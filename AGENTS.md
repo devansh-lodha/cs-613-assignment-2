@@ -26,7 +26,7 @@
 - Submissions must use the official ACL style files and may not use templates designed for other venues.
 - The document class must be \documentclass[11pt]{article}.
 - Use main.tex as the primary main document compiled with LuaLaTeX.
-- Structure report content modularly inside sections/ using separate section files (e.g., sections/01_introduction.tex) included into main.tex using \input{sections/...}.
+- Structure document content modularly inside sections/ using separate section files included into main.tex using \input{sections/...}.
 - Store all plots, diagrams, and image assets in figures/, loaded via \graphicspath{{figures/}} declared in main.tex.
 - Set document layout strictly on A4 paper format (21 cm by 29.7 cm). Never use any other paper size.
 - Maintain standard page margins of exactly 2.5 cm on all four sides (top, bottom, left, right).

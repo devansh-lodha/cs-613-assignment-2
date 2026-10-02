@@ -5,10 +5,12 @@
 \usepackage{acl}
 
 % Layout and font packages
+\usepackage{amsmath}
+\usepackage{booktabs}
 \usepackage{microtype}
 \usepackage{inconsolata}
 \usepackage{graphicx}
-\graphicspath{{figures/}}
+\graphicspath{{figures/common/}{figures/approach_1/}{figures/approach_2/}}
 
 % Font selection for LuaLaTeX
 \usepackage[english,bidi=default]{babel}
@@ -39,16 +41,30 @@
 \maketitle
 
 \input{sections/00_abstract.tex}
-\input{sections/01_introduction.tex}
-\input{sections/02_related_work.tex}
-\input{sections/03_methodology.tex}
-\input{sections/04_experiments.tex}
-\input{sections/05_results.tex}
-\input{sections/06_limitations.tex}
 
+\section{Approach 1: [Title of Approach 1]}
+\label{sec:approach_1}
+\input{sections/approach_1/01_feedback_and_novelty.tex}
+\input{sections/approach_1/02_baselines_and_sota.tex}
+\input{sections/approach_1/03_datasets.tex}
+\input{sections/approach_1/04_experimental_plan.tex}
+\input{sections/approach_1/05_implementation_and_findings.tex}
+
+\section{Approach 2: [Title of Approach 2]}
+\label{sec:approach_2}
+\input{sections/approach_2/01_feedback_and_novelty.tex}
+\input{sections/approach_2/02_baselines_and_sota.tex}
+\input{sections/approach_2/03_datasets.tex}
+\input{sections/approach_2/04_experimental_plan.tex}
+\input{sections/approach_2/05_implementation_and_findings.tex}
+
+\input{sections/03_resources_and_management.tex}
+\input{sections/04_team_contribution.tex}
+
+\nocite{*}
 \bibliography{references}
 
 \appendix
-\input{sections/07_appendix.tex}
+\input{sections/05_appendix.tex}
 
 \end{document}
