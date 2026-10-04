@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+
+% Change "review" to "final" to generate the final (sometimes called camera-ready) version.
+% Change to "preprint" to generate a non-anonymous version with page numbers.
+\usepackage{acl}
+
+% Layout and font packages
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\graphicspath{{figures/common/}{figures/approach_1/}}
+
+% Font selection for LuaLaTeX
+\usepackage[english,bidi=default]{babel}
+\babelfont{rm}{TeXGyreTermesX}
+
+%%% include whatever languages you need below this line
+%%% To add Indic or non-Latin languages, place the font TTF/OTF files in a fonts/ directory:
+%\babelprovide[import]{hindi}
+%\babelfont[*devanagari]{rm}[
+%  Path = fonts/,
+%  BoldFont = NotoSansDevanagari-Bold.ttf
+%]{NotoSansDevanagari-Regular.ttf}
+
+\title{[Approach 1 Title: Specific Title of First Work]}
+
+\author{
+  \textbf{Group: Mixture of Experts (Approach 1)} \\[0.5ex]
+  Indian Institute of Technology Gandhinagar \\[1ex]
+  \begin{tabular}{cc}
+    Vedant Acharya (23110010) & Chavda Haarit Ravindrakumar (23110077) \\
+    Darpana Dharmesh Desai (23110085) & [Member 4 Name] ([Roll])
+  \end{tabular}
+}
+
+\begin{document}
+\maketitle
+
+\input{sections/approach_1/00_abstract.tex}
+\input{sections/approach_1/01_feedback_and_novelty.tex}
+\input{sections/approach_1/02_baselines_and_sota.tex}
+\input{sections/approach_1/03_datasets.tex}
+\input{sections/approach_1/04_experimental_plan.tex}
+\input{sections/approach_1/05_implementation_and_findings.tex}
+\input{sections/approach_1/06_resources_and_management.tex}
+
+\nocite{*}
+\bibliography{references}
+
+\end{document}

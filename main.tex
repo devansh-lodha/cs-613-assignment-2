@@ -25,47 +25,81 @@
 %  BoldFont = NotoSansDevanagari-Bold.ttf
 %]{NotoSansDevanagari-Regular.ttf}
 
-\title{CS 613: Natural Language Processing\\Assignment 2 Report}
+% Macro to reset title and counters between concatenated papers
+\makeatletter
+\let\orig@maketitle\maketitle
+\let\orig@@maketitle\@maketitle
+\newcommand{\nextpaper}{%
+  \clearpage
+  \let\maketitle\orig@maketitle
+  \let\@maketitle\orig@@maketitle
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \setcounter{figure}{0}%
+  \setcounter{table}{0}%
+  \setcounter{equation}{0}%
+}
+\makeatother
+
+\begin{document}
+
+% -------------------------------------------------------------
+% PART I: APPROACH 1
+% -------------------------------------------------------------
+\title{[Approach 1 Title: Specific Title of First Work]}
 
 \author{
-  \textbf{Group: Mixture of Experts} \\[0.5ex]
+  \textbf{Group: Mixture of Experts (Approach 1)} \\[0.5ex]
   Indian Institute of Technology Gandhinagar \\[1ex]
   \begin{tabular}{cc}
     Vedant Acharya (23110010) & Chavda Haarit Ravindrakumar (23110077) \\
-    Darpana Dharmesh Desai (23110085) & Devansh Lodha (23110091) \\
-    Jagtap Arnav Shrikant (23110143) & Suhani (24110358) \\
-    Keval Pintubhai Shah (26120003) & Ruddhi Pintubhai Shah (26250038)
+    Darpana Dharmesh Desai (23110085) & [Member 4 Name] ([Roll])
   \end{tabular}
 }
 
-\begin{document}
 \maketitle
 
-\input{sections/00_abstract.tex}
-
-\section{Approach 1: [Title of Approach 1]}
-\label{sec:approach_1}
+\input{sections/approach_1/00_abstract.tex}
 \input{sections/approach_1/01_feedback_and_novelty.tex}
 \input{sections/approach_1/02_baselines_and_sota.tex}
 \input{sections/approach_1/03_datasets.tex}
 \input{sections/approach_1/04_experimental_plan.tex}
 \input{sections/approach_1/05_implementation_and_findings.tex}
+\input{sections/approach_1/06_resources_and_management.tex}
 
-\section{Approach 2: [Title of Approach 2]}
-\label{sec:approach_2}
+% -------------------------------------------------------------
+% PART II: APPROACH 2
+% -------------------------------------------------------------
+\nextpaper
+
+\title{[Approach 2 Title: Specific Title of Second Work]}
+
+\author{
+  \textbf{Group: Mixture of Experts (Approach 2)} \\[0.5ex]
+  Indian Institute of Technology Gandhinagar \\[1ex]
+  \begin{tabular}{cc}
+    Devansh Lodha (23110091) & Jagtap Arnav Shrikant (23110143) \\
+    Suhani (24110358) & [Member 4 Name] ([Roll])
+  \end{tabular}
+}
+
+\maketitle
+
+\input{sections/approach_2/00_abstract.tex}
 \input{sections/approach_2/01_feedback_and_novelty.tex}
 \input{sections/approach_2/02_baselines_and_sota.tex}
 \input{sections/approach_2/03_datasets.tex}
 \input{sections/approach_2/04_experimental_plan.tex}
 \input{sections/approach_2/05_implementation_and_findings.tex}
+\input{sections/approach_2/06_resources_and_management.tex}
 
-\input{sections/03_resources_and_management.tex}
-\input{sections/04_team_contribution.tex}
+% -------------------------------------------------------------
+% COMBINED TEAM CONTRIBUTION AND BIBLIOGRAPHY
+% -------------------------------------------------------------
+\clearpage
+\input{sections/team_contribution.tex}
 
 \nocite{*}
 \bibliography{references}
-
-\appendix
-\input{sections/05_appendix.tex}
 
 \end{document}
