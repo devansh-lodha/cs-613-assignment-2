@@ -18,16 +18,16 @@
 - This repository synchronizes directly with an Overleaf project via GitHub. Every change must remain strictly compatible with Overleaf.
 - Overleaf projects use LuaLaTeX as the selected compiler engine with main.tex as the main document.
 - File system paths and asset file names are case-sensitive on Overleaf Linux containers. Match exact case when referencing images, bib files, and tex source files.
-- Verify document changes compile cleanly with latexmk -lualatex -interaction=nonstopmode main.tex, as well as `approach_2.tex` when editing Approach 2, before completing a task.
+- Verify every document change compiles cleanly with latexmk -lualatex -interaction=nonstopmode main.tex before completing a task.
 
 # Document Architecture and Style Files
 
 - Never modify acl.sty or acl_natbib.bst under any circumstance.
 - Submissions must use the official ACL style files and may not use templates designed for other venues.
 - The document class must be \documentclass[11pt]{article}.
-- Use main.tex as the primary master submission document compiled with LuaLaTeX, with `approach_1.tex` and `approach_2.tex` providing standalone compilation entrypoints for each paper.
-- Structure document content modularly inside sections/ using dedicated subdirectories for each work (`sections/approach_1/` and `sections/approach_2/`), alongside `sections/team_contribution.tex`.
-- Store all plots, diagrams, and image assets in figures/, loaded via \graphicspath declared in the respective document entrypoints.
+- Use main.tex as the primary main document compiled with LuaLaTeX.
+- Structure document content modularly inside sections/ using separate section files included into main.tex using \input{sections/...}.
+- Store all plots, diagrams, and image assets in figures/, loaded via \graphicspath{{figures/}} declared in main.tex.
 - Set document layout strictly on A4 paper format (21 cm by 29.7 cm). Never use any other paper size.
 - Maintain standard page margins of exactly 2.5 cm on all four sides (top, bottom, left, right).
 - Set text in two columns with column width 7.7 cm, column height 24.7 cm, and inter-column separation 0.6 cm.
