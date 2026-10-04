@@ -27,12 +27,16 @@
 
 % Macro to reset title and counters between concatenated papers
 \makeatletter
-\let\orig@maketitle\maketitle
-\let\orig@@maketitle\@maketitle
+\AtBeginDocument{
+  \let\acl@maketitle\maketitle
+  \let\acl@@maketitle\@maketitle
+}
 \newcommand{\nextpaper}{%
   \clearpage
-  \let\maketitle\orig@maketitle
-  \let\@maketitle\orig@@maketitle
+  \let\maketitle\acl@maketitle
+  \let\@maketitle\acl@@maketitle
+  \thispagestyle{empty}%
+  \pagestyle{empty}%
   \setcounter{section}{0}%
   \setcounter{subsection}{0}%
   \setcounter{figure}{0}%
