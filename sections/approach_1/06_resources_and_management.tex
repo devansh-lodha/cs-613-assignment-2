@@ -1,18 +1,11 @@
 \section{Computational Resources and Project Management}
 \label{sec:app1_resources_management}
 
-% Rubric Requirements (10 Pts):
-% 1. How did you manage to propose the novel solutions?
-% 2. Computational resources needed (RAM, GPUs, CPU Cores, Hard Disk, etc.).
-% 3. Project division and task distribution amongst group members.
-
 \subsection{Conception of Novel Solutions}
-% Describe the collaborative research process, literature review methodology, and mentor consultations that led to Approach 1's solutions.
-[Explain the collaborative research process, literature review methodology, and mentor consultations that led to the proposed solutions for Approach 1.]
+We started from the isotropy literature \citep{ethayarajh-2019-contextual,rudman-etal-2022-isoscore}, which studies English text with older encoders. Two gaps followed: no study covers the scripts and tokenization levels of Indian languages, and no study compares a contrastive embedding model with a base model of the same family. Early runs showed a sharp change in every metric at the final norm, so we added the pre/post-norm split and the norm breakdown to the method.
 
 \subsection{Computational Environment}
-% Specify hardware and infrastructure allocated for model training, inference, and fine-tuning.
-Table~\ref{tab:app1_compute_resources} outlines the computational specifications utilized for our experiments.
+Table~\ref{tab:app1_compute_resources} lists the resources used. The study needs one GPU at a time. Several models can run in parallel on separate GPUs with \texttt{--device}.
 
 \begin{table}[t]
 \centering
@@ -21,18 +14,18 @@ Table~\ref{tab:app1_compute_resources} outlines the computational specifications
 \toprule
 Resource Component & Specification \\
 \midrule
-Hardware Accelerator & [e.g., NVIDIA A100 / RTX 4090] \\
-GPU Video Memory & [e.g., 24 GB / 40 GB VRAM] \\
-System Memory (RAM) & [e.g., 32 GB / 64 GB RAM] \\
-CPU Cores & [e.g., 16 virtual cores] \\
-Persistent Storage & [e.g., 500 GB NVMe SSD] \\
-Software Stack & PyTorch, Hugging Face, CUDA \\
+Hardware Accelerator & [GPU model] \\
+GPU Video Memory & [VRAM]; float32 weights need 1.2 to 4.0\,GB \\
+System Memory (RAM) & [RAM] \\
+CPU Cores & [cores] \\
+Persistent Storage & About 130\,MB of results per model, plus model weights and dataset cache \\
+Software Stack & Python, PyTorch 2.10 to 2.11, Transformers 5.16 to 5.18, sentence-transformers 5.4 to 5.7, Datasets 4.8 to 5.0 \\
 \bottomrule
 \end{tabular}
-\caption{Summary of computational resources and environment specifications for Approach 1.}
+\caption{Computational resources and environment for Approach 1.}
 \label{tab:app1_compute_resources}
 \end{table}
 
 \subsection{Task Distribution and Workflow}
-% Outline the operational workflow and task ownership among the Approach 1 team members.
+% TODO: fill in who did what for Approach 1.
 [Detail the breakdown of responsibilities and workflow distribution among the team members assigned to Approach 1.]

@@ -1,23 +1,14 @@
 \section{Dataset Formulation and Bias Mitigation}
 \label{sec:app1_datasets}
 
-% Rubric Requirements (05 Pts):
-% 1. How did you tackle the bias in your samples?
-% 2. What bottleneck did you encounter?
-% 3. How did you extend the existing dataset, and what are the differences between it and the previous one?
-
 \paragraph{Data Curation and Preprocessing}
-% Detail the primary datasets used, split sizes (train, validation, test), and token distributions.
-[Describe the origin, domain, and characteristics of the raw dataset used in Approach 1.]
+For now we use IN22-Gen \citep{gala-etal-2023-indictrans2}, the general-domain evaluation set of IndicTrans2 (CC-BY-4.0). It has 1{,}024 sentences drawn from Wikipedia and other web sources, translated into all 22 scheduled Indian languages, together with their English source. The sentences cover 13 broad categories: culture, economy, education, entertainment, geography, government, health, industry, legal, news, religion, sports, and tourism. We use all 1{,}024 sentences for each of the 23 languages. No training split is needed because the study only runs inference.
 
 \paragraph{Sample Bias Mitigation}
-% Discuss identified selection, representation, or demographic biases in the data and the steps taken to counteract them.
-[Explain the specific analytical or algorithmic strategies employed to identify and mitigate sample bias in the dataset.]
+IN22-Gen is n-way parallel, so every language carries the same content. Differences between languages therefore come from script, tokenizer, and model, not from topic. The 13 categories cover general language use instead of one domain, so the samples are not biased towards a single register. For the token view, IsoScore depends on the number of points, so we draw exactly $N = 16{,}000$ tokens for every language and model. Tokens are drawn uniformly from all non-special tokens of all 1{,}024 sentences, not from the first sentences, with a seed fixed per dataset and language. Special and padding tokens are excluded from every view.
 
 \paragraph{Bottlenecks Encountered}
-% Document data constraints, cleaning difficulties, alignment issues, or missing labels faced during preparation.
-[Detail data-level bottlenecks encountered during curation, such as high noise levels, class imbalance, or token length constraints.]
+Tokenizer fertility (tokens per whitespace word) varies widely. With the Gemma tokenizer, it ranges from 1.34 for English and 1.48 for Hindi to 6.36 for Santali (Ol Chiki) and 12.13 for Manipuri (Meitei), that is, from 33{,}896 to 284{,}181 tokens per language. Keeping all hidden states for such languages does not fit in memory, so the sampled token positions are fixed before inference and gathered batch by batch. Gemma models and some datasets are gated on Hugging Face and need an approved access token. At layer 0 the same token id always has the same vector, so exact duplicates are removed before estimating ID.
 
 \paragraph{Dataset Extensions and Distinctions}
-% If the dataset was augmented or extended, describe how it differs quantitatively and qualitatively from the original baseline benchmark.
-[Describe how the dataset was extended or modified compared to standard benchmarks, explicitly highlighting structural and distributional differences.]
+Prior isotropy studies use English corpora \citep{ethayarajh-2019-contextual,rudman-etal-2022-isoscore}. We extend the analysis to 22 Indic languages in 12 scripts with an aligned English reference. The pipeline also supports IN22-Conv, FLORES+, Sangraha Verified, IndicCorp v2, Wikipedia, and IITB IndicMonoDoc. These add conversational text, other parallel text, and native monolingual text, which will separate translation effects from language effects in later runs.

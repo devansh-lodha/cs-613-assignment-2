@@ -1,19 +1,11 @@
 \section{State of the Art and Baselines}
 \label{sec:app1_baselines_sota}
 
-% Rubric Requirements (10 Pts):
-% 1. Report the other baselines you want to compete with.
-% 2. What is the state-of-the-art (the best paper that has solved the approach)?
-% 3. Are baseline implementations available for the novelties?
-
 \paragraph{State of the Art}
-% Identify and discuss the strongest published paper and benchmark that addresses this task.
-[Cite and describe the current state of the art paper that achieves leading performance on this problem. Explain its key techniques and limitations.]
+\citet{ethayarajh-2019-contextual} showed that contextual representations of BERT, ELMo, and GPT-2 are anisotropic: random words have high average cosine similarity, and this grows with depth. That work introduced the average random cosine as an anisotropy baseline and maximum explainable variance (MEV) as the share of variance on the first principal component. \citet{rudman-etal-2022-isoscore} showed that average cosine and partition-based scores do not measure uniform use of dimensions and proposed IsoScore, which is 1 when variance is spread equally over all $d$ dimensions and 0 when it lies on one direction. They also used the maximum likelihood intrinsic dimension (ID) of \citet{levina-bickel-2004-maximum}. Both works study English text only.
 
 \paragraph{Competitive Baselines}
-% List the baseline models selected for empirical comparison and explain why they were chosen.
-[Describe the baseline architectures and algorithms selected for benchmarking against our approach.]
+Our baselines are the metrics and the models. We report average random cosine and MEV \citep{ethayarajh-2019-contextual} next to IsoScore and ID \citep{rudman-etal-2022-isoscore}, so results stay comparable to both papers. Within a model family, the base model is the baseline for the embedding model: Gemma-3-1B-PT for EmbeddingGemma-300M, and Qwen3.5-0.8B-Base for Qwen3-Embedding-0.6B. English (\texttt{eng\_Latn}) is the language baseline for the 22 Indic languages.
 
 \paragraph{Baseline Availability}
-% Clarify whether official or reliable third-party open-source implementations exist for these baselines or if custom implementations are required.
-[State whether open-source implementations are available for the baselines and novel components, citing repositories or describing custom re-implementations.]
+The official IsoScore implementation is available as the \texttt{IsoScore} Python package, and \citet{rudman-etal-2022-isoscore} compute ID with \texttt{scikit-dimension}. Both are written in NumPy and run on the CPU. With 16{,}000 points per layer, up to 30 layers, 3 views, 4 models, and 23 languages, this is slow and requires copying every hidden state off the GPU. We therefore ported IsoScore (steps 2 to 7 of the paper), MEV, average random cosine, and the ID estimator to PyTorch so that they run on the GPU next to inference. A unit test checks that our IsoScore matches the official package within $10^{-6}$ on a rotated, shifted, anisotropic Gaussian. Further tests check the expected values on isotropic and rank-one data and recover the dimension of a known linear subspace.

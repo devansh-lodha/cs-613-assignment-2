@@ -1,20 +1,31 @@
 \section{Implementation Status and Preliminary Findings}
 \label{sec:app1_implementation_findings}
 
-% Rubric Requirements (50 Pts Implementation + 10 Pts Findings):
-% 1. Codebase repository link.
-% 2. Boiler code readiness across dataset preparation, training, and evaluation pipelines.
-% 3. Reporting patterns in preliminary results and findings for smaller LLMs and baselines.
-
 \paragraph{Codebase Repository}
-% Provide the direct GitHub repository link containing the code for Approach 1.
-The source code, configuration files, and replication scripts for Approach 1 are maintained at:
-\url{https://github.com/[org-or-user]/[approach-1-repo]}
+The code, run configurations, and results for Approach 1 are public:
+
+\noindent\url{https://github.com/Ninjacoder-vedant/NLP-assignment-2-approach-1}
 
 \paragraph{Pipeline Readiness}
-% Describe implementation milestones: data cleaning, tokenization, training loop, validation checkpoints, and inference scripts.
-[Detail the modular structure of the pipeline, confirming that data preparation, training, and evaluation scripts are functional.]
+The pipeline is complete from data to plots. Datasets, model families, and metrics are registered classes, so a new one is added without changing the runner. \texttt{dataset\_loader.py} downloads, caches, and aligns seven datasets. \texttt{model\_loader.py} wraps sentence-transformers and Hugging Face models behind one interface and detects the final norm. \texttt{inference.py} extracts all hidden states and the three views. \texttt{isotropy\_metrics.py} holds the GPU metrics. \texttt{run.py} runs and resumes experiments, and \texttt{plotting.py} draws per-layer metric and 3-D PCA plots. Unit tests cover the metrics and an end-to-end smoke run. Results are complete for EmbeddingGemma-300M, Qwen3-Embedding-0.6B, and Qwen3.5-0.8B-Base on all 23 languages of IN22-Gen. Gemma-3-1B-PT has a token-view run on Hindi from an earlier pipeline version.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{token_isotropy_depth.png}
+\caption{Token-view IsoScore and average random cosine against relative depth, averaged over 23 languages (Gemma-3-1B-PT: Hindi only). Hollow markers show the last layer after the final norm.}
+\label{fig:app1_depth}
+\end{figure}
 
 \paragraph{Preliminary Findings and Result Patterns}
-% Report patterns observed in initial baseline runs on smaller models (e.g., convergence behaviors, common failure modes, initial metric comparisons).
-[Discuss the preliminary empirical findings and emerging result patterns observed across initial smaller model experiments.]
+Figure~\ref{fig:app1_depth} and Table~\ref{tab:app1_ablation} show four patterns.
+
+First, the last layer before the final norm is close to rank one, and the norm removes this. Before the norm, EmbeddingGemma has token IsoScore 0.000 and average cosine 0.969. After the norm, these are 0.228 and 0.140. The norm breakdown on Hindi explains this. One dimension (731) reaches about 156{,}000 in every token, against about 7{,}000 for the next largest. The learned gain $\gamma$ of this dimension is 0.23 against a median of 10.7. Applying $\gamma$ alone lowers average cosine from 0.96 to 0.10, while the per-token division alone raises IsoScore from 0.0005 to 0.16. Qwen3-Embedding removes its massive dimension (35) earlier. Its last layer's update points against the shared direction (cosine $-0.93$), so average cosine falls from 0.66 to 0.21 before the norm. Isotropy reported only at \texttt{last\_hidden\_state} hides this behaviour.
+
+Second, after the norm, embedding models are more isotropic than base models. Token IsoScore is 0.228 for EmbeddingGemma and 0.114 for Qwen3-Embedding, against 0.038 for Qwen3.5-Base and 0.011 for Gemma-3-1B-PT on Hindi. Average cosine follows the same order: 0.14 and 0.20 against 0.55 and 0.85. Mean-pooled sentence IsoScore is 0.190 and 0.067 against 0.023. Contrastive training spreads the output space, which matches its use for similarity search.
+
+Third, the inner layers behave differently across families. In Qwen3-Embedding, layers 3 to 16 have MEV above 0.99 and IsoScore near 0, because massive activations hold almost all variance. In Qwen3.5-Base, inner IsoScore stays mostly between 0.02 and 0.09 and MEV near 0.1, except at layers 7 and 15, where MEV rises to 0.35 and 0.29. In Gemma-3-1B-PT, average cosine stays above 0.94 from layer 8 onwards. ID drops from 18 to 35 at the embedding layer to below 5 after the first layer in every model, and stays below 20 in all later layers, far below $d$.
+
+Fourth, languages with high fertility produce more clustered sentence representations. English has the lowest mean-pooled average cosine in all three fully run models (0.39, 0.54, 0.65). Manipuri (Meitei) and Santali (Ol Chiki) have the highest (up to 0.99), together with the lowest mean-pooled IsoScore in EmbeddingGemma and Qwen3-Embedding. With fertility from the Gemma tokenizer, the Spearman correlation between fertility and mean-pooled IsoScore is $-0.80$ for EmbeddingGemma, $-0.41$ for Qwen3-Embedding, and $-0.61$ for Qwen3.5-Base. These geometric patterns describe the representation space and do not by themselves measure task quality.
+
+\paragraph{Limitations}
+The Gemma-3-1B-PT result covers only Hindi and comes from an earlier pipeline version without the pre-norm split. The Qwen pair differs in generation (Qwen3 against Qwen3.5) as well as objective. All results use one dataset, one $N$, and one seed. IN22-Gen sentences are translated from English, so translation effects are not yet separated from language effects.

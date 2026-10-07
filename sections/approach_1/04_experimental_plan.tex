@@ -1,47 +1,72 @@
 \section{Experimental Plan and Architecture}
 \label{sec:app1_experimental_plan}
 
-% Rubric Requirements (15 Pts):
-% 1. Experimental setting, training procedures, and robustness under limited computational resources.
-% 2. Models used, architectural differences, and computed parameter counts.
-% 3. Hyperparameter search techniques (grid search or better techniques).
-% 4. Ablation table with different hyperparameters.
-% 5. Metric selection rationale and additional metrics explored.
-% 6. System effort required and scenario for the final viva demonstration.
+\paragraph{Experimental Setting and Robustness}
+The study is inference-only. No model is trained or fine-tuned, so the geometry we measure is that of the released weights. Each model is loaded once in float32 on one GPU, and all 1{,}024 sentences of each language are run in batches of 32 with right padding. Inputs are truncated only at the model's own limit. Every hidden state is kept: the embedding output, each layer, and, for models with a final RMSNorm, the last layer both before and after that norm. We study three views per layer: $N = 16{,}000$ sampled tokens, one mean-pooled vector per sentence, and one last-token vector per sentence. We ran the following command once per model, where omitting \texttt{--langs} selects all 22 Indic languages and \texttt{--english} adds the English baseline:
 
-\paragraph{Training Setup and Robustness}
-% Describe training hardware constraints, precision settings, batching, optimizer choice, and techniques used to ensure stable results (e.g., cross-validation, multiple seeds).
-[Describe the experimental environment, training configuration, and measures taken to ensure empirical robustness given compute bounds.]
+\noindent
+\begin{small}
+\begin{verbatim}
+nohup python run.py --device cuda:0 \
+  --models <model> --datasets in22-gen \
+  --english --n-tokens 16000 --plot \
+  --overwrite --debug \
+  > logs/<model>-in22-gen.log 2>&1 &
+\end{verbatim}
+\end{small}
+Several measures keep results robust under limited compute. The same $N$ and seed are used for every language and model. Token positions are drawn before inference, so the full token matrix is never stored. All metrics run on the GPU one layer at a time. Each run saves a \texttt{run\_config.json} with all settings and library versions, refuses to mix results made with different settings, and resumes without recomputing finished languages. We report means and standard deviations over the 23 languages.
 
-\paragraph{Architectures and Parameters}
-% List the model variants used, provide exact parameter counts, and articulate the key architectural modifications that distinguish them.
-[Detail model architectures, parameter counts, and structural modifications distinguishing this approach from baselines.]
+\paragraph{Models and Parameters}
+We use four models: two embedding models and two base models, one of each from the Gemma and Qwen families (Table~\ref{tab:app1_models}). The approaches differ in training objective and attention. The embedding models are trained contrastively for sentence similarity, whereas the base models are trained only for next-token prediction. EmbeddingGemma uses bidirectional attention and mean pooling \citep{vera-etal-2025-embeddinggemma}. Qwen3-Embedding is a causal model with last-token pooling \citep{zhang-etal-2025-qwen3embedding}. Gemma-3-1B-PT uses causal attention with five sliding-window layers per global layer \citep{gemmateam-2025-gemma3}. Qwen3.5-0.8B-Base is a hybrid model in which three Gated DeltaNet linear-attention layers alternate with one full-attention layer \citep{qwenteam-2026-qwen35}. We analyse its text backbone and discard the vision encoder. Parameter counts come from the released safetensors files.
 
-\paragraph{Hyperparameter Optimization and Ablation Study}
-% Describe the hyperparameter search method (e.g., grid search, Bayesian optimization) and summarize performance across configurations in Table~\ref{tab:app1_ablation}.
-[Explain how optimal hyperparameters were determined across algorithms and baselines.]
-
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \small
-\begin{tabular}{lcccc}
+\begin{tabular}{lrrr}
 \toprule
-Configuration & Learning Rate & Batch Size & Primary Metric & Secondary Metric \\
+Model & Params & $L$ & $d$ \\
 \midrule
-Baseline & $1 \times 10^{-4}$ & 16 & 0.00 & 0.00 \\
-Variant A & $5 \times 10^{-5}$ & 32 & 0.00 & 0.00 \\
-Variant B & $2 \times 10^{-5}$ & 32 & 0.00 & 0.00 \\
-Full Model & $2 \times 10^{-5}$ & 64 & 0.00 & 0.00 \\
+EmbeddingGemma-300M & 303M & 24 & 768 \\
+Qwen3-Embedding-0.6B & 596M & 28 & 1024 \\
+\midrule
+Gemma-3-1B-PT & 1000M & 26 & 1152 \\
+Qwen3.5-0.8B-Base & 752M & 24 & 1024 \\
 \bottomrule
 \end{tabular}
-\caption{Hyperparameter ablation study for Approach 1.}
+\caption{Models used: embedding models (top) and base models (bottom). Params counts the transformer backbone with tied embeddings. EmbeddingGemma has 308M with its dense projection head, and Qwen3.5 has 873M with its vision encoder and multi-token prediction head. $L$ is the number of layers and $d$ the hidden size.}
+\label{tab:app1_models}
+\end{table}
+
+\paragraph{Hyperparameters and Ablation Study}
+No parameters are learned, so there is no grid search. The analysis settings are fixed to keep runs comparable. $N = 16{,}000$ is below the token count of every language for every tokenizer, so no language is skipped. ID uses $k = 20$ neighbours, the \texttt{scikit-dimension} default used by \citet{rudman-etal-2022-isoscore}. Average cosine uses $10^6$ random pairs. The seed is 0. Our ablation varies the representation instead: the pooling view and the position relative to the final norm. Table~\ref{tab:app1_ablation} shows that the final norm changes the conclusions more than any other setting.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{llrrrr}
+\toprule
+ & & \multicolumn{2}{c}{IsoScore} & \multicolumn{2}{c}{Avg. cosine} \\
+Model & View & pre & post & pre & post \\
+\midrule
+EmbGemma & token & .000 & .228 & .969 & .140 \\
+ & mean & .001 & .190 & .999 & .557 \\
+ & last & .000 & .004 & .986 & .718 \\
+\midrule
+Qwen3-Emb & token & .016 & .114 & .254 & .197 \\
+ & mean & .034 & .067 & .825 & .760 \\
+ & last & .080 & .081 & .664 & .446 \\
+\midrule
+Qwen3.5 & token & .019 & .038 & .549 & .550 \\
+ & mean & .014 & .023 & .941 & .943 \\
+ & last & .021 & .024 & .910 & .908 \\
+\bottomrule
+\end{tabular}
+\caption{Ablation over view and final norm: last layer before (pre) and after (post) the final RMSNorm, averaged over 23 languages. The Gemma-3-1B-PT run predates the pre/post split and is omitted.}
 \label{tab:app1_ablation}
-\end{table*}
+\end{table}
 
 \paragraph{Evaluation Metrics}
-% Justify primary metrics chosen and discuss any exploratory or complementary metrics evaluated.
-[Justify the primary evaluation metrics selected and describe any secondary or non-standard metrics tested.]
+IsoScore is the primary metric because it is the only one among those used here that measures how evenly variance is spread over all dimensions and is invariant to rotation and scale \citep{rudman-etal-2022-isoscore}. Average random cosine and MEV are kept for comparability with \citet{ethayarajh-2019-contextual}. However, MEV on raw vectors is dominated by a few tokens with very large norms. ID separates ``variance on few directions'' from ``points on a low-dimensional manifold''. Beyond these metrics, we added three diagnostics. First, MEV on unit-length vectors counts every token equally. Second, we report the last layer before and after the final norm. Third, a norm breakdown splits RMSNorm into the per-token division and the learned per-dimension gain $\gamma$, applies each part alone, and identifies the massive dimensions. We also record tokenizer fertility for each language.
 
-\paragraph{Viva Demonstration Scenario}
-% Paint a clear, concrete walkthrough of what will be demonstrated interactively to course examiners during the viva.
-[Provide an end-to-end scenario demonstrating user input, model inference, and output inspection during the viva session.]
+\paragraph{System Effort and Viva Demonstration}
+One model on 23 languages takes a single GPU run. The 1B-parameter model in float32 needs about 4\,GB for weights. Each model produces about 130\,MB of results. For the viva, we will run the command above for EmbeddingGemma-300M on Hindi and English, show the progress log, and open the per-layer \texttt{metrics.csv}, the metric-versus-depth plot, and the 3-D PCA scatter of every layer. We will then rerun the command to show that finished languages are skipped. Finally, we will run the norm-breakdown script to show the massive dimension and its removal by $\gamma$, and compare the four models with Figure~\ref{fig:app1_depth}.
