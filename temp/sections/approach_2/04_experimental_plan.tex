@@ -1,0 +1,47 @@
+\section{Experimental Plan and Architecture}
+\label{sec:app2_experimental_plan}
+
+% Rubric Requirements (15 Pts):
+% 1. Experimental setting, training procedures, and robustness under limited computational resources.
+% 2. Models used, architectural differences, and computed parameter counts.
+% 3. Hyperparameter search techniques (grid search or better techniques).
+% 4. Ablation table with different hyperparameters.
+% 5. Metric selection rationale and additional metrics explored.
+% 6. System effort required and scenario for the final viva demonstration.
+
+\paragraph{Training Setup and Robustness}
+% Describe training hardware constraints, precision settings, batching, optimizer choice, and techniques used to ensure stable results (e.g., cross-validation, multiple seeds).
+[Describe the experimental environment, training configuration, and measures taken to ensure empirical robustness given compute bounds.]
+
+\paragraph{Architectures and Parameters}
+% List the model variants used, provide exact parameter counts, and articulate the key architectural modifications that distinguish them.
+[Detail model architectures, parameter counts, and structural modifications distinguishing this approach from baselines.]
+
+\paragraph{Hyperparameter Optimization and Ablation Study}
+% Describe the hyperparameter search method (e.g., grid search, Bayesian optimization) and summarize performance across configurations in Table~\ref{tab:app2_ablation}.
+[Explain how optimal hyperparameters were determined across algorithms and baselines.]
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+Configuration & Learning Rate & Batch Size & Primary Metric & Secondary Metric \\
+\midrule
+Baseline & $1 \times 10^{-4}$ & 16 & 0.00 & 0.00 \\
+Variant A & $5 \times 10^{-5}$ & 32 & 0.00 & 0.00 \\
+Variant B & $2 \times 10^{-5}$ & 32 & 0.00 & 0.00 \\
+Full Model & $2 \times 10^{-5}$ & 64 & 0.00 & 0.00 \\
+\bottomrule
+\end{tabular}
+\caption{Hyperparameter ablation study for Approach 2.}
+\label{tab:app2_ablation}
+\end{table*}
+
+\paragraph{Evaluation Metrics}
+% Justify primary metrics chosen and discuss any exploratory or complementary metrics evaluated.
+[Justify the primary evaluation metrics selected and describe any secondary or non-standard metrics tested.]
+
+\paragraph{Viva Demonstration Scenario}
+% Paint a clear, concrete walkthrough of what will be demonstrated interactively to course examiners during the viva.
+[Provide an end-to-end scenario demonstrating user input, model inference, and output inspection during the viva session.]

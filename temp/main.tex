@@ -9,13 +9,13 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{microtype}
-\usepackage{inconsolata}
+%\usepackage{inconsolata}
 \usepackage{graphicx}
 \graphicspath{{figures/common/}{figures/approach_1/}{figures/approach_2/}}
 
 % Font selection for LuaLaTeX
 \usepackage[english,bidi=default]{babel}
-\babelfont{rm}{TeXGyreTermesX}
+\babelfont{rm}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,ItalicFont=*-italic,BoldItalicFont=*-bolditalic]{texgyretermes}
 
 %%% include whatever languages you need below this line
 %%% To add Indic or non-Latin languages, place the font TTF/OTF files in a fonts/ directory:
