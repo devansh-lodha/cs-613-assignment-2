@@ -1,0 +1,160 @@
+\section{Approach 1: Detailed Token-View Results}
+\label{app:app1}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand{\thetable}{A\arabic{table}}
+
+This appendix extends Section~\ref{sec:app1_implementation_findings} to every metric, model, and language. All results use the token view ($N = 16{,}000$) of IN22-Gen. In all plots, solid lines are embedding models and dashed lines generative models, markers distinguish the models, and the hollow marker is the last layer after the final norm.
+
+\subsection{Language Groups for All Metrics}
+\label{app:app1_groups}
+Figure~\ref{fig:app1_groups_all} repeats Figure~\ref{fig:app1_groups} for all four metrics. The bands show that the 18 Indic languages stay close together in every model and metric. In Qwen3.5-Base, Manipuri and Santali also have a higher MEV than the other groups at most depths, so a single direction carries more of their variance.
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{group_trends_all.pdf}
+\caption{All four token-view metrics per language group (rows) for each model (columns). Lines are group means and bands the range over the languages of a group. IsoScore and ID use log scales. Each panel has its own y-axis.}
+\label{fig:app1_groups_all}
+\end{figure*}
+
+\subsection{Per-Language Curves}
+\label{app:app1_languages}
+Figures~\ref{fig:app1_lang_isoscore} to~\ref{fig:app1_lang_id} show each language in its own panel with all four models, so models can be compared for the same language. Languages are ordered by group. The model order seen in the means holds language by language. Averaged over inner layers, Qwen3-Embedding has the lowest IsoScore in 22 of the 23 languages, Gemma-3-1B-PT the highest average cosine in all 23, and Qwen3.5-Base the lowest average cosine in all except Bodo and Manipuri, where Qwen3-Embedding is lower.
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{lang_isoscore.pdf}
+\caption{Token-view IsoScore (log scale) against relative depth for every language and model.}
+\label{fig:app1_lang_isoscore}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{lang_avg_cos.pdf}
+\caption{Token-view average random cosine against relative depth for every language and model.}
+\label{fig:app1_lang_avgcos}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{lang_mev.pdf}
+\caption{Token-view maximum explainable variance against relative depth for every language and model.}
+\label{fig:app1_lang_mev}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{lang_id_mle.pdf}
+\caption{Token-view intrinsic dimension (MLE, $k = 20$, log scale) against relative depth for every language and model.}
+\label{fig:app1_lang_id}
+\end{figure*}
+
+\subsection{Language-by-Layer Heatmaps}
+\label{app:app1_heatmaps}
+Figures~\ref{fig:app1_heat_isoscore} to~\ref{fig:app1_heat_id} show every language and layer of one model in one panel, so languages can be compared within a model. All panels of a figure share one colour scale. White lines separate the four groups, and the last column of each panel is the last layer after the final norm. Uniform columns mean that depth, not language, sets the value; this holds for most of Gemma-3-1B-PT and Qwen3-Embedding. Horizontal stripes mark languages that differ at every depth, such as Manipuri and Santali in Qwen3.5-Base.
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{heatmap_isoscore.pdf}
+\caption{Token-view IsoScore ($\log_{10}$) per language (rows) and layer (columns) for each model. Darker is less isotropic.}
+\label{fig:app1_heat_isoscore}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{heatmap_avg_cos.pdf}
+\caption{Token-view average random cosine per language (rows) and layer (columns) for each model. Brighter is more clustered.}
+\label{fig:app1_heat_avgcos}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{heatmap_mev.pdf}
+\caption{Token-view maximum explainable variance per language (rows) and layer (columns) for each model.}
+\label{fig:app1_heat_mev}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\linewidth]{heatmap_id_mle.pdf}
+\caption{Token-view intrinsic dimension ($\log_{10}$ of the MLE) per language (rows) and layer (columns) for each model.}
+\label{fig:app1_heat_id}
+\end{figure*}
+
+\subsection{Last-Layer Values per Language}
+\label{app:app1_values}
+Table~\ref{tab:app1_languages} lists the last layer of every language before and after the final norm. Three single-language effects are hidden by the group means. In EmbeddingGemma, Bengali has the lowest IsoScore after the norm (0.064), below Manipuri, while Nepali, Maithili, Dogri, Konkani, Sanskrit, and Sindhi have the highest among the Indic languages (0.29 to 0.36). In Gemma-3-1B-PT, Urdu has the highest IsoScore after the norm among the Indic languages (0.038). In Qwen3-Embedding, IsoScore after the norm separates scripts within the 18-language group: its Devanagari languages and Urdu reach 0.14 to 0.17, while the languages in other Brahmic scripts reach 0.08 to 0.12.
+
+\begin{table*}[tp]
+\centering
+\small
+\setlength{\tabcolsep}{3.6pt}
+\begin{tabular}{lrrrrrrrrrrrrrrrr}
+\toprule
+ & \multicolumn{8}{c}{IsoScore} & \multicolumn{8}{c}{Average cosine} \\
+\cmidrule(lr){2-9}\cmidrule(lr){10-17}
+ & \multicolumn{4}{c}{before final norm} & \multicolumn{4}{c}{after final norm} & \multicolumn{4}{c}{before final norm} & \multicolumn{4}{c}{after final norm} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}\cmidrule(lr){10-13}\cmidrule(lr){14-17}
+Language & EG & QE & G3 & Q3.5 & EG & QE & G3 & Q3.5 & EG & QE & G3 & Q3.5 & EG & QE & G3 & Q3.5 \\
+\midrule
+English & .001 & .006 & .025 & .044 & .424 & .165 & .044 & .079 & .960 & .278 & .899 & .348 & .088 & .225 & .361 & .302 \\
+\midrule
+Hindi & .000 & .019 & .010 & .021 & .179 & .174 & .011 & .045 & .960 & .208 & .909 & .459 & .101 & .171 & .846 & .509 \\
+Marathi & .000 & .018 & .008 & .019 & .188 & .151 & .010 & .043 & .965 & .217 & .893 & .469 & .108 & .172 & .840 & .514 \\
+Nepali & .000 & .020 & .008 & .019 & .323 & .160 & .009 & .040 & .965 & .240 & .903 & .486 & .113 & .176 & .853 & .529 \\
+Maithili & .000 & .020 & .009 & .021 & .358 & .165 & .011 & .043 & .966 & .290 & .928 & .590 & .129 & .192 & .889 & .622 \\
+Dogri & .000 & .019 & .007 & .018 & .301 & .160 & .009 & .039 & .966 & .379 & .945 & .665 & .138 & .233 & .885 & .689 \\
+Konkani & .000 & .021 & .008 & .021 & .292 & .154 & .009 & .035 & .970 & .323 & .929 & .587 & .139 & .210 & .867 & .621 \\
+Sanskrit & .000 & .021 & .008 & .019 & .314 & .148 & .008 & .031 & .968 & .306 & .933 & .601 & .142 & .188 & .884 & .636 \\
+Sindhi & .000 & .021 & .006 & .018 & .306 & .137 & .007 & .034 & .969 & .413 & .946 & .686 & .148 & .248 & .871 & .706 \\
+Bengali & .001 & .018 & .010 & .018 & .064 & .121 & .007 & .043 & .964 & .146 & .905 & .460 & .106 & .156 & .849 & .474 \\
+Assamese & .000 & .017 & .006 & .019 & .216 & .085 & .007 & .040 & .969 & .162 & .901 & .503 & .141 & .163 & .831 & .518 \\
+Odia & .000 & .010 & .004 & .019 & .224 & .078 & .010 & .044 & .978 & .117 & .915 & .509 & .168 & .142 & .794 & .526 \\
+Gujarati & .000 & .014 & .005 & .021 & .256 & .093 & .011 & .043 & .970 & .140 & .900 & .516 & .117 & .143 & .729 & .553 \\
+Punjabi & .000 & .014 & .004 & .017 & .235 & .079 & .020 & .038 & .973 & .190 & .904 & .512 & .132 & .159 & .729 & .508 \\
+Kannada & .000 & .013 & .005 & .019 & .220 & .082 & .011 & .043 & .968 & .118 & .897 & .482 & .121 & .141 & .763 & .487 \\
+Malayalam & .000 & .013 & .006 & .024 & .144 & .090 & .010 & .051 & .969 & .129 & .888 & .465 & .120 & .147 & .727 & .485 \\
+Tamil & .000 & .014 & .006 & .019 & .205 & .107 & .007 & .038 & .967 & .155 & .896 & .456 & .111 & .165 & .802 & .489 \\
+Telugu & .000 & .014 & .005 & .021 & .138 & .092 & .011 & .045 & .967 & .092 & .892 & .476 & .114 & .126 & .689 & .493 \\
+Urdu & .000 & .018 & .013 & .018 & .164 & .152 & .038 & .040 & .965 & .315 & .905 & .509 & .111 & .226 & .687 & .503 \\
+\midrule
+Bodo & .000 & .024 & .006 & .018 & .224 & .129 & .009 & .032 & .971 & .468 & .965 & .761 & .146 & .278 & .921 & .775 \\
+Kashmiri & .000 & .020 & .010 & .007 & .185 & .058 & .018 & .011 & .969 & .462 & .960 & .696 & .169 & .277 & .773 & .675 \\
+\midrule
+Manipuri & .000 & .008 & .002 & .002 & .118 & .024 & .005 & .002 & .984 & .356 & .922 & .782 & .346 & .308 & .498 & .586 \\
+Santali & .000 & .006 & .003 & .004 & .166 & .011 & .021 & .004 & .980 & .350 & .933 & .606 & .209 & .277 & .688 & .458 \\
+\bottomrule
+\end{tabular}
+\caption{Token-view IsoScore and average cosine of the last layer before and after the final norm, per language and model. Groups are separated by rules: English, the 18 Indic languages, Bodo and Kashmiri, and Manipuri and Santali. EG: EmbeddingGemma-300M, QE: Qwen3-Embedding-0.6B, G3: Gemma-3-1B-PT, Q3.5: Qwen3.5-0.8B-Base.}
+\label{tab:app1_languages}
+\end{table*}
+
+\subsection{Norm Breakdown}
+\label{app:app1_norm}
+Table~\ref{tab:app1_norm_breakdown} splits the final RMSNorm, $\mathrm{RMSNorm}(x) = \gamma \odot x / \mathrm{rms}(x)$, into its two parts for the two embedding models on Hindi. Average cosine is invariant to the per-token division, so only $\gamma$ changes it. In EmbeddingGemma, $\gamma$ alone removes the shared direction carried by dimension 731. In Qwen3-Embedding, the last layer has already removed most of it, and the norm mainly raises IsoScore.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrr}
+\toprule
+Model & Step & Cos & Iso & MEV & MEV$_1$ \\
+\midrule
+EG & layer $L-1$ & .947 & .001 & .780 & .081 \\
+ & $L$ before norm & .960 & .000 & .862 & .065 \\
+ & $L / \mathrm{rms}$ only & .960 & .160 & .065 & .065 \\
+ & $L \odot \gamma$ only & .101 & .190 & .059 & .044 \\
+ & $L$ after norm & .101 & .179 & .068 & .044 \\
+\midrule
+QE & layer $L-1$ & .655 & .001 & .706 & .098 \\
+ & $L$ before norm & .208 & .019 & .188 & .160 \\
+ & $L / \mathrm{rms}$ only & .208 & .033 & .160 & .160 \\
+ & $L \odot \gamma$ only & .171 & .051 & .122 & .055 \\
+ & $L$ after norm & .171 & .174 & .049 & .055 \\
+\bottomrule
+\end{tabular}
+\caption{Final-norm breakdown on Hindi (token view). Cos: average cosine; Iso: IsoScore; MEV$_1$: MEV on unit-length vectors. EG: EmbeddingGemma-300M, QE: Qwen3-Embedding-0.6B.}
+\label{tab:app1_norm_breakdown}
+\end{table}
