@@ -2,19 +2,8 @@
 \label{sec:app1_experimental_plan}
 
 \paragraph{Experimental Setting and Robustness}
-The study is inference-only. No model is trained or fine-tuned, so the geometry we measure is that of the released weights. Each model is loaded once in float32 on one GPU, and all 1{,}024 sentences of each language are run in batches of 32 with right padding. Inputs are truncated only at the model's own limit. Every hidden state is kept: the embedding output, each layer, and, for models with a final RMSNorm, the last layer both before and after that norm. The pipeline computes three views per layer: $N = 16{,}000$ sampled tokens, one mean-pooled vector per sentence, and one last-token vector per sentence. This report presents the token view. The sentence views are being recomputed after two fixes: IsoScore with fewer points (1{,}024 sentences) than dimensions (Section~\ref{sec:app1_baselines_sota}), and the last-token view of Qwen3-Embedding, which now uses the end-of-text token that the model pools instead of the last non-special token. We ran the following command once per model, where omitting \texttt{--langs} selects all 22 Indic languages and \texttt{--english} adds the English baseline:
-
-\noindent
-\begin{small}
-\begin{verbatim}
-nohup python run.py --device cuda:0 \
-  --models <model> --datasets in22-gen \
-  --english --n-tokens 16000 --plot \
-  --overwrite --debug \
-  > logs/<model>-in22-gen.log 2>&1 &
-\end{verbatim}
-\end{small}
-Several measures keep results robust under limited compute. The same $N$ and seed are used for every language and model. Token positions are drawn before inference, so the full token matrix is never stored. All metrics run on the GPU one layer at a time. Each run saves a \texttt{run\_config.json} with all settings and library versions, refuses to mix results made with different settings, and resumes without recomputing finished languages. We report means over the 23 languages and over language groups with similar behaviour (Section~\ref{sec:app1_implementation_findings}).
+The study is inference-only. No model is trained or fine-tuned, so the geometry we measure is that of the released weights. Each model is loaded in float32, and all 1{,}024 sentences of each language are run with right padding. Hidden embeddings from each layer are stored, and, for models with a final RMSNorm, the last layer both before and after that norm are stored. The pipeline computes three views per layer: $N = 16{,}000$ sampled tokens, one mean-pooled vector per sentence, and one last-token vector per sentence. This report presents the token view. 
+Several measures keep results robust under limited compute. The same $N$ and seed are used for every language and model. Token positions are drawn before inference, so the full token matrix is never stored. 
 
 \paragraph{Models and Parameters}
 We use four models: two embedding models and two generative models, one of each from the Gemma and Qwen families (Table~\ref{tab:app1_models}). The approaches differ in training objective and attention. The embedding models are trained contrastively for sentence similarity, whereas the generative models are trained only for next-token prediction. EmbeddingGemma uses bidirectional attention and mean pooling \citep{vera-etal-2025-embeddinggemma}. Qwen3-Embedding is a causal model with last-token pooling \citep{zhang-etal-2025-qwen3embedding}. Gemma-3-1B-PT uses causal attention with five sliding-window layers per global layer \citep{gemmateam-2025-gemma3}. Qwen3.5-0.8B-Base is a hybrid model in which three Gated DeltaNet linear-attention layers alternate with one full-attention layer \citep{qwenteam-2026-qwen35}. We analyse its text backbone and discard the vision encoder. Parameter counts come from the released safetensors files.
@@ -57,7 +46,7 @@ No parameters are learned, so there is no grid search. The analysis settings are
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
 Model & pre & post & pre & post & pre & post & pre & post \\
 \midrule
-EmbGemma & .000 & .228 & .969 & .140 & .871 & .049 & 15.1 & 14.9 \\
+EmbGemma & .001 & .228 & .969 & .140 & .871 & .049 & 15.1 & 14.9 \\
 Qwen3-Emb & .016 & .114 & .254 & .197 & .225 & .080 & 10.3 & 10.0 \\
 Gemma3 & .008 & .013 & .916 & .773 & .340 & .243 & 6.8 & 7.0 \\
 Qwen3.5 & .019 & .038 & .549 & .550 & .204 & .152 & 6.5 & 6.4 \\
@@ -70,5 +59,5 @@ Qwen3.5 & .019 & .038 & .549 & .550 & .204 & .152 & 6.5 & 6.4 \\
 \paragraph{Evaluation Metrics}
 IsoScore is the primary metric because it is the only one among those used here that measures how evenly variance is spread over all dimensions and is invariant to rotation and scale \citep{rudman-etal-2022-isoscore}. Average random cosine and MEV are kept for comparability with \citet{ethayarajh-2019-contextual}. However, MEV on raw vectors is dominated by a few tokens with very large norms. ID separates ``variance on few directions'' from ``points on a low-dimensional manifold''. Beyond these metrics, we added two diagnostics. First, we report the last layer before and after the final norm. Second, a norm breakdown splits RMSNorm into the per-token division and the learned per-dimension gain $\gamma$, applies each part alone, identifies the massive dimensions, and reports MEV on unit-length vectors, which counts every token equally.
 
-\paragraph{System Effort and Viva Demonstration}
-One model on 23 languages takes a single GPU run. The 1B-parameter model in float32 needs about 4\,GB for weights. Each model produces about 130\,MB of results. For the viva, we will run the command above for EmbeddingGemma-300M on Hindi and English, show the progress log, and open the per-layer \texttt{metrics.csv}, the metric-versus-depth plot, and the 3-D PCA scatter of every layer. We will then rerun the command to show that finished languages are skipped. Finally, we will run the norm-breakdown script to show the massive dimension and its removal by $\gamma$, and regenerate Figures~\ref{fig:app1_depth} and~\ref{fig:app1_groups} from the saved results.
+% \paragraph{System Effort and Viva Demonstration}
+% One model on 23 languages takes a single GPU run. The 1B-parameter model in float32 needs about 4\,GB for weights. Each model produces about 130\,MB of results. For the viva, we will run the command above for EmbeddingGemma-300M on Hindi and English, show the progress log, and open the per-layer \texttt{metrics.csv}, the metric-versus-depth plot, and the 3-D PCA scatter of every layer. We will then rerun the command to show that finished languages are skipped. Finally, we will run the norm-breakdown script to show the massive dimension and its removal by $\gamma$, and regenerate Figures~\ref{fig:app1_depth} and~\ref{fig:app1_groups} from the saved results.
