@@ -2,39 +2,14 @@
 \label{sec:datasets}
 
 \paragraph{Dataset Profiling and Empirical Statistics}
-Evaluations are conducted on six standardized English benchmarks from MTEB v2 \citep{muennighoff2023mteb}. Table~\ref{tab:dataset_statistics} summarizes quantitative dataset distributions.
-
-\begin{table*}[t]
-\centering
-\small
-\caption{Comprehensive quantitative profile of evaluated MTEB v2 benchmark datasets, detailing sample counts, relevance densities, and word length distributions.}
-\label{tab:dataset_statistics}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{ll cccc ccc}
-\toprule
-& & & & & \multicolumn{3}{c}{\textbf{Text Word Length}} & \\
-\cmidrule(lr){6-8}
-\textbf{Benchmark} & \textbf{Task Domain} & \textbf{Corpus Docs} & \textbf{Queries / Pairs} & \textbf{Qrels / Range} & \textbf{Min} & \textbf{Mean} & \textbf{Max} & \textbf{Protocol} \\
-\midrule
-FiQA2018 & Financial Opinion QA & 57,638 & 648 & 1,706 pairs & 0 & 132.9 & 2,973 & Asymmetric Search \\
-ArguAna & Counter-Argument Search & 8,674 & 1,406 & 1,406 pairs & 1 & 167.2 & 1,058 & Asymmetric Search \\
-SCIDOCS & Citation Retrieval & 25,657 & 1,000 & 29,928 pairs & 2 & 176.7 & 3,653 & Asymmetric Search \\
-\midrule
-STSBenchmark & Multi-Domain Synthesis & -- & 1,379 & $[0.00, 5.00]$ & 2 & 9.8 & 30 & Symmetric Matching \\
-SICK-R & Entailment Relatedness & -- & 9,927 & $[1.00, 5.00]$ & 3 & 9.6 & 32 & Symmetric Matching \\
-STS22.v2 & Cross-Domain Narrative & -- & 197 & $[1.00, 4.00]$ & 13 & 461.1 & 4,412 & Symmetric Matching \\
-\bottomrule
-\end{tabular}%
-}
-\end{table*}
-
+Evaluations are conducted on six standardized English benchmarks from MTEB v2 \citep{muennighoff2023mteb}: three retrieval benchmarks evaluated as asymmetric search, and three similarity benchmarks evaluated as symmetric pair matching. Word lengths for retrieval refer to corpus documents.
 \begin{itemize}
-\item FiQA2018: Financial opinion question answering. Contains 57,638 document passages and 648 short user queries (mean 10.9 words). Ground truth maps 1,706 relevant pairs (average 2.63 relevant passages per query).
-\item ArguAna: Counter-argument retrieval. Contains 8,674 candidate arguments and 1,406 queries with strictly 1-to-1 relevance mapping. Both queries (mean 193.6 words) and documents (mean 167.2 words) consist of multi-sentence argumentative passages.
-\item SCIDOCS: Scientific citation search. Contains 25,657 candidate abstracts and 1,000 title queries. Ground truth provides 29,928 relevance pairs (average 29.93 relevant citations per query).
-\item STSBenchmark: Canonical sentence similarity synthesis spanning news, image captions, and web forums across 1,379 sentence pairs. Human labels range from 0.00 (unrelated) to 5.00 (semantically equivalent) with mean 2.61 and standard deviation 1.52.
-\item SICK-R: Sentence relatedness across 9,927 pairs. Sentences average 9.6 words and probe lexical entailment, contradiction, and semantic relatedness. Scores range from 1.00 to 5.00 (mean 3.53, standard deviation 1.02).
-\item STS22.v2: Long-form cross-domain semantic similarity across 197 pairs. Text length averages 461.1 words (median 340.0 words, maximum 4,412 words), testing semantic matching across extended multi-paragraph contexts.
+\item FiQA2018: Financial opinion question answering. Contains 57,638 document passages (0 to 2,973 words, mean 132.9) and 648 short user queries (mean 10.9 words). Ground truth maps 1,706 relevant pairs (average 2.63 relevant passages per query).
+\item ArguAna: Counter-argument retrieval. Contains 8,674 candidate arguments (1 to 1,058 words, mean 167.2) and 1,406 queries (mean 193.6 words) with strictly 1-to-1 relevance mapping (1,406 pairs). Both queries and documents consist of multi-sentence argumentative passages.
+\item SCIDOCS: Scientific citation search. Contains 25,657 candidate abstracts (2 to 3,653 words, mean 176.7) and 1,000 title queries. Ground truth provides 29,928 relevance pairs (average 29.93 relevant citations per query).
+\item STSBenchmark: Sentence similarity spanning news, image captions, and web forums across 1,379 sentence pairs (2 to 30 words, mean 9.8). Human labels range from 0.00 (unrelated) to 5.00 (semantically equivalent) with mean 2.61 and standard deviation 1.52.
+\item SICK-R: Sentence relatedness across 9,927 pairs (3 to 32 words, mean 9.6), probing lexical entailment, contradiction, and semantic relatedness. Scores range from 1.00 to 5.00 (mean 3.53, standard deviation 1.02).
+\item STS22.v2: Long-form cross-domain semantic similarity across 197 pairs. Texts range from 13 to 4,412 words (mean 461.1, median 340.0), testing semantic matching across extended multi-paragraph contexts. Scores range from 1.00 to 4.00.
 \end{itemize}
 
 \paragraph{Sample Bias Mitigation and Experimental Controls}
@@ -48,5 +23,5 @@ To eliminate confounding factors between models and tasks, we implement two cont
 Two data-level bottlenecks were identified and resolved:
 \begin{itemize}
 \item Zero-Length Input Clamping: FiQA2018 contains 38 empty document texts. When tokenized with right-padding, these produce attention mask sums of zero. Unclamped sequence indexing causes negative index wrapping (indexing token $-1$), capturing trailing padding vectors rather than hidden states. We clamp active sequence lengths to $\max(0, \sum \text{mask} - 1)$ to guarantee valid hidden state extraction.
-\item Full-Corpus Memory Allocation: Estimating sample covariance matrices on 57,638 passage vectors in FP32 requires accumulating a $d \times d$ outer product matrix. To avoid GPU threadgroup staging limits on Apple Silicon unified memory, covariance accumulation and symmetric eigendecompositions ($\Sigma = U \Lambda U^\top$) are executed on the host CPU, with eigenvalues clamped to zero to enforce positive semi-definiteness.
+\item Full-Corpus Memory Allocation: Estimating sample covariance matrices on up to 57,638 passage vectors in FP32 requires accumulating a $d \times d$ outer product matrix. Covariance accumulation and symmetric eigendecompositions are executed on the CPU, with small negative eigenvalues from rounding clamped to zero to keep the covariance positive semi-definite.
 \end{itemize}

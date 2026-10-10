@@ -2,21 +2,4 @@
 \label{sec:implementation_status}
 
 \paragraph{Codebase Repository}
-The complete source code, configuration files, execution runners, and analysis pipelines are structured in a modular PyTorch repository conforming to strict software engineering standards:
-\begin{itemize}
-\item Language and Environment: Python 3.14.2 managed strictly via \texttt{uv}.
-\item Code Quality: Enforced via \texttt{ruff} for formatting and linting, and \texttt{ty} for static type safety with explicit type annotations across all interfaces.
-\item Repository URL: {\small\url{https://github.com/devanshlodha/representation-learning-postprocessing}}
-\end{itemize}
-
-\paragraph{Pipeline Readiness and Decoupled Architecture}
-The implementation is organized into four decoupled, strictly idempotent, and resumable execution stages:
-\begin{itemize}
-\item Stage 0: Asset Ingestion (\texttt{scripts/download.py}): Downloads model checkpoints and MTEB v2 datasets into an isolated project-local directory (\texttt{cache/huggingface/}), preventing home directory leakage while inheriting credentials non-destructively.
-\item Stage 1: Representation Extraction (\texttt{scripts/encode.py}): Executes forward passes once per model and task in FP32, caching raw tensors in \texttt{cache/embeddings/}. Implements prompt-mandated asymmetric encoding for dedicated models and attention-mask-aware pooling with zero-token index clamping for base causal models.
-\item Stage 2: Post-Processing Transformations (\texttt{scripts/transform.py}): Applies full-dimension ($d \to d$) and compression ($d \to k$) transformations in memory without repeating neural network inference. Calibrates parameters exclusively on document corpus embeddings in retrieval, and pooled pairs in similarity.
-\item Stage 3: Atomic Evaluation (\texttt{scripts/eval\_retrieval.py}, \texttt{eval\_similarity.py}, \texttt{eval\_geometry.py}): Computes ranking metrics via \texttt{pytrec-eval}, correlation metrics via \texttt{scipy.stats}, and intrinsic geometry diagnostics, emitting atomic CSV records under \texttt{results/}.
-\item Stage 4: Research Table Compilation (\texttt{scripts/generate\_tables.py}): Parses all 2,160 atomic results in under two seconds using a Polars LazyFrame query engine, exporting all 49 publication-grade research tables into \texttt{tables/}.
-\end{itemize}
-
-All pipeline stages are completely validated, tested, and operational.
+The code is available at {\small\url{https://github.com/pandasuwu/cs-613-assignment-2-approach-2}}. It encodes each model and dataset once, caches the embeddings, applies every transformation to the cached embeddings without further model inference, and computes all metrics and result tables from the cache. All stages are implemented and have been run end to end.

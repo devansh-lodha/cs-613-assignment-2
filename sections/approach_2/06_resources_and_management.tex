@@ -3,9 +3,7 @@
 \label{sec:resources_management}
 
 \subsection{Conception of Methodological Strategy}
-The experimental framework was formulated through a systematic review of representation post-processing literature spanning 2018 to 2026. Rather than treating individual methods in isolation, we identified underlying mathematical connections across coordinate-level standardization \citep{timkey2021all}, subspace projection deflation \citep{mu2018all,ren2025correcting}, and spectral covariance regularizations \citep{su2021whitening,diera2024isotropy,li2026spectral}. 
-
-Our architectural strategy was designed around four decoupled, idempotent pipeline stages (Download, Encode, Transform, Evaluate, Generate Tables) to ensure that neural network forward passes occur exactly once per model-task configuration, with downstream transformations and ranking evaluations executing in memory in milliseconds.
+The experimental framework was formulated through a systematic review of representation post-processing literature spanning 2018 to 2026. Rather than treating individual methods in isolation, we identified underlying mathematical connections across coordinate-level standardization \citep{timkey2021all}, subspace projection deflation \citep{mu2018all,ren2025correcting}, and spectral covariance regularizations \citep{su2021whitening,diera2024isotropy,li2026spectral}.
 
 \subsection{Computational Environment and Infrastructure}
 Table~\ref{tab:compute_resources} outlines the hardware and software specifications utilized across all experiments.
@@ -25,8 +23,8 @@ GPU Cores & 30-core integrated GPU \\
 Unified Memory & 36 GB unified LPDDR5 (300 GB/s bandwidth) \\
 Persistent Storage & 1 TB PCIe NVMe SSD \\
 Operating System & macOS Sequoia 15.x (Darwin 24) \\
-Python Environment & Python 3.14.2 managed strictly via \texttt{uv} \\
-Acceleration Framework & PyTorch 2.6 with Metal Performance Shaders \\
+Python Environment & Python 3.14 managed via \texttt{uv} \\
+Acceleration Framework & PyTorch 2.14.1 with Metal Performance Shaders \\
 Numerical Precision & IEEE 754 Single Precision (\texttt{torch.float32}) \\
 \bottomrule
 \end{tabular}%
@@ -35,11 +33,5 @@ Numerical Precision & IEEE 754 Single Precision (\texttt{torch.float32}) \\
 \label{tab:compute_resources}
 \end{table}
 
-\subsection{Task Distribution and Operational Workflow}
-Work was distributed among team members across four functional domains:
-\begin{itemize}
-\item Representation Extraction and Pipeline Infrastructure: Implemented Stage 0 and Stage 1 pipelines, Hugging Face Hub cache isolation, batch forward passes with MPS acceleration, and attention mask pooling operators with zero-token index clamping.
-\item Mathematical Transformations and Numerical Algebra: Implemented Stage 2 linear post-processing algorithms, CPU-based positive semi-definite eigendecomposition, R2 orthogonal projection deflation, Soft-ZCA regularization, and Kneedle SNR knee detection for SpecTemp.
-\item Benchmark Evaluation and Metric Auditing: Implemented Stage 3 evaluation runners, pytrec-eval C-bindings for nDCG@10, Recall@100, and MRR@10, scipy statistical correlation engines, and intrinsic space geometry diagnostics.
-\item Research Table Synthesis and Manuscript Authoring: Developed the Polars LazyFrame table compilation engine generating all 49 publication-grade tables, conducted cross-paradigm statistical analysis, and authored the technical manuscript.
-\end{itemize}
+\subsection{Task Distribution}
+We divided Approach 2 by pipeline component: datasets, models, post-processing transformations, and evaluation metrics. The Team Contribution section lists the member responsible for each.

@@ -1,11 +1,7 @@
 \section{Information Retrieval Benchmarks}
 \label{sec:retrieval_results}
 
-Information Retrieval (IR) tasks evaluate asymmetric search, where an incoming user query retrieves relevant document passages from a large candidate corpus. In this setting, the transformation parameters (empirical mean vector $\mu_D$, covariance matrix $\Sigma_D$, and orthogonal projection matrix $W_D$) are estimated strictly on the document corpus representations $D \in \mathbb{R}^{N \times d}$. The identical transformation parameters are applied to query vectors $Q \in \mathbb{R}^{M \times d}$:
-\begin{equation}
-D' = (D - \mu_D) W_D, \quad Q' = (Q - \mu_D) W_D
-\end{equation}
-Both transformed matrices are L2-normalized to unit length: $D' \leftarrow D' / \|D'\|_2$, $Q' \leftarrow Q' / \|Q'\|_2$. Candidate documents are ranked by inner product $S = Q' (D')^\top$, and the top 100 retrieved candidates per query are evaluated using \texttt{pytrec-eval}.
+Information Retrieval (IR) tasks evaluate asymmetric search, where a user query retrieves relevant passages from a large corpus. Each transformation is fitted on the document embeddings and applied unchanged to the queries (Section~\ref{sec:experimental_plan}). Documents are ranked by inner product with the query, and the top 100 per query are scored with \texttt{pytrec-eval}.
 
 Tables~\ref{tab:arguana_ndcg} to~\ref{tab:scidocs_recall} in Appendix~\ref{app:app2} report nDCG@10, MRR@10, and Recall@100 for every model and method on ArguAna, FiQA2018, and SCIDOCS (Section~\ref{sec:datasets}).
 

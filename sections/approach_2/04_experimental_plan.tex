@@ -1,72 +1,88 @@
 \section{Experimental Plan and Architecture}
 \label{sec:experimental_plan}
 
-\paragraph{Experimental Environment and Precision Standards}
-All experiments execute without neural network gradient descent, backpropagation, or parameter optimization. The post-processing pipeline operates on frozen representations extracted in a single forward pass.
-\begin{itemize}
-\item Hardware Infrastructure: Experiments run on an Apple Silicon M3 Max workstation (36 GB unified memory, 30-core GPU, 14-core CPU) running macOS and PyTorch with Metal Performance Shaders (MPS) acceleration.
-\item Numerical Precision: Representations, covariance accumulations, and transformations are strictly standardized on single-precision floating point (\texttt{torch.float32}).
-\item Determinism: Random seeds across \texttt{torch}, \texttt{numpy}, and Python \texttt{random} are fixed to $2026$.
-\end{itemize}
-
-\paragraph{Evaluated Models and Architectural Properties}
-Table~\ref{tab:model_architectures} summarizes the four evaluated sub-1B architectures.
-
-\begin{table*}[t]
-\centering
-\small
-\caption{Architectural specifications and operational properties of evaluated sub-1B models.}
-\label{tab:model_architectures}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{ll cccc l}
-\toprule
-\textbf{Model Identifier} & \textbf{Architectural Tier} & \textbf{Parameters} & \textbf{Native $d$} & \textbf{Context Limit} & \textbf{MRL} & \textbf{Default Pooling Mode} \\
-\midrule
-\texttt{google/embeddinggemma-300m} & Dedicated Contrastive & 308M & 768 & 2,048 & Yes & Attention Mean Pooling \\
-\texttt{Qwen/Qwen3-Embedding-0.6B} & Dedicated Contrastive & 600M & 1,024 & 32,768 & Yes & Final Non-Padding Token \\
-\texttt{google/gemma-3-1b-pt} & Base Causal Language Model & 1.0B & 1,152 & 32,768 & No & Mean and Last Token Evaluated \\
-\texttt{Qwen/Qwen3.5-0.8B-Base} & Base Causal Language Model & 0.8B & 1,024 & 262,144 & No & Mean and Last Token Evaluated \\
-\bottomrule
-\end{tabular}%
-}
-\end{table*}
+\paragraph{Experimental Setting}
+All experiments execute without neural network gradient descent, backpropagation, or parameter optimization. The post-processing pipeline operates on frozen representations extracted in a single forward pass of the models described in Section~\ref{sec:baselines_sota}. Random seeds across \texttt{torch}, \texttt{numpy}, and Python \texttt{random} are fixed to $2026$. Hardware and numerical precision are listed in Table~\ref{tab:compute_resources}.
 
 \paragraph{Post-Processing Transformations}
-Transformations are decoupled into full-dimension processing ($d \to d$) and dimensional compression ($d \to k$). Transformed representations are projected onto the unit hypersphere: $x' \leftarrow x' / \|x'\|_2$.
-\begin{itemize}
-\item \texttt{baseline}: Raw unit-normalized vectors: $x' = x / \|x\|_2$.
-\item \texttt{standardization}: Coordinate-wise z-score scaling: $x'_j = (x_j - \mu_j) / \sigma_j$ \citep{timkey2021all}.
-\item \texttt{r1}: Direct empirical mean subtraction: $x' = (x - \mu) / \|x - \mu\|_2$ \citep{ren2025correcting}.
-\item \texttt{r2}: Mean-subspace projection deflation: $x' = (x - (x^\top \hat{\mu})\hat{\mu}) / \|x - (x^\top \hat{\mu})\hat{\mu}\|_2$, where $\hat{\mu} = \mu / \|\mu\|_2$.
-\item \texttt{soft\_zca}: Regularized ZCA whitening: $W = U (\Lambda + \epsilon I)^{-1/2} U^\top$, $x' = (x - \mu)W / \|(x - \mu)W\|_2$, with spectral regularizer $\epsilon = 10^{-4}$ \citep{diera2024isotropy}.
-\item \texttt{abtt\_D}: Principal component deflation removing $D \in \{1, 2, 3\}$ leading eigenvectors: $x' = (I - \sum_{j=1}^D u_j u_j^\top)(x - \mu)$ \citep{mu2018all}.
-\item \texttt{rand} (Control): Deflating an arbitrary Gaussian unit vector $v \sim \mathcal{N}(0, I_d)$.
-\item \texttt{mc} (Control): Mean centering without hyperspherical L2 renormalization: $x' = x - \mu$.
-\item Compression ($d \to k, k \in \{512, 256, 128, 64\}$):
-  \begin{itemize}
-  \item \texttt{prefix}: Coordinate prefix slicing $x[:k] / \|x[:k]\|_2$.
-  \item \texttt{pca}: Projection onto top-$k$ eigenvectors $(x - \mu)U_k / \|(x - \mu)U_k\|_2$ ($\gamma = 0$).
-  \item \texttt{whitening}: Truncated Whitening-$k$ scaling components by $\lambda_j^{-1/2}$ ($\gamma = 1.0$) \citep{su2021whitening}.
-  \item \texttt{spectemp}: Adaptive SNR-tempered spectral projection $W_k = U_k \text{diag}((\lambda_j + \epsilon)^{-\gamma(k)/2})$, where $\gamma(k) = \min(1.0, \text{SNR}(k) / \text{SNR}(k_{\text{knee}}))$ derived via the Kneedle algorithm ($S=0.5$) \citep{li2026spectral}.
-  \item \texttt{random\_truncation} (Control): Uniform random subsampling of $k$ coordinates.
-  \end{itemize}
-\end{itemize}
+Let $x \in \mathbb{R}^d$ be an embedding produced by one model, where $d$ is the model's native dimension. Every transformation is fitted on a calibration set $X = \{x_1, \dots, x_N\}$: the document embeddings for retrieval, and the embeddings of both sentence sets for STS (Section~\ref{sec:datasets}). From $X$ we estimate the mean vector
+\begin{equation}
+\mu = \frac{1}{N} \sum_{i=1}^{N} x_i,
+\end{equation}
+the standard deviation $\sigma_j$ of each coordinate $j$,
+\begin{equation}
+\sigma_j = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N} (x_{ij} - \mu_j)^2},
+\end{equation}
+and the covariance matrix with its eigendecomposition
+\begin{equation}
+\Sigma = \frac{1}{N-1} \sum_{i=1}^{N} (x_i - \mu)(x_i - \mu)^\top = U \Lambda U^\top .
+\end{equation}
+Here $\Lambda = \mathrm{diag}(\lambda_1, \dots, \lambda_d)$ holds the eigenvalues in descending order, and the columns $u_1, \dots, u_d$ of $U$ are the matching eigenvectors. $U_k$ denotes the first $k$ columns of $U$, and $\Lambda_k$ the top-left $k \times k$ block of $\Lambda$. Unless stated otherwise, every output is projected onto the unit sphere by
+\begin{equation}
+\phi(z) = z / \|z\|_2 .
+\end{equation}
+
+The full-dimension transformations ($d \to d$) are as follows. The \texttt{baseline} only normalizes the raw embedding:
+\begin{equation}
+f_{\text{base}}(x) = \phi(x).
+\end{equation}
+\texttt{standardization} \citep{timkey2021all} rescales each coordinate to zero mean and unit variance, where $\oslash$ denotes element-wise division:
+\begin{equation}
+f_{\text{std}}(x) = \phi\big((x - \mu) \oslash \sigma\big).
+\end{equation}
+\texttt{r1} \citep{ren2025correcting} subtracts the mean:
+\begin{equation}
+f_{\text{R1}}(x) = \phi(x - \mu).
+\end{equation}
+\texttt{r2} \citep{ren2025correcting} instead removes the component of $x$ along the unit mean direction $\hat{\mu} = \mu / \|\mu\|_2$:
+\begin{equation}
+f_{\text{R2}}(x) = \phi\big(x - (x^\top \hat{\mu})\, \hat{\mu}\big).
+\end{equation}
+\texttt{abtt\_D} \citep{mu2018all} centers $x$ and removes its projection onto the top $D \in \{1, 2, 3\}$ principal directions:
+\begin{equation}
+f_{\text{ABTT-}D}(x) = \phi\big((I - U_D U_D^\top)(x - \mu)\big).
+\end{equation}
+\texttt{soft\_zca} \citep{diera2024isotropy} whitens with a regularized inverse square root of the covariance, using $\epsilon = 10^{-4}$:
+\begin{equation}
+W_{\text{ZCA}} = U (\Lambda + \epsilon I)^{-1/2} U^\top,
+\end{equation}
+\begin{equation}
+f_{\text{ZCA}}(x) = \phi\big(W_{\text{ZCA}} (x - \mu)\big).
+\end{equation}
+
+Two negative controls follow \citet{ren2025correcting}. \texttt{rand} repeats R2 with a random unit direction $r = g / \|g\|_2$, where $g \sim \mathcal{N}(0, I_d)$ is drawn with a fixed seed:
+\begin{equation}
+f_{\text{rand}}(x) = \phi\big(x - (x^\top r)\, r\big).
+\end{equation}
+\texttt{mc} repeats R1 without the final normalization:
+\begin{equation}
+f_{\text{mc}}(x) = x - \mu.
+\end{equation}
+
+The compression transformations map $d \to k$ with $k \in \{512, 256, 128, 64\}$. \texttt{prefix} keeps the first $k$ coordinates, as in Matryoshka Representation Learning \citep{kusupati2022matryoshka}:
+\begin{equation}
+f_{\text{prefix}}(x) = \phi(x_{1:k}).
+\end{equation}
+\texttt{random\_truncation} (control) keeps a fixed random subset $S \subset \{1, \dots, d\}$ of $|S| = k$ coordinates, drawn uniformly without replacement:
+\begin{equation}
+f_{\text{trunc}}(x) = \phi(x_S).
+\end{equation}
+\texttt{pca}, \texttt{whitening}, and \texttt{spectemp} share one spectral form \citep{li2026spectral} with exponent $\gamma \in [0, 1]$ and $\epsilon' = 10^{-6}$:
+\begin{equation}
+f_{\gamma}(x) = \phi\big((\Lambda_k + \epsilon' I)^{-\gamma/2}\, U_k^\top (x - \mu)\big).
+\end{equation}
+\texttt{pca} uses $\gamma = 0$, an unweighted projection onto the top $k$ principal directions. \texttt{whitening} uses $\gamma = 1$, which equalizes the variance of all $k$ retained directions \citep{su2021whitening}. \texttt{spectemp} chooses $\gamma$ for each $k$ from the eigenvalue spectrum \citep{li2026spectral}. It takes the noise floor $\eta$ as the mean of the smallest 10\% of eigenvalues and defines the signal-to-noise ratio of each remaining eigenvalue as
+\begin{equation}
+\mathrm{SNR}(i) = \max\!\left(0, \frac{\lambda_i - \eta}{\eta}\right).
+\end{equation}
+The knee $k_{\text{knee}}$ of this curve is found with the Kneedle algorithm \citep{satopaa2011finding} with sensitivity $S = 0.5$, and
+\begin{equation}
+\gamma(k) = \min\!\left(1, \frac{\mathrm{SNR}(k)}{\mathrm{SNR}(k_{\text{knee}})}\right).
+\end{equation}
 
 \paragraph{Evaluation Metrics and Rationale}
 \begin{itemize}
 \item Retrieval: Evaluated using \texttt{pytrec-eval} against official qrels. Primary metric is \texttt{ndcg\_at\_10} (evaluating graded relevance order). Secondary metrics are \texttt{recall\_at\_100} (candidate coverage) and \texttt{mrr\_at\_10} (reciprocal rank of first relevant passage).
 \item Similarity: Primary metric is Spearman rank correlation $\rho \times 100$ (measuring monotonic ranking agreement). Secondary metric is Pearson linear correlation $r \times 100$.
-\item Intrinsic Geometry: Measured across corpus documents and pooled sentence representations: centroid norm ($\|\mu\|_2$), average pairwise cosine similarity across 2,000 sampled pairs, Maximum Explainable Variance of the leading eigenvalue ($\text{MEV} = \lambda_1 / \sum \lambda_j$), Normalized Intrinsic Dimensionality ($\text{NID} = H / \log d$), and IsoScore \citep{rudman2022isoscore}.
-\end{itemize}
-
-\paragraph{Viva Demonstration Scenario}
-During the viva examination, the end-to-end post-processing pipeline is demonstrated interactively via CLI:
-\begin{itemize}
-\item Step 1: Execute representation extraction on an MTEB v2 benchmark split:
-  \texttt{uv run scripts/encode.py --model google/gemma-3-1b-pt --task ArguAna --pooling mean\_pooling}.
-\item Step 2: Apply the full transformation matrix in memory without model forward passes:
-  \texttt{uv run scripts/transform.py --model google/gemma-3-1b-pt --task ArguAna --pooling mean\_pooling}.
-\item Step 3: Run batched inner-product search and compute trec-eval ranking metrics in under two seconds:
-  \texttt{uv run scripts/eval\_retrieval.py --model google/gemma-3-1b-pt --task ArguAna --pooling mean\_pooling}.
-\item Step 4: Display live metric printout demonstrating the +18.4\% relative nDCG@10 gain from baseline (0.3050) to Soft-ZCA (0.3610).
+\item Intrinsic Geometry: Measured on the transformed embeddings, with $\mu$ and $\lambda_j$ recomputed from them: centroid norm ($\|\mu\|_2$), average pairwise cosine similarity across 2,000 sampled embeddings, Maximum Explainable Variance of the leading eigenvalue ($\text{MEV} = \lambda_1 / \sum_j \lambda_j$), Normalized Intrinsic Dimensionality ($\text{NID} = H / \log d$, where $H = -\sum_j p_j \log p_j$ and $p_j = \lambda_j / \sum_l \lambda_l$) \citep{yokoi2024word}, and IsoScore \citep{rudman-etal-2022-isoscore}.
 \end{itemize}

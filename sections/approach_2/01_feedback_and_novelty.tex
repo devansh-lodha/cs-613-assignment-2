@@ -2,16 +2,15 @@
 \label{sec:feedback_novelty}
 
 \paragraph{Feedback Since Presentation 1}
-% Action items and feedback received from the course instructors and teaching assistants:
-[Placeholder: Insert specific feedback received following Presentation 1, including requested revisions regarding experimental scope, baseline coverage, and presentation structure.]
+The mentor found no issues with the scope or plan presented in Presentation 1 and asked us to proceed as planned.
 
 \paragraph{Weekly Mentor Progress}
-% Summary of weekly progress meetings, scope adjustments, and milestone tracking:
-[Placeholder: Insert summary of weekly mentor interactions, scope refinement milestones, and verified empirical progress reports.]
+\begin{itemize}
+\item Because our datasets are large, the mentor advised us to apply for access to the Singularity HPC cluster.
+\item We walked the mentor through the codebase. The mentor approved every planned combination of datasets, models, transformations, and metrics, and gave us the green light for the final run.
+\end{itemize}
 
 \paragraph{Reproduction Scope and Future Novelties}
-In this investigation, we have not introduced novel architectural parameterizations or newly designed loss functions. Rather, our primary objective is an exhaustive, rigorous reproduction and empirical cross-paradigm benchmark of established post-processing transformations from the representation learning literature \citep{mu2018all,timkey2021all,su2021whitening,diera2024isotropy,ren2025correcting,li2026spectral}. 
+Our primary objective is a rigorous reproduction and cross-paradigm benchmark of established post-processing transformations from the representation learning literature \citep{mu2018all,timkey2021all,su2021whitening,diera2024isotropy,ren2025correcting,li2026spectral}. We evaluate these methods on newer sub-1B parameter models released in late 2024 and 2025, on MTEB v2 benchmarks, and across two tiers: dedicated contrastive embedding encoders and un-fine-tuned base causal language models.
 
-We evaluate these historical methods systematically across newer sub-1B parameter models released in late 2024 and 2025, modern MTEB v2 benchmarks, and across two distinct operational tiers: dedicated contrastive embedding encoders and un-fine-tuned base causal autoregressive language models. 
-
-Building upon the empirical baselines and diagnostic insights established in this comprehensive reproduction, our future work will explore hybridizing coordinate-wise standardization, mean-subspace projection deflation, and signal-to-noise ratio spectral tempering. By unifying these complementary techniques into an integrated pipeline, we plan to formulate novel training-free post-processing operators that expand the Pareto frontier of retrieval accuracy and dimensional compression beyond individual precursor methods.
+As future work, we will combine coordinate-wise standardization, mean-subspace projection deflation, and signal-to-noise ratio spectral tempering into single training-free operators, and test whether they improve retrieval accuracy and compression beyond each method alone.

@@ -1,11 +1,7 @@
 \section{Semantic Textual Similarity Benchmarks}
 \label{sec:similarity_results}
 
-Semantic Textual Similarity (STS) evaluates symmetric pairwise sentence matching. Given sentence pairs $(S_1, S_2) \in \mathbb{R}^{N \times d}$ originating from a shared linguistic domain, both sentence sets are pooled jointly to estimate a shared calibration mean $\mu$ and covariance transform $W$. Transformed sentences are projected onto the unit hypersphere:
-\begin{equation}
-S_1' = \frac{(S_1 - \mu)W}{\|(S_1 - \mu)W\|_2}, \quad S_2' = \frac{(S_2 - \mu)W}{\|(S_2 - \mu)W\|_2}
-\end{equation}
-Row-wise cosine similarity $\text{sim}_i = (S_{1, i}')^\top S_{2, i}'$ is evaluated against human ratings using Spearman rank correlation ($\rho \times 100$) and Pearson linear correlation ($r \times 100$).
+Semantic Textual Similarity (STS) evaluates symmetric pairwise sentence matching. Each transformation is fitted on the sentences of both sets together and applied to both (Section~\ref{sec:experimental_plan}). Each pair is scored by the inner product of its two transformed embeddings, and the scores are compared with human ratings using Spearman rank correlation ($\rho \times 100$) and Pearson linear correlation ($r \times 100$).
 
 Tables~\ref{tab:sickr_spearman} to~\ref{tab:stsb_pearson} in Appendix~\ref{app:app2} report both correlations for every model and method on SICK-R, STS22.v2, and STSBenchmark (Section~\ref{sec:datasets}).
 

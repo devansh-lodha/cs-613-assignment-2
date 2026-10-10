@@ -2,7 +2,7 @@
 \label{sec:baselines_sota}
 
 \paragraph{State of the Art in Representation Post-Processing}
-Pretrained textual representations commonly concentrate within narrow cones, creating high average cosine similarities between unrelated sequences \citep{ethayarajh2019contextual}. The state of the art in training-free post-processing spans three major methodological paradigms:
+Pretrained textual representations commonly concentrate within narrow cones, creating high average cosine similarities between unrelated sequences \citep{ethayarajh-2019-contextual}. The state of the art in training-free post-processing spans three major methodological paradigms:
 \begin{itemize}
 \item Coordinate Paradigm: Identifies outlier rogue dimensions that dominate inner products and applies coordinate-wise z-score standardization \citep{timkey2021all}.
 \item Subspace Paradigm: Treats origin shift as a stable mean bias vector and applies orthogonal projection deflation (R2) to cancel parallel sample-mean estimation noise \citep{ren2025correcting}.
@@ -12,8 +12,8 @@ Pretrained textual representations commonly concentrate within narrow cones, cre
 \paragraph{Competitive Model Baselines}
 To establish empirical baselines across distinct representational structures, we evaluate four open-weight models representing two architectural tiers:
 \begin{itemize}
-\item Dedicated Contrastive Encoders: \texttt{google/embeddinggemma-300m} (308M parameters, $d=768$) and \texttt{Qwen/Qwen3-Embedding-0.6B} (600M parameters, $d=1024$). These models are fine-tuned with contrastive InfoNCE objectives, export unit-normalized vectors, support Matryoshka Representation Learning (MRL) \citep{kusupati2022matryoshka}, and utilize asymmetric instruction prompts.
-\item Un-Fine-Tuned Base Causal LLMs: \texttt{google/gemma-3-1b-pt} (1.0B parameters, $d=1152$) and \texttt{Qwen/Qwen3.5-0.8B-Base} (0.8B parameters, $d=1024$). These models are pretrained strictly on causal next-token cross-entropy with tied embeddings and have never been exposed to sentence-level ranking loss. They are evaluated under both active token mean pooling and final non-padding token pooling.
+\item Dedicated Contrastive Encoders: \texttt{google/embeddinggemma-300m} \citep{vera-etal-2025-embeddinggemma} (308M parameters, $d=768$, mean pooling) and \texttt{Qwen/Qwen3-Embedding-0.6B} \citep{zhang-etal-2025-qwen3embedding} (600M parameters, $d=1024$, final non-padding token pooling). These models are fine-tuned with contrastive InfoNCE objectives, export unit-normalized vectors, support Matryoshka Representation Learning (MRL) \citep{kusupati2022matryoshka}, and utilize asymmetric instruction prompts.
+\item Un-Fine-Tuned Base Causal LLMs: \texttt{google/gemma-3-1b-pt} \citep{gemmateam-2025-gemma3} (1.0B parameters, $d=1152$) and \texttt{Qwen/Qwen3.5-0.8B-Base} \citep{qwenteam-2026-qwen35} (0.8B parameters, $d=1024$). These models are pretrained strictly on causal next-token cross-entropy with tied embeddings, have never been exposed to sentence-level ranking loss, and do not support MRL. They are evaluated under both active token mean pooling and final non-padding token pooling.
 \end{itemize}
 
 \paragraph{Availability of Baseline Implementations}
