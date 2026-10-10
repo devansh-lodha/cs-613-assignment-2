@@ -10,18 +10,33 @@ Pretrained textual representations commonly concentrate within narrow cones, cre
 \end{itemize}
 
 \paragraph{Competitive Model Baselines}
-To establish empirical baselines across distinct representational structures, we evaluate four open-weight models representing two architectural tiers:
-\begin{itemize}
-\item Dedicated Contrastive Encoders: \texttt{google/embeddinggemma-300m} \citep{vera-etal-2025-embeddinggemma} (308M parameters, $d=768$, mean pooling) and \texttt{Qwen/Qwen3-Embedding-0.6B} \citep{zhang-etal-2025-qwen3embedding} (600M parameters, $d=1024$, final non-padding token pooling). These models are fine-tuned with contrastive InfoNCE objectives, export unit-normalized vectors, support Matryoshka Representation Learning (MRL) \citep{kusupati2022matryoshka}, and utilize asymmetric instruction prompts.
-\item Un-Fine-Tuned Base Causal LLMs: \texttt{google/gemma-3-1b-pt} \citep{gemmateam-2025-gemma3} (1.0B parameters, $d=1152$) and \texttt{Qwen/Qwen3.5-0.8B-Base} \citep{qwenteam-2026-qwen35} (0.8B parameters, $d=1024$). These models are pretrained strictly on causal next-token cross-entropy with tied embeddings, have never been exposed to sentence-level ranking loss, and do not support MRL. They are evaluated under both active token mean pooling and final non-padding token pooling.
-\end{itemize}
+We evaluate four open-weight models in two tiers, dedicated contrastive encoders and un-fine-tuned base causal language models (Table~\ref{tab:model_architectures}).
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Evaluated models. Base models are evaluated under both mean pooling and final non-padding token pooling.}
+\label{tab:model_architectures}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{1.7cm}cccc >{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{2.6cm}}
+\toprule
+\textbf{Model} & \textbf{Tier} & \textbf{Params} & \textbf{Native $d$} & \textbf{Context} & \textbf{MRL} & \textbf{Pooling} & \textbf{Training Objective} & \textbf{Prompts and Output} \\
+\midrule
+\texttt{google/\allowbreak embeddinggemma-300m} \citep{vera-etal-2025-embeddinggemma} & Dedicated contrastive & 308M & 768 & 2,048 & Yes & Mean & Contrastive InfoNCE & Asymmetric instruction prompts; unit-normalized \\
+\texttt{Qwen/\allowbreak Qwen3-Embedding-0.6B} \citep{zhang-etal-2025-qwen3embedding} & Dedicated contrastive & 600M & 1,024 & 32,768 & Yes & Final non-padding token & Contrastive InfoNCE & Asymmetric instruction prompts; unit-normalized \\
+\texttt{google/\allowbreak gemma-3-1b-pt} \citep{gemmateam-2025-gemma3} & Base causal LM & 1.0B & 1,152 & 32,768 & No & Mean and final token & Next-token cross-entropy, tied embeddings & No prompts; no sentence-level ranking loss \\
+\texttt{Qwen/\allowbreak Qwen3.5-0.8B-Base} \citep{qwenteam-2026-qwen35} & Base causal LM & 0.8B & 1,024 & 262,144 & No & Mean and final token & Next-token cross-entropy, tied embeddings & No prompts; no sentence-level ranking loss \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
 
 \paragraph{Availability of Baseline Implementations}
-Model checkpoints and tokenizers are publicly available through the Hugging Face Hub. Regarding post-processing methods:
+Model checkpoints and tokenizers are publicly available through the Hugging Face Hub. Matryoshka Representation Learning (MRL) follows \citet{kusupati2022matryoshka}. Regarding post-processing methods:
 \begin{itemize}
 \item Full whitening implementations follow public algorithms from \citet{su2021whitening} and \citet{huang2021whiteningbert}.
-\item Soft-ZCA whitening follows the spectral formulation from \citet{diera2024isotropy}, using CPU eigendecompositions for numerical stability.
+\item Soft-ZCA whitening follows the spectral formulation from \citet{diera2024isotropy}.
 \item SpecTemp compression is implemented from the SNR knee detection equations and Kneedle algorithm specified by \citet{li2026spectral}.
 \item R1 mean subtraction, R2 subspace deflation, ABTT component purging, and scientific controls (random direction deflation, unrenormalized centering) are implemented from the mathematical derivations in \citet{ren2025correcting} and \citet{mu2018all}, as no public repository was provided with the original publication.
 \end{itemize}
-All methods are implemented in a unified, standardized FP32 PyTorch codebase.
+All methods are implemented as an FP32 PyTorch codebase.

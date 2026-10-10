@@ -2,26 +2,41 @@
 \label{sec:datasets}
 
 \paragraph{Dataset Profiling and Empirical Statistics}
-Evaluations are conducted on six standardized English benchmarks from MTEB v2 \citep{muennighoff2023mteb}: three retrieval benchmarks evaluated as asymmetric search, and three similarity benchmarks evaluated as symmetric pair matching. Word lengths for retrieval refer to corpus documents.
-\begin{itemize}
-\item FiQA2018: Financial opinion question answering. Contains 57,638 document passages (0 to 2,973 words, mean 132.9) and 648 short user queries (mean 10.9 words). Ground truth maps 1,706 relevant pairs (average 2.63 relevant passages per query).
-\item ArguAna: Counter-argument retrieval. Contains 8,674 candidate arguments (1 to 1,058 words, mean 167.2) and 1,406 queries (mean 193.6 words) with strictly 1-to-1 relevance mapping (1,406 pairs). Both queries and documents consist of multi-sentence argumentative passages.
-\item SCIDOCS: Scientific citation search. Contains 25,657 candidate abstracts (2 to 3,653 words, mean 176.7) and 1,000 title queries. Ground truth provides 29,928 relevance pairs (average 29.93 relevant citations per query).
-\item STSBenchmark: Sentence similarity spanning news, image captions, and web forums across 1,379 sentence pairs (2 to 30 words, mean 9.8). Human labels range from 0.00 (unrelated) to 5.00 (semantically equivalent) with mean 2.61 and standard deviation 1.52.
-\item SICK-R: Sentence relatedness across 9,927 pairs (3 to 32 words, mean 9.6), probing lexical entailment, contradiction, and semantic relatedness. Scores range from 1.00 to 5.00 (mean 3.53, standard deviation 1.02).
-\item STS22.v2: Long-form cross-domain semantic similarity across 197 pairs. Texts range from 13 to 4,412 words (mean 461.1, median 340.0), testing semantic matching across extended multi-paragraph contexts. Scores range from 1.00 to 4.00.
-\end{itemize}
+Evaluations are conducted on six standardized English benchmarks from MTEB v2 \citep{muennighoff2023mteb}, summarized in Table~\ref{tab:dataset_statistics}.
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Evaluated MTEB v2 benchmarks. For retrieval benchmarks, text lengths refer to corpus documents. Similarity labels range from unrelated (lowest) to semantically equivalent (highest). STS22.v2 texts have a median length of 340.0 words.}
+\label{tab:dataset_statistics}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l >{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}p{1.4cm} cc >{\raggedright\arraybackslash}p{1.6cm} cc ccc c c}
+\toprule
+& & & & & & & & \multicolumn{3}{c}{\textbf{Text Words}} & & \\
+\cmidrule(lr){9-11}
+\textbf{Benchmark} & \textbf{Domain} & \textbf{Protocol} & \textbf{Docs} & \textbf{Queries / Pairs} & \textbf{Qrels / Score Range} & \textbf{Rel./Query} & \textbf{Query Words} & \textbf{Min} & \textbf{Mean} & \textbf{Max} & \textbf{Mean Tokens} & \textbf{Label Mean (SD)} \\
+\midrule
+FiQA2018 & Financial opinion QA & Asymmetric search & 57,638 & 648 & 1,706 pairs & 2.63 & 10.9 & 0 & 132.9 & 2,973 & 174 & -- \\
+ArguAna & Counter-argument retrieval (multi-sentence arguments) & Asymmetric search & 8,674 & 1,406 & 1,406 pairs (1-to-1) & 1 & 193.6 & 1 & 167.2 & 1,058 & 212 & -- \\
+SCIDOCS & Scientific citation search (title queries) & Asymmetric search & 25,657 & 1,000 & 29,928 pairs & 29.93 & -- & 2 & 176.7 & 3,653 & 226 & -- \\
+\midrule
+STSBenchmark & News, image captions, web forums & Symmetric matching & -- & 1,379 & $[0.00, 5.00]$ & -- & -- & 2 & 9.8 & 30 & 12 & 2.61 (1.52) \\
+SICK-R & Entailment, contradiction, relatedness & Symmetric matching & -- & 9,927 & $[1.00, 5.00]$ & -- & -- & 3 & 9.6 & 32 & 10 & 3.53 (1.02) \\
+STS22.v2 & Long-form cross-domain narrative & Symmetric matching & -- & 197 & $[1.00, 4.00]$ & -- & -- & 13 & 461.1 & 4,412 & 638 & -- \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
 
 \paragraph{Sample Bias Mitigation and Experimental Controls}
 To eliminate confounding factors between models and tasks, we implement two controls:
 \begin{itemize}
-\item Uniform Sequence Length Ceiling: Evaluated models possess widely varying context limits (2,048 tokens for EmbeddingGemma; 32,768 for Qwen3-Embedding and Gemma-3-1b-pt; 262,144 for Qwen3.5-0.8B-Base). To eliminate truncation bias, we fix a uniform sequence limit of $\min(2048, 32768, 262144) = 2,048$ tokens. Over 99\% of benchmark texts fall well within 2,048 tokens, ensuring zero document truncation while preventing asymmetric context window advantages.
+\item Uniform Sequence Length Ceiling: Evaluated models possess widely varying context limits (Table~\ref{tab:model_architectures}). To eliminate truncation bias, we fix a uniform sequence limit of 2,048 tokens, the smallest of these limits. Over 99\% of benchmark texts fall well within 2,048 tokens, ensuring zero document truncation while preventing asymmetric context window advantages.
 \item Decoupled Calibration Manifolds: In asymmetric retrieval, user queries arrive dynamically at search time. Calibrating covariance parameters on queries would introduce transductive test-set leakage. We enforce strict asymmetric calibration: empirical mean $\mu_D$, covariance $\Sigma_D$, and transformation matrix $W_D$ are computed strictly on the document corpus $D$, and applied identically to incoming queries $Q$. Transformed representations are projected onto the unit hypersphere via L2 normalization. In symmetric STS, both sentences in each pair originate from the identical distribution and are pooled jointly.
 \end{itemize}
 
 \paragraph{Data Bottlenecks and Technical Handling}
-Two data-level bottlenecks were identified and resolved:
+One data-level bottleneck was identified and resolved:
 \begin{itemize}
 \item Zero-Length Input Clamping: FiQA2018 contains 38 empty document texts. When tokenized with right-padding, these produce attention mask sums of zero. Unclamped sequence indexing causes negative index wrapping (indexing token $-1$), capturing trailing padding vectors rather than hidden states. We clamp active sequence lengths to $\max(0, \sum \text{mask} - 1)$ to guarantee valid hidden state extraction.
-\item Full-Corpus Memory Allocation: Estimating sample covariance matrices on up to 57,638 passage vectors in FP32 requires accumulating a $d \times d$ outer product matrix. Covariance accumulation and symmetric eigendecompositions are executed on the CPU, with small negative eigenvalues from rounding clamped to zero to keep the covariance positive semi-definite.
 \end{itemize}
