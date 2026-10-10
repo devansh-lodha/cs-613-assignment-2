@@ -1,0 +1,20 @@
+% Auto-generated publication table: gap_closure_sts
+\begin{table*}[t]
+\centering
+\small
+\caption{Performance gap closure percentages on Semantic Textual Similarity benchmarks (Spearman $\rho$). Compares un-fine-tuned base causal language models against dedicated contrastive models.}
+\label{tab:gap_closure_sts}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l ccc cc cc}
+\toprule
+& & & & \multicolumn{2}{c}{\textbf{Best Subspace Deflation}} & \multicolumn{2}{c}{\textbf{Regularized Spectral (Soft-ZCA)}} \\
+\cmidrule(lr){5-6} \cmidrule(lr){7-8}
+\textbf{Benchmark} & \textbf{Raw Base} & \textbf{Dedicated} & \textbf{Initial Gap} & \textbf{Method (Score)} & \textbf{Gap Closed} & \textbf{Score} & \textbf{Gap Closed} \\
+\midrule
+STSBenchmark & 39.67 & 84.72 & 45.05 & ABTT-3 (52.50) & 28.5\% & \textbf{60.54} & \textbf{46.3\%} \\
+SICK-R & 47.44 & 80.67 & 33.23 & ABTT-2 (57.41) & 30.0\% & \textbf{59.95} & \textbf{37.7\%} \\
+STS22.v2 & 59.49 & 68.07 & 8.58 & ABTT-3 (59.44) & -0.6\% & \textbf{63.87} & \textbf{51.0\%} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

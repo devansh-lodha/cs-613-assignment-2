@@ -1,0 +1,28 @@
+\section{Token Pooling Ablations}
+\label{sec:ablation_results}
+
+Token pooling ablations evaluate the performance disparity between sequence mean pooling (averaging hidden states across active attention tokens) and final token pooling (hidden state of the final non-padding token) on un-fine-tuned base causal language models (\texttt{google/gemma-3-1b-pt} and \texttt{Qwen/Qwen3.5-0.8B-Base}). Table~\ref{tab:pooling_penalty_ir} reports retrieval performance across FiQA2018, ArguAna, and SCIDOCS (nDCG@10), while Table~\ref{tab:pooling_penalty_sts} reports semantic similarity across SICK-R, STSBenchmark, and STS22.v2 (Spearman rho).
+
+\input{sections/approach_2/tables/ablation/pooling_penalty_ir.tex}
+\input{sections/approach_2/tables/ablation/pooling_penalty_sts.tex}
+
+\paragraph{Analysis of Retrieval Pooling Penalties}
+\begin{itemize}
+\item Universal Retrieval Degradation: Across all asymmetric search benchmarks, last token pooling suffers an extreme and consistent performance penalty on base causal models:
+  \begin{itemize}
+  \item FiQA2018 ($\approx 75$ tokens): Mean nDCG@10 drops from 0.0504 to 0.0136 (mean delta: -0.0368, a -73.0\% relative penalty).
+  \item ArguAna ($\approx 250$ tokens): Mean nDCG@10 drops from 0.3050 to 0.1094 (mean delta: -0.1956, a -64.1\% relative penalty).
+  \item SCIDOCS ($\approx 200$ tokens): Mean nDCG@10 drops from 0.0285 to 0.0050 (mean delta: -0.0235, a -82.5\% relative penalty).
+  \end{itemize}
+\item Architectural Mechanism: Causal autoregressive transformers apply unidirectional triangular attention masks. Hidden states at the final token position are trained to predict the immediate next subword token; they do not aggregate document-level semantics across multi-sentence paragraphs. Uniform mean pooling distributes representation weight across all active tokens, capturing the complete passage semantics required for query matching.
+\item Persistence under Post-Processing: Soft-ZCA improves both pooling modes in absolute terms (e.g. on ArguAna, mean pooling reaches 0.3610 while last token reaches 0.1534). However, because mean pooling gains more in absolute magnitude, the gap widens under Soft-ZCA (-0.2076 delta on ArguAna; -0.0576 on FiQA; -0.0514 on SCIDOCS). Post-processing cannot fully compensate for the structural limitations of final token extraction on extended texts.
+\end{itemize}
+
+\paragraph{Analysis of Similarity Pooling Penalties: Length-Governed Inversion}
+\begin{itemize}
+\item Short-Context Advantage (SICK-R, $\approx 12$ tokens): On ultra-short sentences, last token pooling outperforms mean pooling on raw baseline representations by +2.11 Spearman points (49.55 vs 47.44). In short clauses, the final token attends to all preceding words without context decay or padding dilution.
+\item Medium-Context Parity (STSBenchmark, $\approx 20$ tokens): On medium-length sentences, last token pooling closely matches mean pooling on baseline (-0.97 delta; 38.70 vs 39.67). When regularized with Soft-ZCA, last token pooling surpasses mean pooling by +2.52 points (63.05 vs 60.54), demonstrating that short-range causal states contain high-quality sentence embeddings once spectral noise is regularized.
+\item Long-Context Collapse (STS22.v2, $\approx 2,048$ tokens): On extended multi-paragraph texts, causal language models suffer catastrophic representation collapse: last token pooling drops by -45.33 Spearman points relative to mean pooling (14.17 vs 59.49). Causal attention over 2,048 tokens causes final hidden states to specialize entirely in local transition probabilities.
+\item Cross-Model Symmetry: Gemma-3-1b-pt and Qwen3.5-0.8B-Base exhibit nearly identical collapse on STS22.v2 (-46.71 and -43.94 baseline deltas), demonstrating that autoregressive representation collapse is an inherent mathematical property of causal attention across sequence length.
+\end{itemize}
+

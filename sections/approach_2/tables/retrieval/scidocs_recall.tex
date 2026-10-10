@@ -1,0 +1,28 @@
+% Auto-generated publication table: scidocs_recall
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{SCIDOCS} (Recall@100). Top performance across valid methods in each column is shown in bold.}
+\label{tab:scidocs_recall}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & 0.4230 & \textbf{0.5292} & 0.1108 & 0.1165 & 0.0366 & 0.0270 & 0.4761 & 0.1136 & 0.0318 \\
+Standardization & 0.4331 & 0.5190 & 0.1726 & 0.0855 & 0.0329 & 0.0243 & 0.4761 & 0.1291 & 0.0286 \\
+R1 (Mean Sub.) & \textbf{0.4424} & 0.5217 & 0.0899 & 0.0957 & 0.0293 & 0.0243 & \textbf{0.4821} & 0.0928 & 0.0268 \\
+R2 (Subspace Def.) & 0.4396 & 0.5193 & 0.1002 & 0.1006 & 0.0311 & 0.0247 & 0.4794 & 0.1004 & 0.0279 \\
+Soft-ZCA & 0.3566 & 0.4519 & \textbf{0.2338} & \textbf{0.2172} & \textbf{0.0914} & \textbf{0.0744} & 0.4043 & \textbf{0.2255} & \textbf{0.0829} \\
+ABTT-1 & 0.4394 & 0.5171 & 0.0880 & 0.0865 & 0.0331 & 0.0271 & 0.4782 & 0.0872 & 0.0301 \\
+ABTT-2 & 0.4412 & 0.5190 & 0.0838 & 0.0785 & 0.0390 & 0.0339 & 0.4801 & 0.0812 & 0.0365 \\
+ABTT-3 & 0.4374 & 0.5152 & 0.0895 & 0.0715 & 0.0499 & 0.0478 & 0.4763 & 0.0805 & 0.0489 \\
+\midrule
+Rand (Control) & 0.4216 & 0.5292 & 0.1104 & 0.1165 & 0.0366 & 0.0270 & 0.4754 & 0.1134 & 0.0318 \\
+MC (Control) & 0.4439 & 0.5124 & 0.0474 & 0.0622 & 0.0278 & 0.0247 & 0.4782 & 0.0548 & 0.0263 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

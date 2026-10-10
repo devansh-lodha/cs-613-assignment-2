@@ -1,0 +1,21 @@
+% Auto-generated publication table: context_length_impact
+\begin{table*}[t]
+\centering
+\small
+\caption{Impact of input context length on causal autoregressive pooling penalties and post-processing recovery across benchmark scales.}
+\label{tab:context_length_impact}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll c ccc c c cc}
+\toprule
+\textbf{Benchmark} & \textbf{Track} & \textbf{Tokens} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} & \textbf{Penalty} & \textbf{Penalty (\%)} & \textbf{Soft-ZCA} & \textbf{Gain} \\
+\midrule
+SICK-R & Similarity & 12 & 80.67 & 47.44 & 49.55 & +2.11 & 4.4\% & \textbf{59.95} & \textbf{+12.52} \\
+STSBenchmark & Similarity & 20 & 84.72 & 39.67 & 38.70 & -0.97 & -2.4\% & \textbf{60.54} & \textbf{+20.87} \\
+FiQA2018 & Retrieval & 75 & 0.4738 & 0.0504 & 0.0136 & -0.0368 & -73.0\% & \textbf{0.0791} & \textbf{+0.0288} \\
+SCIDOCS & Retrieval & 200 & 0.2194 & 0.0285 & 0.0050 & -0.0235 & -82.5\% & \textbf{0.0607} & \textbf{+0.0323} \\
+ArguAna & Retrieval & 250 & 0.4816 & 0.3050 & 0.1094 & -0.1956 & -64.1\% & \textbf{0.3610} & \textbf{+0.0561} \\
+STS22.v2 & Similarity & 2048 & 68.07 & 59.49 & 14.17 & -45.33 & -76.2\% & \textbf{63.87} & \textbf{+4.37} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

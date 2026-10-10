@@ -1,0 +1,28 @@
+% Auto-generated publication table: sickr_pearson
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{SICK-R} (Pearson $r$). Top performance across valid methods in each column is shown in bold.}
+\label{tab:sickr_pearson}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & 83.52 & \textbf{86.82} & 49.98 & 53.09 & 47.21 & 50.85 & 85.17 & 51.53 & 49.03 \\
+Standardization & \textbf{84.06} & 86.48 & 57.98 & 57.90 & 56.82 & 55.05 & \textbf{85.27} & 57.94 & 55.93 \\
+R1 (Mean Sub.) & 83.77 & 86.69 & 55.88 & 56.61 & 55.90 & 55.02 & 85.23 & 56.25 & 55.46 \\
+R2 (Subspace Def.) & 83.80 & 86.70 & 55.91 & 56.65 & 56.04 & 55.24 & 85.25 & 56.28 & 55.64 \\
+Soft-ZCA & 70.90 & 70.45 & 58.27 & 58.01 & 53.76 & 51.40 & 70.67 & 58.14 & 52.58 \\
+ABTT-1 & 83.58 & 85.56 & 62.73 & \textbf{64.78} & 56.67 & \textbf{55.70} & 84.57 & \textbf{63.75} & 56.19 \\
+ABTT-2 & 83.15 & 84.37 & \textbf{62.84} & 64.40 & \textbf{57.51} & 55.36 & 83.76 & 63.62 & \textbf{56.43} \\
+ABTT-3 & 82.66 & 83.38 & 62.46 & 62.78 & 57.41 & 54.44 & 83.02 & 62.62 & 55.92 \\
+\midrule
+Rand (Control) & 83.51 & 86.82 & 49.97 & 53.09 & 47.21 & 50.86 & 85.17 & 51.53 & 49.03 \\
+MC (Control) & 80.71 & 84.15 & 50.22 & 51.93 & 51.14 & 49.83 & 82.43 & 51.07 & 50.49 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

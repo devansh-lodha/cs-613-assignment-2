@@ -1,38 +1,45 @@
+
 \section{Computational Resources and Project Management}
-\label{sec:app2_resources_management}
+\label{sec:resources_management}
 
-% Rubric Requirements (10 Pts):
-% 1. How did you manage to propose the novel solutions?
-% 2. Computational resources needed (RAM, GPUs, CPU Cores, Hard Disk, etc.).
-% 3. Project division and task distribution amongst group members.
+\subsection{Conception of Methodological Strategy}
+The experimental framework was formulated through a systematic review of representation post-processing literature spanning 2018 to 2026. Rather than treating individual methods in isolation, we identified underlying mathematical connections across coordinate-level standardization \citep{timkey2021all}, subspace projection deflation \citep{mu2018all,ren2025correcting}, and spectral covariance regularizations \citep{su2021whitening,diera2024isotropy,li2026spectral}. 
 
-\subsection{Conception of Novel Solutions}
-% Describe the collaborative research process, literature review methodology, and mentor consultations that led to Approach 2's solutions.
-[Explain the collaborative research process, literature review methodology, and mentor consultations that led to the proposed solutions for Approach 2.]
+Our architectural strategy was designed around four decoupled, idempotent pipeline stages (Download, Encode, Transform, Evaluate, Generate Tables) to ensure that neural network forward passes occur exactly once per model-task configuration, with downstream transformations and ranking evaluations executing in memory in milliseconds.
 
-\subsection{Computational Environment}
-% Specify hardware and infrastructure allocated for model training, inference, and fine-tuning.
-Table~\ref{tab:app2_compute_resources} outlines the computational specifications utilized for our experiments.
+\subsection{Computational Environment and Infrastructure}
+Table~\ref{tab:compute_resources} outlines the hardware and software specifications utilized across all experiments.
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \centering
 \small
-\begin{tabular}{l>{\raggedright\arraybackslash}p{3.6cm}}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l>{\raggedright\arraybackslash}p{4.2cm}}
 \toprule
-Resource Component & Specification \\
+\textbf{Resource Component} & \textbf{Specification} \\
 \midrule
-Hardware Accelerator & [e.g., NVIDIA A100 / RTX 4090] \\
-GPU Video Memory & [e.g., 24 GB / 40 GB VRAM] \\
-System Memory (RAM) & [e.g., 32 GB / 64 GB RAM] \\
-CPU Cores & [e.g., 16 virtual cores] \\
-Persistent Storage & [e.g., 500 GB NVMe SSD] \\
-Software Stack & PyTorch, Hugging Face, CUDA \\
+Workstation & Apple MacBook Pro (14-inch, Nov 2023) \\
+SoC Architecture & Apple Silicon M3 Max (3nm process) \\
+CPU Cores & 14 cores (10 performance, 4 efficiency) \\
+GPU Cores & 30-core integrated GPU \\
+Unified Memory & 36 GB unified LPDDR5 (300 GB/s bandwidth) \\
+Persistent Storage & 1 TB PCIe NVMe SSD \\
+Operating System & macOS Sequoia 15.x (Darwin 24) \\
+Python Environment & Python 3.14.2 managed strictly via \texttt{uv} \\
+Acceleration Framework & PyTorch 2.6 with Metal Performance Shaders \\
+Numerical Precision & IEEE 754 Single Precision (\texttt{torch.float32}) \\
 \bottomrule
-\end{tabular}
-\caption{Summary of computational resources and environment specifications for Approach 2.}
-\label{tab:app2_compute_resources}
+\end{tabular}%
+}
+\caption{Summary of computational resources and environment specifications.}
+\label{tab:compute_resources}
 \end{table}
 
-\subsection{Task Distribution and Workflow}
-% Outline the operational workflow and task ownership among the Approach 2 team members.
-[Detail the breakdown of responsibilities and workflow distribution among the team members assigned to Approach 2.]
+\subsection{Task Distribution and Operational Workflow}
+Work was distributed among team members across four functional domains:
+\begin{itemize}
+\item Representation Extraction and Pipeline Infrastructure: Implemented Stage 0 and Stage 1 pipelines, Hugging Face Hub cache isolation, batch forward passes with MPS acceleration, and attention mask pooling operators with zero-token index clamping.
+\item Mathematical Transformations and Numerical Algebra: Implemented Stage 2 linear post-processing algorithms, CPU-based positive semi-definite eigendecomposition, R2 orthogonal projection deflation, Soft-ZCA regularization, and Kneedle SNR knee detection for SpecTemp.
+\item Benchmark Evaluation and Metric Auditing: Implemented Stage 3 evaluation runners, pytrec-eval C-bindings for nDCG@10, Recall@100, and MRR@10, scipy statistical correlation engines, and intrinsic space geometry diagnostics.
+\item Research Table Synthesis and Manuscript Authoring: Developed the Polars LazyFrame table compilation engine generating all 49 publication-grade tables, conducted cross-paradigm statistical analysis, and authored the technical manuscript.
+\end{itemize}

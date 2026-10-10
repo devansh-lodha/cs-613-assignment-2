@@ -1,0 +1,41 @@
+% Auto-generated publication table: stsb_compression_spearman
+\begin{table*}[t]
+\centering
+\scriptsize
+\renewcommand{\arraystretch}{0.92}
+\caption{Dimensional compression ladder on \textbf{STSBenchmark} (Spearman $\rho$) across target dimensions $k \in \{512, 256, 128, 64\}$. Absolute metric values and retention percentages relative to native representations ($k=d$) are reported. Top retention per dimension block is bolded.}
+\label{tab:stsb_compression_spearman}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll cc cc cc cc cc cc cc}
+\toprule
+& & \multicolumn{4}{c}{\textbf{Dedicated Models}} & \multicolumn{4}{c}{\textbf{Base LLM (Mean Pooling)}} & \multicolumn{4}{c}{\textbf{Base LLM (Last Token)}} & \multicolumn{2}{c}{\textbf{Tier Retention (\%)}} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-10} \cmidrule(lr){11-14} \cmidrule(lr){15-16}
+$k$ & \textbf{Method} & \textbf{EmbGem} & \textbf{Ret\%} & \textbf{Qwen3} & \textbf{Ret\%} & \textbf{Gem-3} & \textbf{Ret\%} & \textbf{Qwen3.5} & \textbf{Ret\%} & \textbf{Gem-3} & \textbf{Ret\%} & \textbf{Qwen3.5} & \textbf{Ret\%} & \textbf{Dedicated} & \textbf{Base} \\
+\midrule
+\textbf{512} & Prefix (MRL) & 85.06 & 100.2\% & 84.76 & 100.2\% & 36.61 & 95.7\% & 40.33 & 98.1\% & 41.92 & 101.9\% & 35.41 & 97.7\% & 100.2\% & 98.3\% \\
+ & PCA & 85.24 & 100.5\% & 84.86 & 100.3\% & 44.11 & 115.3\% & 44.71 & 108.8\% & 46.97 & 114.1\% & 40.44 & 111.5\% & 100.4\% & 112.5\% \\
+ & Whitening & 81.77 & 96.4\% & 79.22 & 93.7\% & 60.36 & 157.8\% & 60.51 & 147.3\% & 65.13 & 158.3\% & 60.46 & 166.8\% & 95.0\% & \textbf{157.5}\% \\
+ & SpecTemp & 85.43 & 100.7\% & 84.86 & 100.3\% & 45.08 & 117.9\% & 45.38 & 110.4\% & 47.72 & 116.0\% & 40.87 & 112.7\% & \textbf{100.5}\% & 114.2\% \\
+ & Rand. Trunc. (Ctrl) & 84.48 & 99.6\% & 84.49 & 99.9\% & 39.01 & 102.0\% & 39.89 & 97.1\% & 41.69 & 101.3\% & 35.43 & 97.7\% & 99.7\% & 99.5\% \\
+\midrule
+\textbf{256} & Prefix (MRL) & 85.02 & 100.2\% & 84.16 & 99.5\% & 37.81 & 98.9\% & 39.62 & 96.4\% & 41.18 & 100.1\% & 35.24 & 97.2\% & 99.8\% & 98.2\% \\
+ & PCA & 84.16 & 99.2\% & 85.16 & 100.7\% & 42.46 & 111.0\% & 43.61 & 106.1\% & 45.79 & 111.3\% & 39.75 & 109.6\% & 99.9\% & 109.5\% \\
+ & Whitening & 83.06 & 97.9\% & 81.82 & 96.7\% & 57.59 & 150.6\% & 58.57 & 142.5\% & 64.11 & 155.8\% & 59.65 & 164.5\% & 97.3\% & \textbf{153.4}\% \\
+ & SpecTemp & 84.90 & 100.0\% & 85.19 & 100.7\% & 45.01 & 117.7\% & 45.58 & 110.9\% & 48.17 & 117.1\% & 41.37 & 114.1\% & \textbf{100.4}\% & 115.0\% \\
+ & Rand. Trunc. (Ctrl) & 84.58 & 99.7\% & 83.32 & 98.5\% & 36.79 & 96.2\% & 41.56 & 101.1\% & 44.86 & 109.0\% & 36.20 & 99.8\% & 99.1\% & 101.5\% \\
+\midrule
+\textbf{128} & Prefix (MRL) & 84.15 & 99.2\% & 84.02 & 99.3\% & 43.27 & 113.1\% & 38.10 & 92.7\% & 46.36 & 112.7\% & 36.14 & 99.7\% & 99.2\% & 104.5\% \\
+ & PCA & 81.35 & 95.9\% & 84.88 & 100.3\% & 39.46 & 103.2\% & 41.30 & 100.5\% & 43.34 & 105.3\% & 38.27 & 105.5\% & 98.1\% & 103.6\% \\
+ & Whitening & 83.52 & 98.4\% & 83.71 & 99.0\% & 53.75 & 140.5\% & 54.87 & 133.5\% & 60.70 & 147.5\% & 57.04 & 157.3\% & 98.7\% & \textbf{144.7}\% \\
+ & SpecTemp & 83.20 & 98.0\% & 85.20 & 100.7\% & 44.12 & 115.4\% & 45.13 & 109.8\% & 47.91 & 116.4\% & 41.80 & 115.3\% & \textbf{99.4}\% & 114.2\% \\
+ & Rand. Trunc. (Ctrl) & 83.47 & 98.4\% & 82.78 & 97.9\% & 35.56 & 93.0\% & 38.96 & 94.8\% & 42.41 & 103.1\% & 36.34 & 100.2\% & 98.1\% & 97.8\% \\
+\midrule
+\textbf{64} & Prefix (MRL) & 81.30 & 95.8\% & 82.66 & 97.7\% & 43.21 & 113.0\% & 35.03 & 85.2\% & 44.08 & 107.1\% & 32.68 & 90.1\% & 96.8\% & 98.9\% \\
+ & PCA & 76.35 & 90.0\% & 83.18 & 98.3\% & 35.74 & 93.4\% & 38.49 & 93.7\% & 39.87 & 96.9\% & 35.86 & 98.9\% & 94.2\% & 95.7\% \\
+ & Whitening & 80.99 & 95.4\% & 83.88 & 99.2\% & 47.40 & 123.9\% & 50.16 & 122.1\% & 54.36 & 132.1\% & 51.35 & 141.6\% & \textbf{97.3}\% & \textbf{129.9}\% \\
+ & SpecTemp & 79.67 & 93.9\% & 84.17 & 99.5\% & 42.64 & 111.5\% & 45.03 & 109.6\% & 47.03 & 114.3\% & 42.14 & 116.2\% & 96.7\% & 112.9\% \\
+ & Rand. Trunc. (Ctrl) & 81.78 & 96.4\% & 80.74 & 95.5\% & 34.47 & 90.1\% & 36.24 & 88.2\% & 38.29 & 93.1\% & 35.16 & 97.0\% & 95.9\% & 92.1\% \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

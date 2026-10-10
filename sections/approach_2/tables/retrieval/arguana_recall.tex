@@ -1,0 +1,28 @@
+% Auto-generated publication table: arguana_recall
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{ArguAna} (Recall@100). Top performance across valid methods in each column is shown in bold.}
+\label{tab:arguana_recall}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & 0.9936 & \textbf{0.9957} & 0.9125 & 0.9403 & 0.3890 & 0.3549 & \textbf{0.9947} & 0.9264 & 0.3720 \\
+Standardization & \textbf{0.9943} & 0.9943 & 0.9630 & 0.9403 & 0.4253 & 0.3734 & 0.9943 & 0.9516 & 0.3994 \\
+R1 (Mean Sub.) & \textbf{0.9943} & 0.9943 & 0.9317 & 0.9289 & 0.3940 & 0.3634 & 0.9943 & 0.9303 & 0.3787 \\
+R2 (Subspace Def.) & 0.9936 & 0.9936 & 0.9324 & 0.9303 & 0.3947 & 0.3649 & 0.9936 & 0.9314 & 0.3798 \\
+Soft-ZCA & 0.9723 & 0.9780 & \textbf{0.9780} & \textbf{0.9723} & \textbf{0.6394} & \textbf{0.5839} & 0.9751 & \textbf{0.9751} & \textbf{0.6117} \\
+ABTT-1 & 0.9936 & 0.9936 & 0.9516 & 0.9374 & 0.4509 & 0.3947 & 0.9936 & 0.9445 & 0.4228 \\
+ABTT-2 & 0.9936 & 0.9929 & 0.9516 & 0.9360 & 0.5028 & 0.4353 & 0.9932 & 0.9438 & 0.4691 \\
+ABTT-3 & 0.9915 & 0.9950 & 0.9559 & 0.9502 & 0.5533 & 0.5071 & 0.9932 & 0.9531 & 0.5302 \\
+\midrule
+Rand (Control) & 0.9936 & 0.9957 & 0.9118 & 0.9403 & 0.3883 & 0.3535 & 0.9947 & 0.9260 & 0.3709 \\
+MC (Control) & 0.9943 & 0.9929 & 0.9118 & 0.8777 & 0.3798 & 0.3450 & 0.9936 & 0.8947 & 0.3624 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

@@ -1,0 +1,28 @@
+% Auto-generated publication table: arguana_ndcg
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{ArguAna} (nDCG@10). Top performance across valid methods in each column is shown in bold.}
+\label{tab:arguana_ndcg}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & 0.4702 & \textbf{0.4930} & 0.2938 & 0.3162 & 0.1124 & 0.1064 & \textbf{0.4816} & 0.3050 & 0.1094 \\
+Standardization & 0.4754 & 0.4796 & 0.3172 & 0.3077 & 0.1299 & 0.1125 & 0.4775 & 0.3124 & 0.1212 \\
+R1 (Mean Sub.) & 0.4760 & 0.4829 & 0.2988 & 0.2954 & 0.1108 & 0.1078 & 0.4794 & 0.2971 & 0.1093 \\
+R2 (Subspace Def.) & 0.4697 & 0.4852 & 0.2985 & 0.2952 & 0.1121 & 0.1080 & 0.4774 & 0.2969 & 0.1100 \\
+Soft-ZCA & 0.4287 & 0.4447 & \textbf{0.3599} & \textbf{0.3622} & \textbf{0.1584} & \textbf{0.1485} & 0.4367 & \textbf{0.3610} & \textbf{0.1534} \\
+ABTT-1 & 0.4764 & 0.4825 & 0.3056 & 0.2986 & 0.1286 & 0.1109 & 0.4795 & 0.3021 & 0.1198 \\
+ABTT-2 & \textbf{0.4767} & 0.4805 & 0.3108 & 0.3012 & 0.1338 & 0.1169 & 0.4786 & 0.3060 & 0.1253 \\
+ABTT-3 & 0.4686 & 0.4792 & 0.3104 & 0.3157 & 0.1433 & 0.1301 & 0.4739 & 0.3130 & 0.1367 \\
+\midrule
+Rand (Control) & 0.4700 & 0.4931 & 0.2938 & 0.3163 & 0.1130 & 0.1063 & 0.4815 & 0.3051 & 0.1097 \\
+MC (Control) & 0.4778 & 0.4592 & 0.2299 & 0.1924 & 0.0939 & 0.0819 & 0.4685 & 0.2111 & 0.0879 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

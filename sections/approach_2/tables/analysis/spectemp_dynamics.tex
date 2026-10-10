@@ -1,0 +1,23 @@
+% Auto-generated publication table: spectemp_dynamics
+\begin{table*}[t]
+\centering
+\small
+\caption{SpecTemp spectral decomposition properties and derived adaptive tempering exponents $\gamma(k)$ on google/embeddinggemma-300m ($d=768$).}
+\label{tab:spectemp_dynamics}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll c ccc cc cccc}
+\toprule
+& & & & & & & \multicolumn{4}{c}{\textbf{Derived Tempering Exponent $\mathbf{\gamma(k)}$}} \\
+\cmidrule(lr){8-11}
+\textbf{Dataset} & \textbf{Track} & $\mathbf{d}$ & $\mathbf{\lambda_1}$ & $\mathbf{\sigma^2_{\text{noise}}}$ & $\mathbf{\text{SNR}(1)}$ & $\mathbf{k_{\text{knee}}}$ & $\mathbf{k=512}$ & $\mathbf{k=256}$ & $\mathbf{k=128}$ & $\mathbf{k=64}$ \\
+\midrule
+FiQA2018 & Retrieval & 768 & 0.0333 & $< 10^{-4}$ & 2666.3 & 30 & 0.0586 & 0.1576 & 0.3092 & 0.5598 \\
+ArguAna & Retrieval & 768 & 0.0276 & $< 10^{-4}$ & 3339.6 & 53 & 0.0524 & 0.1896 & 0.4388 & 0.8591 \\
+SCIDOCS & Retrieval & 768 & 0.0285 & $< 10^{-4}$ & 2796.6 & 34 & 0.0613 & 0.1920 & 0.3809 & 0.6590 \\
+STSBenchmark & Similarity & 768 & 0.0506 & $< 10^{-4}$ & 6270.3 & 24 & 0.0319 & 0.1291 & 0.2822 & 0.5082 \\
+SICK-R & Similarity & 768 & 0.0488 & $< 10^{-4}$ & $1.64 \times 10^{4}$ & 23 & 0.0120 & 0.0660 & 0.1892 & 0.4287 \\
+STS22.v2 & Similarity & 768 & 0.0260 & $< 10^{-4}$ & $2.60 \times 10^{10}$ & 55 & 0.0000 & 0.0988 & 0.4282 & 0.8890 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

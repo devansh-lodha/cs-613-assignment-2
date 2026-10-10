@@ -1,0 +1,28 @@
+% Auto-generated publication table: fiqa_mrr
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{FiQA2018} (MRR@10). Top performance across valid methods in each column is shown in bold.}
+\label{tab:fiqa_mrr}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & 0.5467 & 0.5509 & 0.0700 & 0.0567 & 0.0299 & 0.0034 & 0.5488 & 0.0634 & 0.0167 \\
+Standardization & 0.5404 & 0.5440 & 0.0868 & 0.0486 & 0.0258 & 0.0027 & 0.5422 & 0.0677 & 0.0142 \\
+R1 (Mean Sub.) & 0.5424 & 0.5509 & 0.0666 & 0.0541 & 0.0284 & 0.0035 & 0.5466 & 0.0604 & 0.0159 \\
+R2 (Subspace Def.) & \textbf{0.5481} & 0.5496 & 0.0686 & 0.0568 & 0.0296 & 0.0036 & \textbf{0.5489} & 0.0627 & 0.0166 \\
+Soft-ZCA & 0.4823 & 0.4929 & \textbf{0.1132} & \textbf{0.0687} & \textbf{0.0449} & \textbf{0.0041} & 0.4876 & \textbf{0.0909} & \textbf{0.0245} \\
+ABTT-1 & 0.5442 & 0.5536 & 0.0697 & 0.0475 & 0.0268 & 0.0035 & \textbf{0.5489} & 0.0586 & 0.0152 \\
+ABTT-2 & 0.5359 & \textbf{0.5558} & 0.0682 & 0.0537 & 0.0322 & 0.0040 & 0.5458 & 0.0609 & 0.0181 \\
+ABTT-3 & 0.5340 & 0.5440 & 0.0855 & 0.0566 & 0.0302 & 0.0037 & 0.5390 & 0.0710 & 0.0170 \\
+\midrule
+Rand (Control) & 0.5460 & 0.5502 & 0.0699 & 0.0566 & 0.0300 & 0.0034 & 0.5481 & 0.0633 & 0.0167 \\
+MC (Control) & 0.5245 & 0.5360 & 0.0252 & 0.0164 & 0.0264 & 0.0019 & 0.5302 & 0.0208 & 0.0142 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

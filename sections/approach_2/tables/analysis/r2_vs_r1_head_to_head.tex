@@ -1,0 +1,51 @@
+% Auto-generated publication table: r2_vs_r1_head_to_head
+\begin{table*}[t]
+\centering
+\small
+\caption{Pairwise head-to-head comparison between R2 mean-subspace deflation and R1 direct mean subtraction testing first-order parallel error cancellation. Instances where R2 outperforms R1 are bolded.}
+\label{tab:r2_vs_r1_head_to_head}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll ccc c}
+\toprule
+\textbf{Benchmark} & \textbf{Track (Metric)} & \textbf{Model} & \textbf{R1} & \textbf{R2} & $\Delta(\text{R2} - \text{R1})$ & \textbf{R2 Wins} \\
+\midrule
+ArguAna & Retrieval (nDCG@10) & Qwen3-Emb-0.6B & 0.4829 & \textbf{0.4852} & \textbf{+0.0023} & \textbf{True} \\
+ArguAna & Retrieval (nDCG@10) & Qwen3.5-0.8B (Last) & 0.1078 & \textbf{0.1080} & \textbf{+0.0002} & \textbf{True} \\
+ArguAna & Retrieval (nDCG@10) & Qwen3.5-0.8B (Mean) & 0.2954 & 0.2952 & -0.0002 & False \\
+ArguAna & Retrieval (nDCG@10) & EmbGemma-300M & 0.4760 & 0.4697 & -0.0063 & False \\
+ArguAna & Retrieval (nDCG@10) & Gemma-3-1B (Last) & 0.1108 & \textbf{0.1121} & \textbf{+0.0013} & \textbf{True} \\
+ArguAna & Retrieval (nDCG@10) & Gemma-3-1B (Mean) & 0.2988 & 0.2985 & -0.0003 & False \\
+FiQA2018 & Retrieval (nDCG@10) & Qwen3-Emb-0.6B & 0.4725 & \textbf{0.4730} & \textbf{+0.0006} & \textbf{True} \\
+FiQA2018 & Retrieval (nDCG@10) & Qwen3.5-0.8B (Last) & 0.0025 & \textbf{0.0028} & \textbf{+0.0003} & \textbf{True} \\
+FiQA2018 & Retrieval (nDCG@10) & Qwen3.5-0.8B (Mean) & 0.0420 & \textbf{0.0433} & \textbf{+0.0013} & \textbf{True} \\
+FiQA2018 & Retrieval (nDCG@10) & EmbGemma-300M & 0.4731 & \textbf{0.4765} & \textbf{+0.0034} & \textbf{True} \\
+FiQA2018 & Retrieval (nDCG@10) & Gemma-3-1B (Last) & 0.0225 & 0.0223 & -0.0002 & False \\
+FiQA2018 & Retrieval (nDCG@10) & Gemma-3-1B (Mean) & 0.0564 & \textbf{0.0572} & \textbf{+0.0008} & \textbf{True} \\
+SCIDOCS & Retrieval (nDCG@10) & Qwen3-Emb-0.6B & 0.2403 & \textbf{0.2405} & \textbf{+0.0002} & \textbf{True} \\
+SCIDOCS & Retrieval (nDCG@10) & Qwen3.5-0.8B (Last) & 0.0048 & \textbf{0.0048} & \textbf{0.0000} & \textbf{True} \\
+SCIDOCS & Retrieval (nDCG@10) & Qwen3.5-0.8B (Mean) & 0.0216 & \textbf{0.0229} & \textbf{+0.0013} & \textbf{True} \\
+SCIDOCS & Retrieval (nDCG@10) & EmbGemma-300M & 0.1992 & 0.1966 & -0.0027 & False \\
+SCIDOCS & Retrieval (nDCG@10) & Gemma-3-1B (Last) & 0.0052 & \textbf{0.0055} & \textbf{+0.0003} & \textbf{True} \\
+SCIDOCS & Retrieval (nDCG@10) & Gemma-3-1B (Mean) & 0.0222 & \textbf{0.0244} & \textbf{+0.0021} & \textbf{True} \\
+SICK-R & Similarity (Spearman $\rho$) & Qwen3-Emb-0.6B & 81.02 & \textbf{81.03} & \textbf{+0.00} & \textbf{True} \\
+SICK-R & Similarity (Spearman $\rho$) & Qwen3.5-0.8B (Last) & 52.02 & \textbf{52.23} & \textbf{+0.21} & \textbf{True} \\
+SICK-R & Similarity (Spearman $\rho$) & Qwen3.5-0.8B (Mean) & 52.02 & \textbf{52.07} & \textbf{+0.05} & \textbf{True} \\
+SICK-R & Similarity (Spearman $\rho$) & EmbGemma-300M & 79.75 & \textbf{79.77} & \textbf{+0.02} & \textbf{True} \\
+SICK-R & Similarity (Spearman $\rho$) & Gemma-3-1B (Last) & 53.22 & \textbf{53.35} & \textbf{+0.13} & \textbf{True} \\
+SICK-R & Similarity (Spearman $\rho$) & Gemma-3-1B (Mean) & 51.72 & \textbf{51.75} & \textbf{+0.03} & \textbf{True} \\
+STS22.v2 & Similarity (Spearman $\rho$) & Qwen3-Emb-0.6B & 67.61 & 67.55 & -0.06 & False \\
+STS22.v2 & Similarity (Spearman $\rho$) & Qwen3.5-0.8B (Last) & 15.36 & \textbf{15.82} & \textbf{+0.46} & \textbf{True} \\
+STS22.v2 & Similarity (Spearman $\rho$) & Qwen3.5-0.8B (Mean) & 58.16 & \textbf{58.28} & \textbf{+0.13} & \textbf{True} \\
+STS22.v2 & Similarity (Spearman $\rho$) & EmbGemma-300M & 65.90 & \textbf{66.02} & \textbf{+0.11} & \textbf{True} \\
+STS22.v2 & Similarity (Spearman $\rho$) & Gemma-3-1B (Last) & 13.39 & \textbf{14.22} & \textbf{+0.83} & \textbf{True} \\
+STS22.v2 & Similarity (Spearman $\rho$) & Gemma-3-1B (Mean) & 55.45 & 55.34 & -0.11 & False \\
+STSBenchmark & Similarity (Spearman $\rho$) & Qwen3-Emb-0.6B & 84.72 & \textbf{84.79} & \textbf{+0.07} & \textbf{True} \\
+STSBenchmark & Similarity (Spearman $\rho$) & Qwen3.5-0.8B (Last) & 40.52 & \textbf{40.70} & \textbf{+0.19} & \textbf{True} \\
+STSBenchmark & Similarity (Spearman $\rho$) & Qwen3.5-0.8B (Mean) & 44.81 & \textbf{45.08} & \textbf{+0.27} & \textbf{True} \\
+STSBenchmark & Similarity (Spearman $\rho$) & EmbGemma-300M & 85.27 & \textbf{85.41} & \textbf{+0.14} & \textbf{True} \\
+STSBenchmark & Similarity (Spearman $\rho$) & Gemma-3-1B (Last) & 47.23 & \textbf{47.87} & \textbf{+0.64} & \textbf{True} \\
+STSBenchmark & Similarity (Spearman $\rho$) & Gemma-3-1B (Mean) & 44.29 & \textbf{44.58} & \textbf{+0.28} & \textbf{True} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

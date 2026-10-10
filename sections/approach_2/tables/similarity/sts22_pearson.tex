@@ -1,0 +1,28 @@
+% Auto-generated publication table: sts22_pearson
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{STS22.v2} (Pearson $r$). Top performance across valid methods in each column is shown in bold.}
+\label{tab:sts22_pearson}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & 66.85 & \textbf{70.57} & 48.40 & 50.00 & 12.53 & 13.92 & 68.71 & 49.20 & 13.23 \\
+Standardization & 67.16 & 70.03 & 58.30 & 55.20 & 12.44 & 15.34 & 68.60 & 56.75 & 13.89 \\
+R1 (Mean Sub.) & 67.03 & 69.76 & 53.87 & 53.42 & 12.56 & 12.40 & 68.39 & 53.64 & 12.48 \\
+R2 (Subspace Def.) & 67.19 & 69.74 & 54.01 & 53.43 & 12.97 & 12.93 & 68.46 & 53.72 & 12.95 \\
+Soft-ZCA & 62.30 & 60.62 & \textbf{65.04} & \textbf{65.75} & 11.17 & 16.17 & 61.46 & \textbf{65.39} & 13.67 \\
+ABTT-1 & 67.99 & 70.02 & 55.31 & 55.23 & 15.06 & 20.04 & 69.01 & 55.27 & 17.55 \\
+ABTT-2 & 68.25 & 70.28 & 56.60 & 58.74 & 15.34 & 22.80 & 69.27 & 57.67 & 19.07 \\
+ABTT-3 & \textbf{68.31} & 70.53 & 57.08 & 59.80 & \textbf{15.35} & \textbf{24.55} & \textbf{69.42} & 58.44 & \textbf{19.95} \\
+\midrule
+Rand (Control) & 66.84 & 70.57 & 48.38 & 50.05 & 12.51 & 13.95 & 68.71 & 49.22 & 13.23 \\
+MC (Control) & 65.82 & 69.08 & 39.85 & 45.68 & 5.92 & 7.76 & 67.45 & 42.76 & 6.84 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

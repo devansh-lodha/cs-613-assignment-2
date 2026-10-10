@@ -1,0 +1,39 @@
+% Auto-generated publication table: tri_paradigm_benchmark
+\begin{table*}[t]
+\centering
+\small
+\caption{Grand benchmark comparison among Coordinate (Standardization), Subspace (R2), and Spectral (Soft-ZCA) paradigms on un-fine-tuned base causal LLMs. Highest score across paradigms is bolded.}
+\label{tab:tri_paradigm_benchmark}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll cccc cc}
+\toprule
+\textbf{Benchmark} & \textbf{Track} & \textbf{Model} & \textbf{Baseline} & \textbf{Standardization} & \textbf{R2} & \textbf{Soft-ZCA} & \textbf{Best Paradigm} & \textbf{Max Gain} \\
+\midrule
+ArguAna & Retrieval & Qwen3.5-0.8B (Last) & 0.1064 & 0.1125 & 0.1080 & \textbf{0.1485} & \textbf{Soft-ZCA} & \textbf{+0.0421} \\
+ArguAna & Retrieval & Qwen3.5-0.8B (Mean) & 0.3162 & 0.3077 & 0.2952 & \textbf{0.3622} & \textbf{Soft-ZCA} & \textbf{+0.0460} \\
+ArguAna & Retrieval & Gemma-3-1B (Last) & 0.1124 & 0.1299 & 0.1121 & \textbf{0.1584} & \textbf{Soft-ZCA} & \textbf{+0.0460} \\
+ArguAna & Retrieval & Gemma-3-1B (Mean) & 0.2938 & 0.3172 & 0.2985 & \textbf{0.3599} & \textbf{Soft-ZCA} & \textbf{+0.0661} \\
+FiQA2018 & Retrieval & Qwen3.5-0.8B (Last) & 0.0026 & 0.0019 & 0.0028 & \textbf{0.0042} & \textbf{Soft-ZCA} & \textbf{+0.0016} \\
+FiQA2018 & Retrieval & Qwen3.5-0.8B (Mean) & 0.0419 & 0.0385 & 0.0433 & \textbf{0.0615} & \textbf{Soft-ZCA} & \textbf{+0.0196} \\
+FiQA2018 & Retrieval & Gemma-3-1B (Last) & 0.0246 & 0.0187 & 0.0223 & \textbf{0.0389} & \textbf{Soft-ZCA} & \textbf{+0.0143} \\
+FiQA2018 & Retrieval & Gemma-3-1B (Mean) & 0.0589 & 0.0681 & 0.0572 & \textbf{0.0968} & \textbf{Soft-ZCA} & \textbf{+0.0379} \\
+SCIDOCS & Retrieval & Qwen3.5-0.8B (Last) & 0.0042 & 0.0049 & 0.0048 & \textbf{0.0080} & \textbf{Soft-ZCA} & \textbf{+0.0038} \\
+SCIDOCS & Retrieval & Qwen3.5-0.8B (Mean) & 0.0268 & 0.0193 & 0.0229 & \textbf{0.0536} & \textbf{Soft-ZCA} & \textbf{+0.0268} \\
+SCIDOCS & Retrieval & Gemma-3-1B (Last) & 0.0057 & 0.0062 & 0.0055 & \textbf{0.0106} & \textbf{Soft-ZCA} & \textbf{+0.0049} \\
+SCIDOCS & Retrieval & Gemma-3-1B (Mean) & 0.0302 & 0.0420 & 0.0244 & \textbf{0.0679} & \textbf{Soft-ZCA} & \textbf{+0.0377} \\
+SICK-R & Similarity & Qwen3.5-0.8B (Last) & 48.52 & 52.43 & 52.23 & \textbf{56.20} & \textbf{Soft-ZCA} & \textbf{+7.67} \\
+SICK-R & Similarity & Qwen3.5-0.8B (Mean) & 48.21 & 53.27 & 52.07 & \textbf{60.16} & \textbf{Soft-ZCA} & \textbf{+11.95} \\
+SICK-R & Similarity & Gemma-3-1B (Last) & 50.57 & 54.32 & 53.35 & \textbf{58.43} & \textbf{Soft-ZCA} & \textbf{+7.87} \\
+SICK-R & Similarity & Gemma-3-1B (Mean) & 46.66 & 53.46 & 51.75 & \textbf{59.75} & \textbf{Soft-ZCA} & \textbf{+13.09} \\
+STS22.v2 & Similarity & Qwen3.5-0.8B (Last) & 16.26 & 18.77 & 15.82 & \textbf{34.20} & \textbf{Soft-ZCA} & \textbf{+17.93} \\
+STS22.v2 & Similarity & Qwen3.5-0.8B (Mean) & 60.21 & 58.92 & 58.28 & \textbf{63.99} & \textbf{Soft-ZCA} & \textbf{+3.78} \\
+STS22.v2 & Similarity & Gemma-3-1B (Last) & 12.07 & 14.67 & 14.22 & \textbf{23.19} & \textbf{Soft-ZCA} & \textbf{+11.12} \\
+STS22.v2 & Similarity & Gemma-3-1B (Mean) & 58.78 & 57.56 & 55.34 & \textbf{63.75} & \textbf{Soft-ZCA} & \textbf{+4.97} \\
+STSBenchmark & Similarity & Qwen3.5-0.8B (Last) & 36.26 & 43.01 & 40.70 & \textbf{60.62} & \textbf{Soft-ZCA} & \textbf{+24.36} \\
+STSBenchmark & Similarity & Qwen3.5-0.8B (Mean) & 41.09 & 46.86 & 45.08 & \textbf{60.40} & \textbf{Soft-ZCA} & \textbf{+19.30} \\
+STSBenchmark & Similarity & Gemma-3-1B (Last) & 41.15 & 50.61 & 47.87 & \textbf{65.49} & \textbf{Soft-ZCA} & \textbf{+24.34} \\
+STSBenchmark & Similarity & Gemma-3-1B (Mean) & 38.25 & 49.65 & 44.58 & \textbf{60.68} & \textbf{Soft-ZCA} & \textbf{+22.43} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

@@ -1,0 +1,53 @@
+% Auto-generated publication table: compression_divergence
+\begin{table*}[t]
+\centering
+\small
+\caption{Dual-regime compression divergence contrasting broad subspace advantage ($k=512$, SpecTemp vs Whitening) against compact subspace advantage ($k=64$, SpecTemp vs PCA). Positive advantages are bolded.}
+\label{tab:compression_divergence}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll ccc c ccc c}
+\toprule
+& & & \multicolumn{4}{c}{\textbf{Broad Subspace Regime ($k=512$)}} & \multicolumn{4}{c}{\textbf{Compact Subspace Regime ($k=64$)}} \\
+\cmidrule(lr){4-7} \cmidrule(lr){8-11}
+\textbf{Benchmark} & \textbf{Track} & \textbf{Model} & \textbf{PCA} & \textbf{White} & \textbf{SpecTemp} & \textbf{Adv. ($\Delta_{512}$)} & \textbf{PCA} & \textbf{White} & \textbf{SpecTemp} & \textbf{Adv. ($\Delta_{64}$)} \\
+\midrule
+ArguAna & Retrieval & Qwen3-Emb-0.6B & 0.4823 & 0.4435 & 0.4826 & \textbf{+0.0391} & 0.4476 & 0.4377 & 0.4468 & -0.0008 \\
+ArguAna & Retrieval & Qwen3.5-0.8B (Last) & 0.1069 & 0.1482 & 0.1093 & -0.0389 & 0.0832 & 0.1048 & 0.0931 & \textbf{+0.0099} \\
+ArguAna & Retrieval & Qwen3.5-0.8B (Mean) & 0.2954 & 0.3568 & 0.2988 & -0.0581 & 0.2596 & 0.3010 & 0.2903 & \textbf{+0.0307} \\
+ArguAna & Retrieval & EmbGemma-300M & 0.4762 & 0.4296 & 0.4749 & \textbf{+0.0453} & 0.4353 & 0.4071 & 0.4140 & -0.0214 \\
+ArguAna & Retrieval & Gemma-3-1B (Last) & 0.1100 & 0.1610 & 0.1122 & -0.0488 & 0.0776 & 0.1210 & 0.0940 & \textbf{+0.0164} \\
+ArguAna & Retrieval & Gemma-3-1B (Mean) & 0.2976 & 0.3558 & 0.3009 & -0.0549 & 0.2396 & 0.2882 & 0.2728 & \textbf{+0.0331} \\
+FiQA2018 & Retrieval & Qwen3-Emb-0.6B & 0.4722 & 0.4135 & 0.4739 & \textbf{+0.0605} & 0.3978 & 0.3831 & 0.3890 & -0.0088 \\
+FiQA2018 & Retrieval & Qwen3.5-0.8B (Last) & 0.0026 & 0.0060 & 0.0026 & -0.0034 & 0.0018 & 0.0020 & 0.0015 & -0.0002 \\
+FiQA2018 & Retrieval & Qwen3.5-0.8B (Mean) & 0.0401 & 0.0585 & 0.0411 & -0.0175 & 0.0244 & 0.0289 & 0.0284 & \textbf{+0.0040} \\
+FiQA2018 & Retrieval & EmbGemma-300M & 0.4711 & 0.4101 & 0.4719 & \textbf{+0.0618} & 0.3134 & 0.3277 & 0.3285 & \textbf{+0.0151} \\
+FiQA2018 & Retrieval & Gemma-3-1B (Last) & 0.0225 & 0.0443 & 0.0227 & -0.0216 & 0.0161 & 0.0128 & 0.0162 & \textbf{+0.0001} \\
+FiQA2018 & Retrieval & Gemma-3-1B (Mean) & 0.0495 & 0.0844 & 0.0519 & -0.0325 & 0.0204 & 0.0313 & 0.0287 & \textbf{+0.0083} \\
+SCIDOCS & Retrieval & Qwen3-Emb-0.6B & 0.2399 & 0.2147 & 0.2410 & \textbf{+0.0263} & 0.1972 & 0.1973 & 0.2015 & \textbf{+0.0043} \\
+SCIDOCS & Retrieval & Qwen3.5-0.8B (Last) & 0.0043 & 0.0085 & 0.0046 & -0.0039 & 0.0040 & 0.0060 & 0.0048 & \textbf{+0.0008} \\
+SCIDOCS & Retrieval & Qwen3.5-0.8B (Mean) & 0.0201 & 0.0487 & 0.0206 & -0.0281 & 0.0138 & 0.0114 & 0.0129 & -0.0009 \\
+SCIDOCS & Retrieval & EmbGemma-300M & 0.1987 & 0.1784 & 0.1999 & \textbf{+0.0215} & 0.1250 & 0.1250 & 0.1295 & \textbf{+0.0045} \\
+SCIDOCS & Retrieval & Gemma-3-1B (Last) & 0.0053 & 0.0089 & 0.0055 & -0.0034 & 0.0053 & 0.0056 & 0.0053 & -0.0000 \\
+SCIDOCS & Retrieval & Gemma-3-1B (Mean) & 0.0195 & 0.0634 & 0.0202 & -0.0432 & 0.0135 & 0.0140 & 0.0139 & \textbf{+0.0003} \\
+SICK-R & Similarity & Qwen3-Emb-0.6B & 81.09 & 69.91 & 81.00 & \textbf{+11.09} & 81.76 & 78.56 & 80.18 & -1.57 \\
+SICK-R & Similarity & Qwen3.5-0.8B (Last) & 51.98 & 55.31 & 52.24 & -3.07 & 50.05 & 54.83 & 53.68 & \textbf{+3.63} \\
+SICK-R & Similarity & Qwen3.5-0.8B (Mean) & 51.87 & 59.56 & 52.27 & -7.29 & 48.53 & 56.78 & 54.52 & \textbf{+5.99} \\
+SICK-R & Similarity & EmbGemma-300M & 79.73 & 70.29 & 79.79 & \textbf{+9.50} & 75.91 & 78.15 & 79.00 & \textbf{+3.09} \\
+SICK-R & Similarity & Gemma-3-1B (Last) & 53.16 & 57.50 & 53.48 & -4.03 & 51.15 & 56.13 & 54.94 & \textbf{+3.79} \\
+SICK-R & Similarity & Gemma-3-1B (Mean) & 51.52 & 59.32 & 51.88 & -7.44 & 47.82 & 55.36 & 52.74 & \textbf{+4.91} \\
+STS22.v2 & Similarity & Qwen3-Emb-0.6B & 67.61 & 67.43 & 67.61 & \textbf{+0.18} & 67.56 & 67.75 & 67.75 & \textbf{+0.20} \\
+STS22.v2 & Similarity & Qwen3.5-0.8B (Last) & 15.36 & 34.70 & 15.36 & -19.34 & 10.46 & 26.24 & 21.53 & \textbf{+11.07} \\
+STS22.v2 & Similarity & Qwen3.5-0.8B (Mean) & 58.16 & 63.93 & 58.16 & -5.77 & 54.88 & 59.34 & 57.82 & \textbf{+2.94} \\
+STS22.v2 & Similarity & EmbGemma-300M & 65.90 & 68.08 & 65.90 & -2.17 & 64.03 & 66.34 & 66.11 & \textbf{+2.07} \\
+STS22.v2 & Similarity & Gemma-3-1B (Last) & 13.39 & 22.96 & 13.39 & -9.57 & 11.44 & 19.50 & 17.47 & \textbf{+6.03} \\
+STS22.v2 & Similarity & Gemma-3-1B (Mean) & 55.45 & 65.03 & 55.45 & -9.58 & 49.69 & 54.97 & 53.72 & \textbf{+4.03} \\
+STSBenchmark & Similarity & Qwen3-Emb-0.6B & 84.86 & 79.22 & 84.86 & \textbf{+5.64} & 83.18 & 83.88 & 84.17 & \textbf{+0.99} \\
+STSBenchmark & Similarity & Qwen3.5-0.8B (Last) & 40.44 & 60.46 & 40.87 & -19.59 & 35.86 & 51.35 & 42.14 & \textbf{+6.28} \\
+STSBenchmark & Similarity & Qwen3.5-0.8B (Mean) & 44.71 & 60.51 & 45.38 & -15.13 & 38.49 & 50.16 & 45.03 & \textbf{+6.54} \\
+STSBenchmark & Similarity & EmbGemma-300M & 85.24 & 81.77 & 85.43 & \textbf{+3.66} & 76.35 & 80.99 & 79.67 & \textbf{+3.32} \\
+STSBenchmark & Similarity & Gemma-3-1B (Last) & 46.97 & 65.13 & 47.72 & -17.42 & 39.87 & 54.36 & 47.03 & \textbf{+7.16} \\
+STSBenchmark & Similarity & Gemma-3-1B (Mean) & 44.11 & 60.36 & 45.08 & -15.28 & 35.74 & 47.40 & 42.64 & \textbf{+6.90} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

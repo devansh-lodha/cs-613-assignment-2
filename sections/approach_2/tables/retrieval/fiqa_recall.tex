@@ -1,0 +1,28 @@
+% Auto-generated publication table: fiqa_recall
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{FiQA2018} (Recall@100). Top performance across valid methods in each column is shown in bold.}
+\label{tab:fiqa_recall}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & 0.7959 & \textbf{0.8154} & 0.2443 & 0.1717 & 0.1169 & 0.0206 & \textbf{0.8056} & 0.2080 & 0.0688 \\
+Standardization & 0.7921 & 0.8018 & 0.2570 & 0.1611 & 0.1172 & 0.0260 & 0.7970 & 0.2091 & 0.0716 \\
+R1 (Mean Sub.) & 0.7917 & 0.8071 & 0.2208 & 0.1775 & 0.1148 & 0.0198 & 0.7994 & 0.1991 & 0.0673 \\
+R2 (Subspace Def.) & \textbf{0.7981} & 0.8104 & 0.2352 & 0.1746 & 0.1115 & 0.0236 & 0.8042 & 0.2049 & 0.0675 \\
+Soft-ZCA & 0.7137 & 0.7400 & \textbf{0.3663} & \textbf{0.2692} & \textbf{0.1898} & \textbf{0.0644} & 0.7268 & \textbf{0.3177} & \textbf{0.1271} \\
+ABTT-1 & 0.7966 & 0.8077 & 0.2399 & 0.1608 & 0.1232 & 0.0265 & 0.8021 & 0.2003 & 0.0749 \\
+ABTT-2 & 0.7923 & 0.7985 & 0.2393 & 0.1774 & 0.1451 & 0.0470 & 0.7954 & 0.2084 & 0.0960 \\
+ABTT-3 & 0.7881 & 0.7953 & 0.2725 & 0.1822 & 0.1377 & 0.0390 & 0.7917 & 0.2274 & 0.0883 \\
+\midrule
+Rand (Control) & 0.7959 & 0.8154 & 0.2438 & 0.1717 & 0.1177 & 0.0206 & 0.8056 & 0.2077 & 0.0692 \\
+MC (Control) & 0.7809 & 0.8028 & 0.1026 & 0.0943 & 0.0965 & 0.0200 & 0.7919 & 0.0984 & 0.0582 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

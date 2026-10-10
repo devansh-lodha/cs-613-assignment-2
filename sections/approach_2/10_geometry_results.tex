@@ -1,0 +1,78 @@
+\section{Intrinsic Space Geometry Diagnostics}
+\label{sec:geometry_results}
+
+Intrinsic space geometry diagnostics quantify representation space distributions across five metrics: centroid norm ($\|\mu\|_2$), average pairwise cosine similarity, Maximum Explainable Variance of the leading eigenvalue (MEV Top-1), Normalized Intrinsic Dimensionality (NID), and global isotropy (IsoScore).
+
+\subsection{ArguAna Intrinsic Geometry}
+Table~\ref{tab:arguana_geometry} and Table~\ref{tab:arguana_geometry_comp} report geometric diagnostics on ArguAna under full-dimension and compressed representations ($k=128$).
+
+\input{sections/approach_2/tables/geometry/arguana_geometry.tex}
+
+\paragraph{Analysis of ArguAna Geometry}
+\begin{itemize}
+\item Baseline Tier Disparity: Base models exhibit severe origin shift (centroid norm 0.8992 on mean pooling; 0.8123 on last token) and narrow representation cones (average cosine 0.8070 and 0.6583), yielding low isotropy (IsoScore 0.0108 to 0.0309). Dedicated models maintain balanced dispersion (centroid norm ~0.46; average cosine ~0.21; IsoScore 0.1135 to 0.1679).
+\item Last Token Rogue Dimension: MEV top-1 reaches 0.2632 on Qwen3.5-Base under last token pooling, indicating that over 26\% of all representation energy concentrates along a single coordinate axis.
+\item Error Cancellation and Whitening: R2 reduces centroid norm from 0.8992 to 0.0434, while Soft-ZCA flattens the spectrum (MEV drops to 0.0045; IsoScore jumps to 0.4733 on base mean pooling and 0.8573 on dedicated models).
+\end{itemize}
+
+
+\subsection{FiQA2018 Intrinsic Geometry}
+Table~\ref{tab:fiqa_geometry} and Table~\ref{tab:fiqa_geometry_comp} report geometric diagnostics on FiQA2018.
+
+\input{sections/approach_2/tables/geometry/fiqa_geometry.tex}
+
+\paragraph{Analysis of FiQA2018 Geometry}
+\begin{itemize}
+\item Acute Anisotropy: Base models exhibit extreme cosine crowding (average cosine 0.7952 to 0.8267) and high centroid norms (0.8911 to 0.9070). Last token pooling produces MEV top-1 of 0.2363 on Qwen3.5-Base.
+\item Progressive Component Purging: ABTT-1 through ABTT-3 cut MEV on Gemma-3-Base from 0.1223 down to 0.0602, raising IsoScore from 0.0239 to 0.0564. Soft-ZCA reduces MEV to 0.0054 and raises IsoScore to 0.4962.
+\item Compressed Subspaces ($k=128$): Whitening at $k=128$ drives IsoScore to 0.9453, while unrotated prefix slicing retains severe origin offset (centroid norm 0.6811; average cosine 0.4657).
+\end{itemize}
+
+
+\subsection{SCIDOCS Intrinsic Geometry}
+Table~\ref{tab:scidocs_geometry} and Table~\ref{tab:scidocs_geometry_comp} report geometric diagnostics on SCIDOCS.
+
+\input{sections/approach_2/tables/geometry/scidocs_geometry.tex}
+
+\paragraph{Analysis of SCIDOCS Geometry}
+\begin{itemize}
+\item Scientific Manifold Crowding: Base models exhibit centroid norm ~0.87 and average cosine ~0.75.
+\item Spectral Expansion: Soft-ZCA expands effective dimensionality to over 93\% of maximum entropy (NID > 0.93; IsoScore 0.48 to 0.87).
+\item Incompleteness of Mean Translation: R1 and R2 eliminate mean bias (centroid norm ~0.043) but leave MEV elevated (~0.11), explaining why mean subtraction alone fails to improve SCIDOCS retrieval without spectral decorrelation.
+\end{itemize}
+
+
+\subsection{SICK-R Intrinsic Geometry}
+Table~\ref{tab:sickr_geometry} and Table~\ref{tab:sickr_geometry_comp} report geometric diagnostics on SICK-R.
+
+\input{sections/approach_2/tables/geometry/sickr_geometry.tex}
+
+\paragraph{Analysis of SICK-R Geometry}
+\begin{itemize}
+\item Short-Context Geometric Reversal: Base models under last token pooling exhibit lower MEV (0.0685 to 0.0815) and higher IsoScore (0.0454 to 0.0455) than under mean pooling (MEV 0.1127 to 0.1355; IsoScore 0.0251 to 0.0268), explaining why last token pooling outperforms mean pooling on raw SICK-R correlations.
+\item Soft-ZCA Expansion: Soft-ZCA raises NID to >0.91 and IsoScore to 0.3691--0.6729, driving substantial correlation recoveries.
+\end{itemize}
+
+
+\subsection{STS22.v2 Intrinsic Geometry}
+Table~\ref{tab:sts22_geometry} and Table~\ref{tab:sts22_geometry_comp} report geometric diagnostics on STS22.v2.
+
+\input{sections/approach_2/tables/geometry/sts22_geometry.tex}
+
+\paragraph{Analysis of STS22.v2 Geometry}
+\begin{itemize}
+\item Long-Context Dispersion: Dedicated models maintain low centroid norm (0.39 to 0.43) and low average cosine (0.15 to 0.18), reflecting rich semantic dispersion across extended texts.
+\item Base Representation Collapse: Base models under mean pooling show substantial origin displacement (centroid norm 0.88; average cosine 0.77), which Soft-ZCA eliminates by raising IsoScore from 0.028 to 0.472.
+\end{itemize}
+
+
+\subsection{STSBenchmark Intrinsic Geometry}
+Table~\ref{tab:stsb_geometry} and Table~\ref{tab:stsb_geometry_comp} report geometric diagnostics on STSBenchmark.
+
+\input{sections/approach_2/tables/geometry/stsb_geometry.tex}
+
+\paragraph{Analysis of STSBenchmark Geometry}
+\begin{itemize}
+\item Rogue Variance Dominance: Base models under last token pooling exhibit extreme MEV (0.2135 on Qwen3.5-Base), which coordinate standardization cuts in half (down to 0.0721), confirming that z-score scaling specifically targets outlier rogue coordinates.
+\item Soft-ZCA Isotropy: Soft-ZCA expands representation entropy to over 93\% of theoretical maximum (NID > 0.93; IsoScore 0.47 to 0.76), providing the geometric basis for the +20.87 point Spearman rho recovery.
+\end{itemize}

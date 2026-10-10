@@ -6,12 +6,26 @@
 
 % Layout and font packages
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{microtype}
 \usepackage{inconsolata}
 \usepackage{graphicx}
+\usepackage{multirow}
 \graphicspath{{figures/common/}{figures/approach_1/}{figures/approach_2/}}
+
+% Float placement parameters to allow smooth integration of tables and text
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\dblfloatpagefraction}{0.75}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{4}
+\setcounter{totalnumber}{8}
+\setcounter{dbltopnumber}{4}
 
 % Font selection for LuaLaTeX
 \usepackage[english,bidi=default]{babel}
@@ -42,6 +56,10 @@
   \setcounter{figure}{0}%
   \setcounter{table}{0}%
   \setcounter{equation}{0}%
+  \gdef\thesection{\arabic{section}}%
+  \gdef\thesubsection{\thesection.\arabic{subsection}}%
+  \gdef\thefigure{\arabic{figure}}%
+  \gdef\thetable{\arabic{table}}%
 }
 \makeatother
 
@@ -68,11 +86,17 @@
 \input{sections/approach_1/06_resources_and_management.tex}
 
 % -------------------------------------------------------------
+% APPROACH 1: APPENDIX
+% -------------------------------------------------------------
+\appendix
+\input{sections/approach_1/07_appendix.tex}
+
+% -------------------------------------------------------------
 % PART II: APPROACH 2
 % -------------------------------------------------------------
 \nextpaper
 
-\title{[Approach 2 Title: Specific Title of Second Work]}
+\title{Post-Processing Textual Embeddings for Representation Learning}
 
 \author{
   \textbf{Group: Mixture of Experts} \\
@@ -86,8 +110,14 @@
 \input{sections/approach_2/02_baselines_and_sota.tex}
 \input{sections/approach_2/03_datasets.tex}
 \input{sections/approach_2/04_experimental_plan.tex}
-\input{sections/approach_2/05_implementation_and_findings.tex}
+\input{sections/approach_2/05_implementation_status.tex}
 \input{sections/approach_2/06_resources_and_management.tex}
+\input{sections/approach_2/07_retrieval_results.tex}
+\input{sections/approach_2/08_similarity_results.tex}
+\input{sections/approach_2/09_compression_results.tex}
+\input{sections/approach_2/10_geometry_results.tex}
+\input{sections/approach_2/11_ablation_results.tex}
+\input{sections/approach_2/12_theoretical_analysis.tex}
 
 % -------------------------------------------------------------
 % COMBINED TEAM CONTRIBUTION AND BIBLIOGRAPHY
@@ -97,11 +127,5 @@
 
 \nocite{*}
 \bibliography{references}
-
-% -------------------------------------------------------------
-% APPENDICES
-% -------------------------------------------------------------
-\appendix
-\input{sections/approach_1/07_appendix.tex}
 
 \end{document}

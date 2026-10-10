@@ -1,19 +1,27 @@
 \section{State of the Art and Baselines}
-\label{sec:app2_baselines_sota}
+\label{sec:baselines_sota}
 
-% Rubric Requirements (10 Pts):
-% 1. Report the other baselines you want to compete with.
-% 2. What is the state-of-the-art (the best paper that has solved the approach)?
-% 3. Are baseline implementations available for the novelties?
+\paragraph{State of the Art in Representation Post-Processing}
+Pretrained textual representations commonly concentrate within narrow cones, creating high average cosine similarities between unrelated sequences \citep{ethayarajh2019contextual}. The state of the art in training-free post-processing spans three major methodological paradigms:
+\begin{itemize}
+\item Coordinate Paradigm: Identifies outlier rogue dimensions that dominate inner products and applies coordinate-wise z-score standardization \citep{timkey2021all}.
+\item Subspace Paradigm: Treats origin shift as a stable mean bias vector and applies orthogonal projection deflation (R2) to cancel parallel sample-mean estimation noise \citep{ren2025correcting}.
+\item Spectral Paradigm: Regularizes covariance eigenvalues to enforce hyperspherical isotropy via eigenvalue-regularized Zero-phase Component Analysis (Soft-ZCA) \citep{diera2024isotropy} or adapts tempering strength based on signal-to-noise ratio knee points (SpecTemp) \citep{li2026spectral}.
+\end{itemize}
 
-\paragraph{State of the Art}
-% Identify and discuss the strongest published paper and benchmark that addresses this task.
-[Cite and describe the current state of the art paper that achieves leading performance on this problem. Explain its key techniques and limitations.]
+\paragraph{Competitive Model Baselines}
+To establish empirical baselines across distinct representational structures, we evaluate four open-weight models representing two architectural tiers:
+\begin{itemize}
+\item Dedicated Contrastive Encoders: \texttt{google/embeddinggemma-300m} (308M parameters, $d=768$) and \texttt{Qwen/Qwen3-Embedding-0.6B} (600M parameters, $d=1024$). These models are fine-tuned with contrastive InfoNCE objectives, export unit-normalized vectors, support Matryoshka Representation Learning (MRL) \citep{kusupati2022matryoshka}, and utilize asymmetric instruction prompts.
+\item Un-Fine-Tuned Base Causal LLMs: \texttt{google/gemma-3-1b-pt} (1.0B parameters, $d=1152$) and \texttt{Qwen/Qwen3.5-0.8B-Base} (0.8B parameters, $d=1024$). These models are pretrained strictly on causal next-token cross-entropy with tied embeddings and have never been exposed to sentence-level ranking loss. They are evaluated under both active token mean pooling and final non-padding token pooling.
+\end{itemize}
 
-\paragraph{Competitive Baselines}
-% List the baseline models selected for empirical comparison and explain why they were chosen.
-[Describe the baseline architectures and algorithms selected for benchmarking against Approach 2.]
-
-\paragraph{Baseline Availability}
-% Clarify whether official or reliable third-party open-source implementations exist for these baselines or if custom implementations are required.
-[State whether open-source implementations are available for the baselines and novel components, citing repositories or describing custom re-implementations.]
+\paragraph{Availability of Baseline Implementations}
+Model checkpoints and tokenizers are publicly available through the Hugging Face Hub. Regarding post-processing methods:
+\begin{itemize}
+\item Full whitening implementations follow public algorithms from \citet{su2021whitening} and \citet{huang2021whiteningbert}.
+\item Soft-ZCA whitening follows the spectral formulation from \citet{diera2024isotropy}, using CPU eigendecompositions for numerical stability.
+\item SpecTemp compression is implemented from the SNR knee detection equations and Kneedle algorithm specified by \citet{li2026spectral}.
+\item R1 mean subtraction, R2 subspace deflation, ABTT component purging, and scientific controls (random direction deflation, unrenormalized centering) are implemented from the mathematical derivations in \citet{ren2025correcting} and \citet{mu2018all}, as no public repository was provided with the original publication.
+\end{itemize}
+All methods are implemented in a unified, standardized FP32 PyTorch codebase.

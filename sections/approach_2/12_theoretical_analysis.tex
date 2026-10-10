@@ -1,0 +1,136 @@
+\section{Theoretical Investigations}
+\label{sec:theoretical_analysis}
+
+This section investigates eleven foundational hypotheses regarding representation geometry, error propagation, spectral filtering, and cross-paradigm post-processing.
+
+\subsection{Base-to-Dedicated Gap Closure Dynamics}
+Table~\ref{tab:gap_closure_ir} and Table~\ref{tab:gap_closure_sts} quantify the proportion of the performance gap between raw base language models and contrastively trained dedicated encoders that can be closed without model retraining.
+
+\input{sections/approach_2/tables/analysis/gap_closure_ir.tex}
+\input{sections/approach_2/tables/analysis/gap_closure_sts.tex}
+
+\paragraph{Analysis of Gap Closure Rates}
+\begin{itemize}
+\item Information Retrieval: Soft-ZCA closes 31.74\% of the gap on ArguAna counter-argument retrieval (lifting nDCG@10 from 0.3050 to 0.3610 against a dedicated baseline of 0.4816) and 16.91\% on SCIDOCS citation search (+0.0322 nDCG gain). On FiQA financial QA, Soft-ZCA closes 6.79\% (+56.9\% relative gain). Subspace deflations (R1, R2, ABTT) close only 1.5\% to 4.6\% of the gap on IR.
+\item Semantic Textual Similarity: Gap closure rates are substantially higher on symmetric tasks: Soft-ZCA closes 50.97\% of the gap on STS22.v2 (reaching 63.87 vs 68.07 dedicated), 46.32\% on STSBenchmark (reaching 60.54 vs 84.72), and 37.67\% on SICK-R (reaching 59.95 vs 80.67). Subspace deflation (ABTT-2 and ABTT-3) closes 28.5\% to 30.0\% of the gap on STS-B and SICK-R.
+\item Mechanistic Insight: Gap closure is higher on symmetric STS than asymmetric IR because sentence similarity directly benefits from hyperspherical variance equalization, whereas complex document retrieval relies on hard-negative contrastive discrimination that linear transformations cannot fully synthesize.
+\end{itemize}
+
+
+\subsection{SpecTemp Dynamics and Spectral Decay Properties}
+Table~\ref{tab:spectemp_dynamics} tabulates the spectral properties of dense retrieval manifolds and the derived adaptive tempering exponents $\gamma(k)$ on \texttt{google/embeddinggemma-300m} ($d=768$).
+
+\input{sections/approach_2/tables/analysis/spectemp_dynamics.tex}
+
+\paragraph{Analysis of SpecTemp Spectral Dynamics}
+\begin{itemize}
+\item Universal Spectral Plateau: Across all datasets, the leading eigenvalue $\lambda_1$ ranges from 0.0260 to 0.0506, while the noise floor variance $\sigma^2_{\text{noise}}$ (trailing 10\% of the spectrum) drops to $< 10^{-4}$. Initial SNR ranks are high ($\text{SNR}(1) \approx 2,666\text{--}16,424$).
+\item Stable Knee Point Detection: The Kneedle algorithm ($S=0.5$) identifies knee points $k_{\text{knee}}$ consistently between ranks 23 and 55 across all tasks.
+\item Monotonic Decay of Tempering Strength: Across every benchmark, the adaptive tempering exponent $\gamma(k)$ is a strictly monotonically decreasing function of target dimension $k$:
+  \begin{itemize}
+  \item At compact dimension $k=64$: $\gamma$ ranges from 0.4287 to 0.8890, applying strong whitening to equalize variance across high-confidence signal components.
+  \item At intermediate dimensions $k=128$ and $k=256$: $\gamma$ decays to 0.1892--0.4388 and 0.0660--0.1920.
+  \item At broad dimension $k=512$: $\gamma$ decays to 0.0000--0.0613, approaching unweighted PCA ($\gamma=0$) to prevent noise floor amplification.
+  \end{itemize}
+\end{itemize}
+
+
+\subsection{Intrinsic Space Geometry and Downstream Task Correlation}
+Table~\ref{tab:geometry_task_correlation} evaluates the statistical correlation between intrinsic geometry diagnostics and downstream accuracy across all models and methods.
+
+\input{sections/approach_2/tables/analysis/geometry_task_correlation.tex}
+
+\paragraph{Analysis of Geometry-Task Correlations}
+\begin{itemize}
+\item MEV Top-1 (Rogue Dominance): Leading eigenvalue concentration displays a strong, statistically significant negative correlation with downstream performance across both Information Retrieval (Pearson $r = -0.4830$, $p < 0.0001$; Spearman $\rho = -0.5621$) and Semantic Textual Similarity ($r = -0.4238$, $p < 0.0001$; $\rho = -0.5340$). When variance collapses along a single axis, representations fail to discriminate subtle semantic differences.
+\item NID Spectral Entropy: Normalized Shannon entropy across the eigenspectrum is the strongest positive predictor of downstream accuracy ($r = +0.4815$, $p < 0.0001$ on IR; $r = +0.4376$, $p < 0.0001$ on STS). Effective representations distribute variance broadly across all available dimensions.
+\item Global Isotropy (IsoScore): Positively correlates with downstream accuracy ($r = +0.2610$, $p = 0.0004$ on IR; $r = +0.2615$, $p = 0.0004$ on STS), with strong rank correlation ($\rho \approx 0.53\text{--}0.60$).
+\item Centroid Norm and Average Cosine: Exhibit weaker direct linear correlation ($p > 0.05$ on IR), confirming that zeroing origin shift alone is insufficient without spectral decorrelation.
+\end{itemize}
+
+
+\subsection{R2 vs R1 Head-to-Head Error Cancellation}
+Table~\ref{tab:r2_vs_r1_head_to_head} directly tests the theoretical hypothesis from \citet{ren2025correcting} that mean-subspace projection deflation (R2) outperforms direct mean subtraction (R1) by canceling first-order parallel sample-mean estimation noise.
+
+\input{sections/approach_2/tables/analysis/r2_vs_r1_head_to_head.tex}
+
+\paragraph{Analysis of R2 vs R1 Comparisons}
+\begin{itemize}
+\item Overall Head-to-Head Record: R2 defeats R1 in 29 of 36 evaluations (80.6\% win rate across all models and benchmarks).
+\item Track Breakdown: In symmetric STS where sample size is smaller ($N \in [197, 1379]$) and sample-mean estimation noise is non-negligible, R2 wins in 16 of 18 comparisons (88.9\% win rate). In asymmetric IR where corpus size is large ($N \in [8674, 57638]$), R2 wins in 13 of 18 comparisons (72.2\% win rate).
+\item Mathematical Validation: Projecting vectors onto the orthogonal complement of the normalized mean vector ($\hat{\mu} = \mu / \|\mu\|_2$) algebraically cancels the parallel noise term $\alpha \hat{\mu}$, preserving downstream ranking fidelity.
+\end{itemize}
+
+
+\subsection{All-But-The-Top (ABTT) Monotonicity Progression}
+Table~\ref{tab:abtt_monotonicity} tests whether removing successive principal components $D \in \{1, 2, 3\}$ produces a monotonic performance progression.
+
+\input{sections/approach_2/tables/analysis/abtt_monotonicity.tex}
+
+\paragraph{Analysis of ABTT Progression}
+\begin{itemize}
+\item Base Language Models: Stepwise component deflation produces substantial cumulative gains: on Gemma-3-Base and Qwen3.5-Base, $D=3$ deflation yields average gains of +3.70 to +5.31 points. Under last token pooling, monotonic ascent holds strictly in 50.0\% of tasks, confirming that initial eigenvectors encode non-semantic sequence artifacts.
+\item Dedicated Embedding Models: On dedicated contrastive encoders, monotonic ascent holds in 0.0\% of tasks, with $D=3$ deflation producing net losses (-0.24 to -0.75 points). Contrastive fine-tuning distributes semantic information across leading components; deflating them removes true discriminative variance.
+\end{itemize}
+
+
+\subsection{Dual-Regime Compression Divergence}
+Table~\ref{tab:compression_divergence} contrasts broad subspace advantage ($k=512$, SpecTemp vs Whitening) against compact subspace advantage ($k=64$, SpecTemp vs PCA).
+
+\input{sections/approach_2/tables/analysis/compression_divergence.tex}
+
+\paragraph{Analysis of Compression Divergence}
+\begin{itemize}
+\item Dedicated Models: SpecTemp outperforms whitening in 91.7\% of evaluations at $k=512$ (mean advantage of +2.35 points), and outperforms PCA in 66.7\% of evaluations at $k=64$ (mean advantage of +0.67 points).
+\item Base Models: At $k=64$, SpecTemp outperforms PCA in 75.0\% of base evaluations (mean advantage of +2.89 points).
+\item Theoretical Confirmation: Validates that whitening fails in broad subspaces due to noise floor inflation, while PCA fails in compact subspaces due to spectral skewness. SpecTemp resolves both failure modes via adaptive SNR tempering.
+\end{itemize}
+
+
+\subsection{Scientific Negative Controls Validation}
+Table~\ref{tab:negative_controls_validation} evaluates three counterfactual hypotheses to confirm that improvements originate from true geometric alignment rather than arbitrary dimensionality shifts.
+
+\input{sections/approach_2/tables/analysis/negative_controls_validation.tex}
+
+\paragraph{Analysis of Scientific Negative Controls}
+\begin{itemize}
+\item Subspace Specificity (R2 vs Rand): Deflating an arbitrary random unit vector produces 0.0000 metric shift from baseline. R2 outperforms random deflation across the panel, confirming that gains stem specifically from eliminating the mean direction $\hat{\mu}$.
+\item Renormalization Necessity (R1 vs MC): Omitting hyperspherical L2 renormalization causes catastrophic collapse, with R1 outperforming MC in 91.7\% of evaluations (+3.05 points average advantage).
+\item Principal Axis Alignment (PCA vs Random Truncation): PCA outperforms uniform random coordinate subsampling in 58.3\% of evaluations on dedicated models (+0.028 to +0.058 nDCG advantage).
+\end{itemize}
+
+
+\subsection{Sequence Length and Context Scale Impact}
+Table~\ref{tab:context_length_impact} examines the quantitative relationship between input text length and causal autoregressive representation decay.
+
+\input{sections/approach_2/tables/analysis/context_length_impact.tex}
+
+\paragraph{Analysis of Context Scale Progression}
+\begin{itemize}
+\item Length-Penalty Gradient: As sequence length increases from 12 tokens (SICK-R) to 2,048 tokens (STS22.v2), the pooling penalty transitions monotonically from a +4.45\% advantage for last token pooling to a -76.19\% catastrophic collapse.
+\item Post-Processing Gains: Soft-ZCA provides consistent recoveries across all context scales (+12.52 points on SICK-R; +20.87 points on STS-B; +56.9\% on FiQA; +113.0\% on SCIDOCS).
+\end{itemize}
+
+
+\subsection{Post-Hoc Spectral Compression vs Native MRL}
+Table~\ref{tab:spectemp_vs_mrl} compares training-free SpecTemp compression against native Matryoshka Representation Learning (MRL) prefix slicing on dedicated models.
+
+\input{sections/approach_2/tables/analysis/spectemp_vs_mrl.tex}
+
+\paragraph{Analysis of SpecTemp vs MRL}
+\begin{itemize}
+\item High-Compression Win Rate: SpecTemp beats or ties native MRL prefix slicing in 62.5\% of evaluations overall, increasing monotonically with compression: 50.0\% at $k=512$, 50.0\% at $k=256$, 66.7\% at $k=128$, and 83.3\% at $k=64$.
+\item Operational Advantage: Training-free spectral tempering adaptively optimizes projection matrices to the empirical covariance of the target corpus, outperforming fixed learned coordinate prefixes at high compression ratios.
+\end{itemize}
+
+
+\subsection{Tri-Paradigm Degeneracy Benchmark}
+Table~\ref{tab:tri_paradigm_benchmark} provides a grand comparison among Coordinate (Standardization), Subspace (R2), and Spectral (Soft-ZCA) paradigms on un-fine-tuned base causal language models.
+
+\input{sections/approach_2/tables/analysis/tri_paradigm_benchmark.tex}
+
+\paragraph{Analysis of Tri-Paradigm Dominance}
+\begin{itemize}
+\item 100\% Win Rate for Soft-ZCA: Soft-ZCA achieves the highest downstream score in 24 out of 24 benchmark evaluations across base models, pooling modes, and tasks.
+\item Subspace and Coordinate Incompleteness: Standardization and R2 address 1D or diagonal coordinate skews but leave off-diagonal covariance correlations intact. Soft-ZCA provides the only transformation that rotates representations into an orthogonal eigenspace while regularizing variance across all components, establishing it as the empirically superior post-processing operator for base causal LLMs.
+\end{itemize}

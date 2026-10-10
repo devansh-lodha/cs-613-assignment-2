@@ -1,47 +1,72 @@
 \section{Experimental Plan and Architecture}
-\label{sec:app2_experimental_plan}
+\label{sec:experimental_plan}
 
-% Rubric Requirements (15 Pts):
-% 1. Experimental setting, training procedures, and robustness under limited computational resources.
-% 2. Models used, architectural differences, and computed parameter counts.
-% 3. Hyperparameter search techniques (grid search or better techniques).
-% 4. Ablation table with different hyperparameters.
-% 5. Metric selection rationale and additional metrics explored.
-% 6. System effort required and scenario for the final viva demonstration.
+\paragraph{Experimental Environment and Precision Standards}
+All experiments execute without neural network gradient descent, backpropagation, or parameter optimization. The post-processing pipeline operates on frozen representations extracted in a single forward pass.
+\begin{itemize}
+\item Hardware Infrastructure: Experiments run on an Apple Silicon M3 Max workstation (36 GB unified memory, 30-core GPU, 14-core CPU) running macOS and PyTorch with Metal Performance Shaders (MPS) acceleration.
+\item Numerical Precision: Representations, covariance accumulations, and transformations are strictly standardized on single-precision floating point (\texttt{torch.float32}).
+\item Determinism: Random seeds across \texttt{torch}, \texttt{numpy}, and Python \texttt{random} are fixed to $2026$.
+\end{itemize}
 
-\paragraph{Training Setup and Robustness}
-% Describe training hardware constraints, precision settings, batching, optimizer choice, and techniques used to ensure stable results (e.g., cross-validation, multiple seeds).
-[Describe the experimental environment, training configuration, and measures taken to ensure empirical robustness given compute bounds.]
-
-\paragraph{Architectures and Parameters}
-% List the model variants used, provide exact parameter counts, and articulate the key architectural modifications that distinguish them.
-[Detail model architectures, parameter counts, and structural modifications distinguishing this approach from baselines.]
-
-\paragraph{Hyperparameter Optimization and Ablation Study}
-% Describe the hyperparameter search method (e.g., grid search, Bayesian optimization) and summarize performance across configurations in Table~\ref{tab:app2_ablation}.
-[Explain how optimal hyperparameters were determined across algorithms and baselines.]
+\paragraph{Evaluated Models and Architectural Properties}
+Table~\ref{tab:model_architectures} summarizes the four evaluated sub-1B architectures.
 
 \begin{table*}[t]
 \centering
 \small
-\begin{tabular}{lcccc}
+\caption{Architectural specifications and operational properties of evaluated sub-1B models.}
+\label{tab:model_architectures}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll cccc l}
 \toprule
-Configuration & Learning Rate & Batch Size & Primary Metric & Secondary Metric \\
+\textbf{Model Identifier} & \textbf{Architectural Tier} & \textbf{Parameters} & \textbf{Native $d$} & \textbf{Context Limit} & \textbf{MRL} & \textbf{Default Pooling Mode} \\
 \midrule
-Baseline & $1 \times 10^{-4}$ & 16 & 0.00 & 0.00 \\
-Variant A & $5 \times 10^{-5}$ & 32 & 0.00 & 0.00 \\
-Variant B & $2 \times 10^{-5}$ & 32 & 0.00 & 0.00 \\
-Full Model & $2 \times 10^{-5}$ & 64 & 0.00 & 0.00 \\
+\texttt{google/embeddinggemma-300m} & Dedicated Contrastive & 308M & 768 & 2,048 & Yes & Attention Mean Pooling \\
+\texttt{Qwen/Qwen3-Embedding-0.6B} & Dedicated Contrastive & 600M & 1,024 & 32,768 & Yes & Final Non-Padding Token \\
+\texttt{google/gemma-3-1b-pt} & Base Causal Language Model & 1.0B & 1,152 & 32,768 & No & Mean and Last Token Evaluated \\
+\texttt{Qwen/Qwen3.5-0.8B-Base} & Base Causal Language Model & 0.8B & 1,024 & 262,144 & No & Mean and Last Token Evaluated \\
 \bottomrule
-\end{tabular}
-\caption{Hyperparameter ablation study for Approach 2.}
-\label{tab:app2_ablation}
+\end{tabular}%
+}
 \end{table*}
 
-\paragraph{Evaluation Metrics}
-% Justify primary metrics chosen and discuss any exploratory or complementary metrics evaluated.
-[Justify the primary evaluation metrics selected and describe any secondary or non-standard metrics tested.]
+\paragraph{Post-Processing Transformations}
+Transformations are decoupled into full-dimension processing ($d \to d$) and dimensional compression ($d \to k$). Transformed representations are projected onto the unit hypersphere: $x' \leftarrow x' / \|x'\|_2$.
+\begin{itemize}
+\item \texttt{baseline}: Raw unit-normalized vectors: $x' = x / \|x\|_2$.
+\item \texttt{standardization}: Coordinate-wise z-score scaling: $x'_j = (x_j - \mu_j) / \sigma_j$ \citep{timkey2021all}.
+\item \texttt{r1}: Direct empirical mean subtraction: $x' = (x - \mu) / \|x - \mu\|_2$ \citep{ren2025correcting}.
+\item \texttt{r2}: Mean-subspace projection deflation: $x' = (x - (x^\top \hat{\mu})\hat{\mu}) / \|x - (x^\top \hat{\mu})\hat{\mu}\|_2$, where $\hat{\mu} = \mu / \|\mu\|_2$.
+\item \texttt{soft\_zca}: Regularized ZCA whitening: $W = U (\Lambda + \epsilon I)^{-1/2} U^\top$, $x' = (x - \mu)W / \|(x - \mu)W\|_2$, with spectral regularizer $\epsilon = 10^{-4}$ \citep{diera2024isotropy}.
+\item \texttt{abtt\_D}: Principal component deflation removing $D \in \{1, 2, 3\}$ leading eigenvectors: $x' = (I - \sum_{j=1}^D u_j u_j^\top)(x - \mu)$ \citep{mu2018all}.
+\item \texttt{rand} (Control): Deflating an arbitrary Gaussian unit vector $v \sim \mathcal{N}(0, I_d)$.
+\item \texttt{mc} (Control): Mean centering without hyperspherical L2 renormalization: $x' = x - \mu$.
+\item Compression ($d \to k, k \in \{512, 256, 128, 64\}$):
+  \begin{itemize}
+  \item \texttt{prefix}: Coordinate prefix slicing $x[:k] / \|x[:k]\|_2$.
+  \item \texttt{pca}: Projection onto top-$k$ eigenvectors $(x - \mu)U_k / \|(x - \mu)U_k\|_2$ ($\gamma = 0$).
+  \item \texttt{whitening}: Truncated Whitening-$k$ scaling components by $\lambda_j^{-1/2}$ ($\gamma = 1.0$) \citep{su2021whitening}.
+  \item \texttt{spectemp}: Adaptive SNR-tempered spectral projection $W_k = U_k \text{diag}((\lambda_j + \epsilon)^{-\gamma(k)/2})$, where $\gamma(k) = \min(1.0, \text{SNR}(k) / \text{SNR}(k_{\text{knee}}))$ derived via the Kneedle algorithm ($S=0.5$) \citep{li2026spectral}.
+  \item \texttt{random\_truncation} (Control): Uniform random subsampling of $k$ coordinates.
+  \end{itemize}
+\end{itemize}
+
+\paragraph{Evaluation Metrics and Rationale}
+\begin{itemize}
+\item Retrieval: Evaluated using \texttt{pytrec-eval} against official qrels. Primary metric is \texttt{ndcg\_at\_10} (evaluating graded relevance order). Secondary metrics are \texttt{recall\_at\_100} (candidate coverage) and \texttt{mrr\_at\_10} (reciprocal rank of first relevant passage).
+\item Similarity: Primary metric is Spearman rank correlation $\rho \times 100$ (measuring monotonic ranking agreement). Secondary metric is Pearson linear correlation $r \times 100$.
+\item Intrinsic Geometry: Measured across corpus documents and pooled sentence representations: centroid norm ($\|\mu\|_2$), average pairwise cosine similarity across 2,000 sampled pairs, Maximum Explainable Variance of the leading eigenvalue ($\text{MEV} = \lambda_1 / \sum \lambda_j$), Normalized Intrinsic Dimensionality ($\text{NID} = H / \log d$), and IsoScore \citep{rudman2022isoscore}.
+\end{itemize}
 
 \paragraph{Viva Demonstration Scenario}
-% Paint a clear, concrete walkthrough of what will be demonstrated interactively to course examiners during the viva.
-[Provide an end-to-end scenario demonstrating user input, model inference, and output inspection during the viva session.]
+During the viva examination, the end-to-end post-processing pipeline is demonstrated interactively via CLI:
+\begin{itemize}
+\item Step 1: Execute representation extraction on an MTEB v2 benchmark split:
+  \texttt{uv run scripts/encode.py --model google/gemma-3-1b-pt --task ArguAna --pooling mean\_pooling}.
+\item Step 2: Apply the full transformation matrix in memory without model forward passes:
+  \texttt{uv run scripts/transform.py --model google/gemma-3-1b-pt --task ArguAna --pooling mean\_pooling}.
+\item Step 3: Run batched inner-product search and compute trec-eval ranking metrics in under two seconds:
+  \texttt{uv run scripts/eval\_retrieval.py --model google/gemma-3-1b-pt --task ArguAna --pooling mean\_pooling}.
+\item Step 4: Display live metric printout demonstrating the +18.4\% relative nDCG@10 gain from baseline (0.3050) to Soft-ZCA (0.3610).
+\end{itemize}

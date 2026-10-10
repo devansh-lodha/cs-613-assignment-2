@@ -1,0 +1,28 @@
+% Auto-generated publication table: sickr_spearman
+\begin{table*}[t]
+\centering
+\small
+\caption{Full-dimension evaluation on \textbf{SICK-R} (Spearman $\rho$). Top performance across valid methods in each column is shown in bold.}
+\label{tab:sickr_spearman}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l cccc cccc c}
+\toprule
+& \multicolumn{2}{c}{\textbf{Dedicated Models}} & \multicolumn{2}{c}{\textbf{Base LLM (Mean)}} & \multicolumn{2}{c}{\textbf{Base LLM (Last)}} & \multicolumn{3}{c}{\textbf{Tier Averages}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-10}
+\textbf{Method} & \textbf{EmbGemma} & \textbf{Qwen3-Emb} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Gemma-3} & \textbf{Qwen3.5} & \textbf{Dedicated} & \textbf{Base (Mean)} & \textbf{Base (Last)} \\
+\midrule
+Baseline & \textbf{80.17} & \textbf{81.16} & 46.66 & 48.21 & 50.57 & 48.52 & \textbf{80.67} & 47.44 & 49.55 \\
+Standardization & 79.93 & 80.67 & 53.46 & 53.27 & 54.32 & 52.43 & 80.30 & 53.37 & 53.38 \\
+R1 (Mean Sub.) & 79.75 & 81.02 & 51.72 & 52.02 & 53.22 & 52.02 & 80.39 & 51.87 & 52.62 \\
+R2 (Subspace Def.) & 79.77 & 81.03 & 51.75 & 52.07 & 53.35 & 52.23 & 80.40 & 51.91 & 52.79 \\
+Soft-ZCA & 71.09 & 70.95 & \textbf{59.75} & \textbf{60.16} & \textbf{58.43} & \textbf{56.20} & 71.02 & \textbf{59.95} & \textbf{57.32} \\
+ABTT-1 & 79.23 & 80.31 & 56.87 & 57.52 & 54.10 & 52.84 & 79.77 & 57.19 & 53.47 \\
+ABTT-2 & 79.09 & 79.30 & 57.09 & 57.72 & 55.18 & 53.04 & 79.20 & 57.41 & 54.11 \\
+ABTT-3 & 79.05 & 78.85 & 57.08 & 57.45 & 55.18 & 52.77 & 78.95 & 57.26 & 53.98 \\
+\midrule
+Rand (Control) & 80.17 & 81.17 & 46.66 & 48.20 & 50.56 & 48.53 & 80.67 & 47.43 & 49.54 \\
+MC (Control) & 75.27 & 77.46 & 49.32 & 50.09 & 49.58 & 48.98 & 76.36 & 49.71 & 49.28 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

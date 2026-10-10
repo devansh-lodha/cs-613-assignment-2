@@ -1,0 +1,129 @@
+% Auto-generated publication table: arguana_geometry
+\begin{table*}[t]
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{0.88}
+\caption{Intrinsic space geometry diagnostics on \textbf{ArguAna} under full-dimension transformations ($d \to d$). Measured across centroid norm ($\|\mu\|_2$), average pairwise cosine similarity, Maximum Explainable Variance (MEV top-1), Normalized Intrinsic Dimensionality (NID), and IsoScore. Best isotropic metric in each model block is bolded.}
+\label{tab:arguana_geometry}
+\begin{tabular}{ll ccccc}
+\toprule
+\textbf{Model} & \textbf{Transformation} & $\mathbf{\|\mu\|_2}$ & \textbf{Avg. Cosine} & \textbf{MEV Top-1} & \textbf{NID Entropy} & \textbf{IsoScore} \\
+\midrule
+\textbf{EmbGemma-300M} & ABTT-1 & 0.0048 & \textbf{-0.0001} & 0.0312 & 0.8469 & 0.1839 \\
+ & ABTT-2 & 0.0052 & \textbf{-0.0001} & 0.0232 & 0.8526 & 0.2005 \\
+ & ABTT-3 & 0.0042 & \textbf{-0.0001} & 0.0229 & 0.8559 & 0.2088 \\
+ & Baseline & 0.4582 & 0.2084 & 0.0349 & 0.8411 & 0.1679 \\
+ & MC (Control) & 0.0000 & -0.0001 & 0.0349 & 0.8411 & 0.1679 \\
+ & R1 (Mean Sub.) & 0.0045 & \textbf{-0.0001} & 0.0350 & 0.8401 & 0.1661 \\
+ & R2 (Subspace Def.) & \textbf{0.0036} & \textbf{-0.0001} & 0.0352 & 0.8407 & 0.1670 \\
+ & Rand (Control) & 0.4581 & 0.2083 & 0.0349 & 0.8410 & 0.1679 \\
+ & Soft-ZCA & \textbf{0.0036} & \textbf{-0.0001} & \textbf{0.0022} & \textbf{0.9827} & \textbf{0.8573} \\
+ & Standardization & 0.0045 & \textbf{-0.0001} & 0.0333 & 0.8424 & 0.1720 \\
+\midrule
+\textbf{Qwen3-Emb-0.6B} & ABTT-1 & 0.0045 & \textbf{-0.0001} & 0.0334 & 0.8074 & 0.1273 \\
+ & ABTT-2 & 0.0046 & \textbf{-0.0001} & 0.0273 & 0.8135 & 0.1394 \\
+ & ABTT-3 & 0.0049 & \textbf{-0.0001} & 0.0242 & 0.8178 & 0.1478 \\
+ & Baseline & 0.4703 & 0.2193 & 0.0388 & 0.8000 & 0.1135 \\
+ & MC (Control) & 0.0000 & -0.0001 & 0.0388 & 0.8000 & 0.1135 \\
+ & R1 (Mean Sub.) & 0.0043 & \textbf{-0.0001} & 0.0391 & 0.7995 & 0.1128 \\
+ & R2 (Subspace Def.) & \textbf{0.0029} & \textbf{-0.0001} & 0.0392 & 0.7997 & 0.1127 \\
+ & Rand (Control) & 0.4705 & 0.2195 & 0.0388 & 0.7999 & 0.1135 \\
+ & Soft-ZCA & 0.0031 & \textbf{-0.0001} & \textbf{0.0021} & \textbf{0.9758} & \textbf{0.7712} \\
+ & Standardization & 0.0043 & -0.0000 & 0.0344 & 0.8094 & 0.1265 \\
+\midrule
+\textbf{Gemma-3-1B (Mean)} & ABTT-1 & 0.0200 & 0.0003 & 0.0697 & 0.7125 & 0.0451 \\
+ & ABTT-2 & 0.0150 & 0.0000 & 0.0604 & 0.7280 & 0.0532 \\
+ & ABTT-3 & 0.0130 & -0.0000 & 0.0472 & 0.7407 & 0.0611 \\
+ & Baseline & 0.9260 & 0.8569 & 0.0954 & 0.6887 & 0.0342 \\
+ & MC (Control) & 0.0000 & 0.0004 & 0.0954 & 0.6887 & 0.0342 \\
+ & R1 (Mean Sub.) & 0.0188 & 0.0004 & 0.0924 & 0.6889 & 0.0347 \\
+ & R2 (Subspace Def.) & 0.0176 & 0.0003 & 0.0927 & 0.6888 & 0.0347 \\
+ & Rand (Control) & 0.9261 & 0.8570 & 0.0954 & 0.6887 & 0.0342 \\
+ & Soft-ZCA & \textbf{0.0080} & \textbf{-0.0001} & \textbf{0.0047} & \textbf{0.9277} & \textbf{0.4458} \\
+ & Standardization & 0.0142 & 0.0002 & 0.0572 & 0.7590 & 0.0649 \\
+\midrule
+\textbf{Qwen3.5-0.8B (Mean)} & ABTT-1 & 0.0158 & 0.0002 & 0.0816 & 0.6874 & 0.0412 \\
+ & ABTT-2 & 0.0146 & 0.0002 & 0.0635 & 0.7051 & 0.0495 \\
+ & ABTT-3 & 0.0144 & 0.0001 & 0.0559 & 0.7170 & 0.0552 \\
+ & Baseline & 0.8992 & 0.8070 & 0.1086 & 0.6606 & 0.0309 \\
+ & MC (Control) & 0.0000 & 0.0002 & 0.1086 & 0.6606 & 0.0309 \\
+ & R1 (Mean Sub.) & 0.0158 & 0.0002 & 0.1059 & 0.6615 & 0.0314 \\
+ & R2 (Subspace Def.) & 0.0140 & 0.0002 & 0.1062 & 0.6612 & 0.0313 \\
+ & Rand (Control) & 0.8992 & 0.8071 & 0.1086 & 0.6605 & 0.0309 \\
+ & Soft-ZCA & \textbf{0.0074} & \textbf{-0.0001} & \textbf{0.0045} & \textbf{0.9291} & \textbf{0.4733} \\
+ & Standardization & 0.0142 & 0.0002 & 0.0877 & 0.6946 & 0.0404 \\
+\midrule
+\textbf{Gemma-3-1B (Last)} & ABTT-1 & 0.0229 & 0.0000 & 0.0668 & 0.7639 & 0.0610 \\
+ & ABTT-2 & 0.0219 & 0.0001 & 0.0422 & 0.7807 & 0.0778 \\
+ & ABTT-3 & 0.0202 & 0.0001 & 0.0412 & 0.7894 & 0.0854 \\
+ & Baseline & 0.7839 & 0.6113 & 0.2358 & 0.6654 & 0.0128 \\
+ & MC (Control) & 0.0000 & -0.0000 & 0.2358 & 0.6654 & 0.0128 \\
+ & R1 (Mean Sub.) & 0.0163 & -0.0000 & 0.2379 & 0.6607 & 0.0126 \\
+ & R2 (Subspace Def.) & 0.0141 & \textbf{-0.0001} & 0.2386 & 0.6613 & 0.0125 \\
+ & Rand (Control) & 0.7839 & 0.6114 & 0.2359 & 0.6653 & 0.0128 \\
+ & Soft-ZCA & \textbf{0.0092} & \textbf{-0.0001} & \textbf{0.0047} & \textbf{0.9606} & \textbf{0.6290} \\
+ & Standardization & 0.0119 & -0.0000 & 0.1661 & 0.7287 & 0.0239 \\
+\midrule
+\textbf{Qwen3.5-0.8B (Last)} & ABTT-1 & 0.0291 & 0.0001 & 0.1132 & 0.7177 & 0.0376 \\
+ & ABTT-2 & 0.0245 & 0.0002 & 0.0727 & 0.7510 & 0.0596 \\
+ & ABTT-3 & 0.0235 & 0.0003 & 0.0467 & 0.7693 & 0.0765 \\
+ & Baseline & 0.8123 & 0.6583 & 0.2632 & 0.6149 & 0.0108 \\
+ & MC (Control) & 0.0000 & 0.0008 & 0.2632 & 0.6149 & 0.0108 \\
+ & R1 (Mean Sub.) & 0.0247 & 0.0008 & 0.2639 & 0.6111 & 0.0107 \\
+ & R2 (Subspace Def.) & 0.0213 & 0.0006 & 0.2650 & 0.6120 & 0.0107 \\
+ & Rand (Control) & 0.8124 & 0.6585 & 0.2631 & 0.6148 & 0.0108 \\
+ & Soft-ZCA & \textbf{0.0110} & \textbf{-0.0001} & \textbf{0.0060} & \textbf{0.9502} & \textbf{0.5813} \\
+ & Standardization & 0.0218 & 0.0006 & 0.1998 & 0.6619 & 0.0173 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Intrinsic space geometry diagnostics on \textbf{ArguAna} under compressed representations ($k=128$). Best isotropic metric in each model block is bolded.}
+\label{tab:arguana_geometry_comp}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll ccccc}
+\toprule
+\textbf{Model} & \textbf{Compression ($k=128$)} & $\mathbf{\|\mu\|_2}$ & \textbf{Avg. Cosine} & \textbf{MEV Top-1} & \textbf{NID Entropy} & \textbf{IsoScore} \\
+\midrule
+\textbf{EmbGemma-300M} & PCA & \textbf{0.0041} & -0.0000 & 0.0490 & 0.9358 & 0.5177 \\
+ & Prefix (MRL) & 0.5834 & 0.3395 & 0.0431 & 0.9390 & 0.5509 \\
+ & Rand. Trunc. (Ctrl) & 0.4594 & 0.2096 & 0.0440 & 0.9348 & 0.5389 \\
+ & SpecTemp & \textbf{0.0042} & \textbf{-0.0001} & 0.0241 & 0.9812 & 0.8183 \\
+ & Whitening & 0.0045 & -0.0000 & \textbf{0.0087} & \textbf{0.9998} & \textbf{0.9983} \\
+\midrule
+\textbf{Qwen3-Emb-0.6B} & PCA & 0.0051 & \textbf{0.0000} & 0.0530 & 0.9318 & 0.4968 \\
+ & Prefix (MRL) & 0.5325 & 0.2798 & 0.0639 & 0.8907 & 0.3800 \\
+ & Rand. Trunc. (Ctrl) & 0.5022 & 0.2506 & 0.0477 & 0.9255 & 0.5027 \\
+ & SpecTemp & \textbf{0.0048} & \textbf{-0.0000} & 0.0344 & 0.9649 & 0.6889 \\
+ & Whitening & 0.0049 & \textbf{-0.0000} & \textbf{0.0089} & \textbf{0.9998} & \textbf{0.9980} \\
+\midrule
+\textbf{Gemma-3-1B (Mean)} & PCA & 0.0210 & 0.0005 & 0.1096 & 0.8303 & 0.2196 \\
+ & Prefix (MRL) & 0.6497 & 0.4149 & 0.1686 & 0.8035 & 0.1561 \\
+ & Rand. Trunc. (Ctrl) & 0.9730 & 0.9465 & 0.1989 & 0.7674 & 0.1218 \\
+ & SpecTemp & 0.0190 & 0.0003 & 0.0736 & 0.8956 & 0.3569 \\
+ & Whitening & \textbf{0.0118} & \textbf{0.0000} & \textbf{0.0100} & \textbf{0.9984} & \textbf{0.9852} \\
+\midrule
+\textbf{Qwen3.5-0.8B (Mean)} & PCA & 0.0171 & 0.0003 & 0.1203 & 0.8074 & 0.1926 \\
+ & Prefix (MRL) & 0.9167 & 0.8387 & 0.1428 & 0.7273 & 0.1368 \\
+ & Rand. Trunc. (Ctrl) & 0.9026 & 0.8130 & 0.1272 & 0.8036 & 0.1889 \\
+ & SpecTemp & 0.0166 & 0.0002 & 0.0867 & 0.8688 & 0.2932 \\
+ & Whitening & \textbf{0.0112} & \textbf{-0.0000} & \textbf{0.0097} & \textbf{0.9988} & \textbf{0.9889} \\
+\midrule
+\textbf{Gemma-3-1B (Last)} & PCA & 0.0166 & 0.0001 & 0.2896 & 0.7473 & 0.0737 \\
+ & Prefix (MRL) & 0.6491 & 0.4198 & 0.2655 & 0.7730 & 0.0882 \\
+ & Rand. Trunc. (Ctrl) & 0.7483 & 0.5573 & 0.2893 & 0.7452 & 0.0739 \\
+ & SpecTemp & 0.0154 & \textbf{-0.0000} & 0.2090 & 0.8266 & 0.1338 \\
+ & Whitening & \textbf{0.0137} & \textbf{-0.0000} & \textbf{0.0138} & \textbf{0.9978} & \textbf{0.9786} \\
+\midrule
+\textbf{Qwen3.5-0.8B (Last)} & PCA & 0.0289 & 0.0012 & 0.3045 & 0.7031 & 0.0626 \\
+ & Prefix (MRL) & 0.8175 & 0.6654 & 0.3430 & 0.6616 & 0.0509 \\
+ & Rand. Trunc. (Ctrl) & 0.7432 & 0.5475 & 0.2698 & 0.7517 & 0.0824 \\
+ & SpecTemp & 0.0232 & 0.0006 & 0.2218 & 0.7917 & 0.1120 \\
+ & Whitening & \textbf{0.0180} & \textbf{0.0000} & \textbf{0.0165} & \textbf{0.9963} & \textbf{0.9634} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

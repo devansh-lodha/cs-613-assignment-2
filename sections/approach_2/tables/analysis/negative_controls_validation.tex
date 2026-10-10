@@ -1,0 +1,53 @@
+% Auto-generated publication table: negative_controls_validation
+\begin{table*}[t]
+\centering
+\small
+\caption{Empirical validation of scientific negative controls: R2 vs Random unit direction ($\Delta_{\text{rand}}$), R1 vs Unrenormalized Mean Centering ($\Delta_{\text{mc}}$), and PCA vs Random Truncation at $k=128$ ($\Delta_{\text{trunc}}$). Hypotheses-confirming positive deltas are bolded.}
+\label{tab:negative_controls_validation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll ccc ccc ccc}
+\toprule
+& & & \multicolumn{3}{c}{\textbf{Mean Renormalization}} & \multicolumn{3}{c}{\textbf{Subspace Specificity}} & \multicolumn{3}{c}{\textbf{Axis Alignment ($k=128$)}} \\
+\cmidrule(lr){4-6} \cmidrule(lr){7-9} \cmidrule(lr){10-12}
+\textbf{Benchmark} & \textbf{Track} & \textbf{Model} & \textbf{R1} & \textbf{MC (Ctrl)} & \textbf{$\Delta_{\text{mc}}$} & \textbf{R2} & \textbf{Rand (Ctrl)} & \textbf{$\Delta_{\text{rand}}$} & \textbf{PCA} & \textbf{RandTrunc} & \textbf{$\Delta_{\text{trunc}}$} \\
+\midrule
+ArguAna & Retrieval & Qwen3-Emb-0.6B & 0.4829 & 0.4592 & \textbf{+0.0237} & 0.4852 & 0.4931 & -0.0079 & 0.4730 & 0.4445 & \textbf{+0.0285} \\
+ArguAna & Retrieval & Qwen3.5-0.8B (Last) & 0.1078 & 0.0819 & \textbf{+0.0259} & 0.1080 & 0.1063 & \textbf{+0.0017} & 0.0980 & 0.0964 & \textbf{+0.0016} \\
+ArguAna & Retrieval & Qwen3.5-0.8B (Mean) & 0.2954 & 0.1924 & \textbf{+0.1030} & 0.2952 & 0.3163 & -0.0211 & 0.2814 & 0.2911 & -0.0096 \\
+ArguAna & Retrieval & EmbGemma-300M & 0.4760 & 0.4778 & -0.0018 & 0.4697 & 0.4700 & -0.0003 & 0.4639 & 0.4364 & \textbf{+0.0275} \\
+ArguAna & Retrieval & Gemma-3-1B (Last) & 0.1108 & 0.0939 & \textbf{+0.0169} & 0.1121 & 0.1130 & -0.0009 & 0.0984 & 0.0980 & \textbf{+0.0004} \\
+ArguAna & Retrieval & Gemma-3-1B (Mean) & 0.2988 & 0.2299 & \textbf{+0.0690} & 0.2985 & 0.2938 & \textbf{+0.0047} & 0.2704 & 0.2331 & \textbf{+0.0373} \\
+FiQA2018 & Retrieval & Qwen3-Emb-0.6B & 0.4725 & 0.4597 & \textbf{+0.0128} & 0.4730 & 0.4726 & \textbf{+0.0005} & 0.4427 & 0.3844 & \textbf{+0.0583} \\
+FiQA2018 & Retrieval & Qwen3.5-0.8B (Last) & 0.0025 & 0.0016 & \textbf{+0.0009} & 0.0028 & 0.0026 & \textbf{+0.0003} & 0.0024 & 0.0021 & \textbf{+0.0002} \\
+FiQA2018 & Retrieval & Qwen3.5-0.8B (Mean) & 0.0420 & 0.0126 & \textbf{+0.0294} & 0.0433 & 0.0416 & \textbf{+0.0017} & 0.0283 & 0.0315 & -0.0032 \\
+FiQA2018 & Retrieval & EmbGemma-300M & 0.4731 & 0.4539 & \textbf{+0.0192} & 0.4765 & 0.4736 & \textbf{+0.0029} & 0.4126 & 0.3724 & \textbf{+0.0402} \\
+FiQA2018 & Retrieval & Gemma-3-1B (Last) & 0.0225 & 0.0200 & \textbf{+0.0025} & 0.0223 & 0.0247 & -0.0024 & 0.0170 & 0.0123 & \textbf{+0.0047} \\
+FiQA2018 & Retrieval & Gemma-3-1B (Mean) & 0.0564 & 0.0181 & \textbf{+0.0383} & 0.0572 & 0.0587 & -0.0015 & 0.0329 & 0.0391 & -0.0062 \\
+SCIDOCS & Retrieval & Qwen3-Emb-0.6B & 0.2403 & 0.2288 & \textbf{+0.0115} & 0.2405 & 0.2440 & -0.0035 & 0.2228 & 0.1960 & \textbf{+0.0268} \\
+SCIDOCS & Retrieval & Qwen3.5-0.8B (Last) & 0.0048 & 0.0053 & -0.0006 & 0.0048 & 0.0042 & \textbf{+0.0006} & 0.0033 & 0.0038 & -0.0005 \\
+SCIDOCS & Retrieval & Qwen3.5-0.8B (Mean) & 0.0216 & 0.0111 & \textbf{+0.0105} & 0.0229 & 0.0267 & -0.0038 & 0.0166 & 0.0258 & -0.0092 \\
+SCIDOCS & Retrieval & EmbGemma-300M & 0.1992 & 0.1930 & \textbf{+0.0062} & 0.1966 & 0.1950 & \textbf{+0.0015} & 0.1649 & 0.1520 & \textbf{+0.0129} \\
+SCIDOCS & Retrieval & Gemma-3-1B (Last) & 0.0052 & 0.0061 & -0.0009 & 0.0055 & 0.0058 & -0.0003 & 0.0052 & 0.0059 & -0.0007 \\
+SCIDOCS & Retrieval & Gemma-3-1B (Mean) & 0.0222 & 0.0093 & \textbf{+0.0129} & 0.0244 & 0.0299 & -0.0055 & 0.0153 & 0.0228 & -0.0076 \\
+SICK-R & Similarity & Qwen3-Emb-0.6B & 81.02 & 77.46 & \textbf{+3.57} & 81.03 & 81.17 & -0.14 & 81.83 & 79.94 & \textbf{+1.89} \\
+SICK-R & Similarity & Qwen3.5-0.8B (Last) & 52.02 & 48.98 & \textbf{+3.04} & 52.23 & 48.53 & \textbf{+3.70} & 51.16 & 47.85 & \textbf{+3.31} \\
+SICK-R & Similarity & Qwen3.5-0.8B (Mean) & 52.02 & 50.09 & \textbf{+1.93} & 52.07 & 48.20 & \textbf{+3.86} & 50.08 & 48.46 & \textbf{+1.62} \\
+SICK-R & Similarity & EmbGemma-300M & 79.75 & 75.27 & \textbf{+4.48} & 79.77 & 80.17 & -0.40 & 78.47 & 78.99 & -0.52 \\
+SICK-R & Similarity & Gemma-3-1B (Last) & 53.22 & 49.58 & \textbf{+3.64} & 53.35 & 50.56 & \textbf{+2.79} & 52.32 & 50.26 & \textbf{+2.06} \\
+SICK-R & Similarity & Gemma-3-1B (Mean) & 51.72 & 49.32 & \textbf{+2.40} & 51.75 & 46.66 & \textbf{+5.09} & 49.64 & 45.20 & \textbf{+4.44} \\
+STS22.v2 & Similarity & Qwen3-Emb-0.6B & 67.61 & 67.34 & \textbf{+0.27} & 67.55 & 69.60 & -2.05 & 67.60 & 71.10 & -3.50 \\
+STS22.v2 & Similarity & Qwen3.5-0.8B (Last) & 15.36 & 11.91 & \textbf{+3.45} & 15.82 & 16.28 & -0.46 & 15.03 & 17.75 & -2.72 \\
+STS22.v2 & Similarity & Qwen3.5-0.8B (Mean) & 58.16 & 44.79 & \textbf{+13.37} & 58.28 & 60.20 & -1.92 & 57.01 & 59.71 & -2.69 \\
+STS22.v2 & Similarity & EmbGemma-300M & 65.90 & 64.02 & \textbf{+1.88} & 66.02 & 66.54 & -0.52 & 65.73 & 65.84 & -0.10 \\
+STS22.v2 & Similarity & Gemma-3-1B (Last) & 13.39 & 11.87 & \textbf{+1.52} & 14.22 & 12.08 & \textbf{+2.14} & 12.84 & 21.57 & -8.73 \\
+STS22.v2 & Similarity & Gemma-3-1B (Mean) & 55.45 & 38.69 & \textbf{+16.75} & 55.34 & 58.79 & -3.45 & 53.04 & 57.46 & -4.42 \\
+STSBenchmark & Similarity & Qwen3-Emb-0.6B & 84.72 & 77.29 & \textbf{+7.42} & 84.79 & 84.60 & \textbf{+0.19} & 84.88 & 82.78 & \textbf{+2.09} \\
+STSBenchmark & Similarity & Qwen3.5-0.8B (Last) & 40.52 & 27.05 & \textbf{+13.46} & 40.70 & 36.26 & \textbf{+4.45} & 38.27 & 36.34 & \textbf{+1.93} \\
+STSBenchmark & Similarity & Qwen3.5-0.8B (Mean) & 44.81 & 37.89 & \textbf{+6.92} & 45.08 & 41.09 & \textbf{+3.99} & 41.30 & 38.96 & \textbf{+2.34} \\
+STSBenchmark & Similarity & EmbGemma-300M & 85.27 & 78.47 & \textbf{+6.80} & 85.41 & 84.86 & \textbf{+0.54} & 81.35 & 83.47 & -2.12 \\
+STSBenchmark & Similarity & Gemma-3-1B (Last) & 47.23 & 36.17 & \textbf{+11.06} & 47.87 & 41.14 & \textbf{+6.73} & 43.34 & 42.41 & \textbf{+0.92} \\
+STSBenchmark & Similarity & Gemma-3-1B (Mean) & 44.29 & 36.66 & \textbf{+7.64} & 44.58 & 38.23 & \textbf{+6.35} & 39.46 & 35.56 & \textbf{+3.90} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

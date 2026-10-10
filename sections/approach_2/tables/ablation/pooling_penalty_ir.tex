@@ -1,0 +1,52 @@
+% Auto-generated publication table: pooling_penalty_ir
+\begin{table*}[t]
+\centering
+\small
+\caption{Token pooling penalty ablation on base causal language models (nDCG@10). Compares sequence mean pooling against final token pooling across datasets and transformations. Deltas reflect last token minus mean pooling.}
+\label{tab:pooling_penalty_ir}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll ccc ccc c}
+\toprule
+& & \multicolumn{3}{c}{\textbf{Google Gemma-3-1B-PT}} & \multicolumn{3}{c}{\textbf{Qwen/Qwen3.5-0.8B-Base}} & \textbf{Combined} \\
+\cmidrule(lr){3-5} \cmidrule(lr){6-8} \cmidrule(lr){9-9}
+\textbf{Dataset} & \textbf{Method} & \textbf{Mean} & \textbf{Last} & \textbf{$\Delta$} & \textbf{Mean} & \textbf{Last} & \textbf{$\Delta$} & \textbf{Mean $\Delta$} \\
+\midrule
+\textbf{FiQA2018} & Baseline & 0.0589 & 0.0246 & -0.0343 & 0.0419 & 0.0026 & -0.0393 & -0.0368 \\
+ & Standardization & 0.0681 & 0.0187 & -0.0494 & 0.0385 & 0.0019 & -0.0366 & -0.0430 \\
+ & R1 (Mean Sub.) & 0.0564 & 0.0225 & -0.0339 & 0.0420 & 0.0025 & -0.0395 & -0.0367 \\
+ & R2 (Subspace Def.) & 0.0572 & 0.0223 & -0.0349 & 0.0433 & 0.0028 & -0.0404 & -0.0377 \\
+ & Soft-ZCA & 0.0968 & 0.0389 & -0.0579 & 0.0615 & 0.0042 & -0.0573 & -0.0576 \\
+ & ABTT-1 & 0.0568 & 0.0222 & -0.0345 & 0.0378 & 0.0026 & -0.0352 & -0.0348 \\
+ & ABTT-2 & 0.0555 & 0.0272 & -0.0283 & 0.0422 & 0.0036 & -0.0386 & -0.0335 \\
+ & ABTT-3 & 0.0689 & 0.0254 & -0.0435 & 0.0446 & 0.0036 & -0.0409 & -0.0422 \\
+\addlinespace
+ & Rand (Control) & 0.0587 & 0.0247 & -0.0340 & 0.0416 & 0.0026 & -0.0390 & -0.0365 \\
+ & MC (Control) & 0.0181 & 0.0200 & +0.0019 & 0.0126 & 0.0016 & -0.0110 & -0.0046 \\
+\midrule
+\textbf{ArguAna} & Baseline & 0.2938 & 0.1124 & -0.1814 & 0.3162 & 0.1064 & -0.2098 & -0.1956 \\
+ & Standardization & 0.3172 & 0.1299 & -0.1873 & 0.3077 & 0.1125 & -0.1952 & -0.1912 \\
+ & R1 (Mean Sub.) & 0.2988 & 0.1108 & -0.1880 & 0.2954 & 0.1078 & -0.1876 & -0.1878 \\
+ & R2 (Subspace Def.) & 0.2985 & 0.1121 & -0.1865 & 0.2952 & 0.1080 & -0.1872 & -0.1868 \\
+ & Soft-ZCA & 0.3599 & 0.1584 & -0.2015 & 0.3622 & 0.1485 & -0.2137 & -0.2076 \\
+ & ABTT-1 & 0.3056 & 0.1286 & -0.1770 & 0.2986 & 0.1109 & -0.1877 & -0.1824 \\
+ & ABTT-2 & 0.3108 & 0.1338 & -0.1770 & 0.3012 & 0.1169 & -0.1843 & -0.1806 \\
+ & ABTT-3 & 0.3104 & 0.1433 & -0.1670 & 0.3157 & 0.1301 & -0.1856 & -0.1763 \\
+\addlinespace
+ & Rand (Control) & 0.2938 & 0.1130 & -0.1808 & 0.3163 & 0.1063 & -0.2100 & -0.1954 \\
+ & MC (Control) & 0.2299 & 0.0939 & -0.1360 & 0.1924 & 0.0819 & -0.1105 & -0.1233 \\
+\midrule
+\textbf{SCIDOCS} & Baseline & 0.0302 & 0.0057 & -0.0244 & 0.0268 & 0.0042 & -0.0225 & -0.0235 \\
+ & Standardization & 0.0420 & 0.0062 & -0.0359 & 0.0193 & 0.0049 & -0.0145 & -0.0252 \\
+ & R1 (Mean Sub.) & 0.0222 & 0.0052 & -0.0170 & 0.0216 & 0.0048 & -0.0168 & -0.0169 \\
+ & R2 (Subspace Def.) & 0.0244 & 0.0055 & -0.0189 & 0.0229 & 0.0048 & -0.0181 & -0.0185 \\
+ & Soft-ZCA & 0.0679 & 0.0106 & -0.0573 & 0.0536 & 0.0080 & -0.0456 & -0.0514 \\
+ & ABTT-1 & 0.0226 & 0.0053 & -0.0173 & 0.0197 & 0.0042 & -0.0155 & -0.0164 \\
+ & ABTT-2 & 0.0214 & 0.0057 & -0.0157 & 0.0189 & 0.0044 & -0.0144 & -0.0151 \\
+ & ABTT-3 & 0.0226 & 0.0068 & -0.0158 & 0.0172 & 0.0055 & -0.0118 & -0.0138 \\
+\addlinespace
+ & Rand (Control) & 0.0299 & 0.0058 & -0.0241 & 0.0267 & 0.0042 & -0.0225 & -0.0233 \\
+ & MC (Control) & 0.0093 & 0.0061 & -0.0032 & 0.0111 & 0.0053 & -0.0058 & -0.0045 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

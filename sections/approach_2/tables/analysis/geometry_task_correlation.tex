@@ -1,0 +1,22 @@
+% Auto-generated publication table: geometry_task_correlation
+\begin{table*}[t]
+\centering
+\small
+\caption{Pearson and Spearman correlation between intrinsic space geometry diagnostics and downstream task performance (IR nDCG@10 and STS Spearman $\rho$). Statistically significant correlations ($p < 0.05$) are bolded.}
+\label{tab:geometry_task_correlation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l ccc ccc}
+\toprule
+& \multicolumn{3}{c}{\textbf{Information Retrieval (nDCG@10)}} & \multicolumn{3}{c}{\textbf{Semantic Textual Similarity (Spearman $\mathbf{\rho}$)}} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+\textbf{Geometry Diagnostic Metric} & \textbf{Pearson $r$} & $\mathbf{p}$\textbf{-value} & \textbf{Spearman $\rho$} & \textbf{Pearson $r$} & $\mathbf{p}$\textbf{-value} & \textbf{Spearman $\rho$} \\
+\midrule
+Centroid Norm ($\|\mu\|_2$) & -0.1061 & 0.1563 & -0.3541 & -0.1390 & 0.0627 & -0.3156 \\
+Average Cosine Similarity & -0.1342 & 0.0724 & -0.4861 & \textbf{-0.1617} & \textbf{0.0301} & \textbf{-0.2199} \\
+Maximum Explainable Variance (MEV Top-1) & \textbf{-0.4830} & \textbf{$< 0.0001$} & \textbf{-0.5621} & \textbf{-0.4238} & \textbf{$< 0.0001$} & \textbf{-0.5340} \\
+Normalized Intrinsic Dimensionality (NID) & \textbf{0.4815} & \textbf{$< 0.0001$} & \textbf{0.4698} & \textbf{0.4376} & \textbf{$< 0.0001$} & \textbf{0.5650} \\
+Global Isotropy (IsoScore) & \textbf{0.2610} & \textbf{0.0004} & \textbf{0.5267} & \textbf{0.2615} & \textbf{0.0004} & \textbf{0.5964} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
