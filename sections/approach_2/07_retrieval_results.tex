@@ -7,49 +7,22 @@ D' = (D - \mu_D) W_D, \quad Q' = (Q - \mu_D) W_D
 \end{equation}
 Both transformed matrices are L2-normalized to unit length: $D' \leftarrow D' / \|D'\|_2$, $Q' \leftarrow Q' / \|Q'\|_2$. Candidate documents are ranked by inner product $S = Q' (D')^\top$, and the top 100 retrieved candidates per query are evaluated using \texttt{pytrec-eval}.
 
-\subsection{ArguAna Counter-Argument Retrieval}
-ArguAna evaluates the retrieval of counter-arguments against input argumentative claims across 8,674 candidate documents and 1,406 queries. Table~\ref{tab:arguana_ndcg}, Table~\ref{tab:arguana_mrr}, and Table~\ref{tab:arguana_recall} report nDCG@10, MRR@10, and Recall@100 across models and transformations.
+Tables~\ref{tab:arguana_ndcg} to~\ref{tab:scidocs_recall} in Appendix~\ref{app:app2} report nDCG@10, MRR@10, and Recall@100 for every model and method on ArguAna, FiQA2018, and SCIDOCS (Section~\ref{sec:datasets}).
 
-\input{sections/approach_2/tables/retrieval/arguana_ndcg.tex}
-\input{sections/approach_2/tables/retrieval/arguana_mrr.tex}
-\input{sections/approach_2/tables/retrieval/arguana_recall.tex}
+\paragraph{The base-to-dedicated gap depends on the dataset.}
+Raw base models trail both dedicated encoders on every dataset, but by very different margins. On ArguAna, mean-pooled base models reach about two thirds of the dedicated nDCG@10. On FiQA2018 and SCIDOCS they reach only about a tenth. On ArguAna, Recall@100 of the dedicated encoders is close to 1 under every method, so it leaves little room to separate methods.
 
-\paragraph{Analysis of ArguAna Results}
-\begin{itemize}
-\item Dedicated Embedding Models: Dedicated contrastive encoders achieve high baseline performance (mean nDCG@10 of 0.4816, MRR@10 of 0.3408, Recall@100 of 0.9947). Soft-ZCA whitening reduces dedicated nDCG@10 to 0.4367 (-0.0449) because contrastive training has already optimized the relative component weighting. Subspace deflations (R1: 0.4794; R2: 0.4774; ABTT-1: 0.4795) preserve baseline scores without metric distortion.
-\item Base Causal Models under Mean Pooling: Baseline mean representations achieve 0.3050 nDCG@10, 0.1993 MRR@10, and 0.9264 Recall@100. Soft-ZCA produces the strongest recovery across all methods, raising nDCG@10 to 0.3610 (+0.0560 absolute, +18.4\% relative), MRR@10 to 0.2356 (+18.2\%), and Recall@100 to 0.9751, closing 31.7\% of the initial gap to dedicated models. ABTT-3 reaches 0.3130, and standardization reaches 0.3124.
-\item Base Causal Models under Last Token Pooling: Last token representations suffer an initial penalty of 0.1956 nDCG points relative to mean pooling (baseline 0.1094 vs 0.3050). Soft-ZCA lifts last token nDCG@10 to 0.1534 (+40.2\%) and Recall@100 from 0.3720 to 0.6117 (+64.4\%).
-\item Negative Controls: Random unit direction deflation (\texttt{rand}) yields 0.4815 for dedicated and 0.3051 for base mean pooling, demonstrating zero statistical shift from baseline (0.4816 and 0.3050). Mean centering without L2 renormalization (\texttt{mc}) causes base mean pooling nDCG@10 to collapse from 0.3050 to 0.2111 (-30.8\%), confirming that hyperspherical projection is mathematically essential.
-\end{itemize}
+\paragraph{Soft-ZCA helps base models and hurts dedicated encoders.}
+For both mean-pooled base models, Soft-ZCA gives the highest nDCG@10, MRR@10, and Recall@100 of all methods on all three datasets. Its relative gain is larger where the raw score is lower: mean-pooled nDCG@10 rises by about a fifth on ArguAna, by over half on FiQA2018, and more than doubles on SCIDOCS. It also raises last-token nDCG@10 for both base models on every dataset. The same transform lowers both dedicated encoders on every dataset and metric, by about 0.03 to 0.07 nDCG@10. Even after Soft-ZCA, every base model stays well below the raw dedicated encoders.
 
+\paragraph{The other transforms barely move dedicated encoders.}
+Standardization, R1, R2, and ABTT-1 to ABTT-3 change dedicated scores by at most about 0.02 on any IR metric, in both directions. Deflating a random direction (\texttt{rand}) changes no score of any model by more than 0.002. Mean centering without renormalization (\texttt{mc}) lowers dedicated scores in most cases, but raises EmbeddingGemma on ArguAna.
 
-\subsection{FiQA2018 Financial Question Answering}
-FiQA2018 evaluates financial opinion question answering across 57,638 document passages and 648 queries. Table~\ref{tab:fiqa_ndcg}, Table~\ref{tab:fiqa_mrr}, and Table~\ref{tab:fiqa_recall} report nDCG@10, MRR@10, and Recall@100.
+\paragraph{Removing the mean direction does not help base models.}
+For mean-pooled base models, R1 and R2 slightly lower the average nDCG@10 on all three datasets. Only standardization and Soft-ZCA raise it on all three. ABTT-3 helps on ArguAna and FiQA2018, but on SCIDOCS every deflation method (R1, R2, and ABTT-1 to ABTT-3) falls below the raw baseline.
 
-\input{sections/approach_2/tables/retrieval/fiqa_ndcg.tex}
-\input{sections/approach_2/tables/retrieval/fiqa_mrr.tex}
-\input{sections/approach_2/tables/retrieval/fiqa_recall.tex}
+\paragraph{Renormalization matters most for mean-pooled base models.}
+Without the final L2 normalization, mean centering (\texttt{mc}) cuts the mean-pooled base nDCG@10 by about a third on ArguAna and by about two thirds on FiQA2018 and SCIDOCS. The same centering followed by normalization (R1) stays much closer to the baseline.
 
-\paragraph{Analysis of FiQA2018 Results}
-\begin{itemize}
-\item Initial Disparity: Raw base causal models perform poorly on specialized financial QA, achieving an average baseline nDCG@10 of 0.0504 under mean pooling and 0.0136 under last token pooling, trailing dedicated models (0.4738) by 0.4234 points.
-\item Post-Processing Gains on Base Models: Soft-ZCA delivers a +56.9\% relative gain on base mean pooling, lifting nDCG@10 from 0.0504 to 0.0791, MRR@10 from 0.0634 to 0.0909 (+43.4\%), and Recall@100 from 0.2080 to 0.3177 (+52.7\%). ABTT-3 reaches 0.0567 nDCG@10 and 0.2274 Recall@100.
-\item Extreme Collapse on Last Token Pooling: Qwen3.5-0.8B-Base under last token pooling retrieves almost no relevant financial passages (0.0026 nDCG@10, 0.0034 MRR@10, and 0.0206 Recall@100). Soft-ZCA raises recall to 0.0644, but last token pooling remains deeply compromised by autoregressive token specialization.
-\item Dedicated Model Stability: Dedicated models preserve peak performance under R2 (0.4748 nDCG vs 0.4738 baseline) and ABTT-1 (0.4752 nDCG), whereas Soft-ZCA causes an over-smoothing drop to 0.4103.
-\end{itemize}
-
-
-\subsection{SCIDOCS Scientific Citation Retrieval}
-SCIDOCS evaluates paper citation matching across 25,657 paper abstracts and 1,000 title queries with 29,928 relevant citation links. Table~\ref{tab:scidocs_ndcg}, Table~\ref{tab:scidocs_mrr}, and Table~\ref{tab:scidocs_recall} report nDCG@10, MRR@10, and Recall@100.
-
-\input{sections/approach_2/tables/retrieval/scidocs_ndcg.tex}
-\input{sections/approach_2/tables/retrieval/scidocs_mrr.tex}
-\input{sections/approach_2/tables/retrieval/scidocs_recall.tex}
-
-\paragraph{Analysis of SCIDOCS Results}
-\begin{itemize}
-\item Base Representation Deficits: Raw base causal models achieve only 0.0285 nDCG@10 and 0.0503 MRR@10 under mean pooling, and 0.0050 nDCG@10 under last token pooling, compared to 0.2194 and 0.3708 for dedicated encoders.
-\item Soft-ZCA Recovery: Soft-ZCA more than doubles base model retrieval quality, lifting nDCG@10 from 0.0285 to 0.0607 (+113.0\% relative increase), MRR@10 from 0.0503 to 0.1043 (+107.4\%), and Recall@100 from 0.1136 to 0.2255 (+98.5\%), closing 16.9\% of the initial gap to dedicated models.
-\item Failure of 1D Deflation: Unlike Soft-ZCA, simple mean subtraction (R1: 0.0219; R2: 0.0237) and coordinate standardization (0.0307) provide little to no gain on SCIDOCS. In scientific abstracts, representational crowding is driven by higher-order covariance coupling rather than origin shift alone.
-\item Dedicated Encoders Under Deflation: Dedicated models slightly improve under light deflation (ABTT-2 reaches 0.2208 nDCG vs 0.2194 baseline; R1 reaches 0.4821 Recall vs 0.4761 baseline), demonstrating that removing the top two principal background directions purges residual citation dataset noise.
-\end{itemize}
+\paragraph{Last-token pooling is the weakest setting.}
+Last-token base models score far below mean pooling on every dataset, and post-processing does not close the gap (Section~\ref{sec:ablation_results}). The extreme case is Qwen3.5-0.8B-Base on FiQA2018, where no method lifts nDCG@10 above 0.005.

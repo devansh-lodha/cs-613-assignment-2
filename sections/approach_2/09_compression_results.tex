@@ -3,87 +3,25 @@
 
 Dimensional compression evaluates representation retention when high-dimensional embeddings ($d \in \{768, 1024, 1152\}$) are compressed into compact subspaces $k \in \{512, 256, 128, 64\}$. We evaluate five compression algorithms: coordinate prefix slicing (\texttt{prefix}), unweighted principal component projection (\texttt{pca}), truncated variance-equalizing whitening (\texttt{whitening}), adaptive spectral tempering (\texttt{spectemp}), and uniform random coordinate subsampling (\texttt{random\_truncation}).
 
-\subsection{ArguAna Retrieval Compression}
-Table~\ref{tab:arguana_compression_ndcg}, Table~\ref{tab:arguana_compression_mrr}, and Table~\ref{tab:arguana_compression_recall} report compression performance on ArguAna.
+Tables~\ref{tab:arguana_compression_ndcg} to~\ref{tab:stsb_compression_pearson} in Appendix~\ref{app:app2} report absolute scores and retention for every model, method, and $k$. Retention is the compressed score divided by the same model's full-dimension baseline score, so values above 100\% mean the compressed embedding scored higher than the raw one.
 
-\input{sections/approach_2/tables/compression/arguana_compression_ndcg.tex}
-\input{sections/approach_2/tables/compression/arguana_compression_mrr.tex}
-\input{sections/approach_2/tables/compression/arguana_compression_recall.tex}
+\paragraph{Retrieval loses far more than similarity under compression.}
+For dedicated encoders, the loss at small $k$ depends strongly on the task. On FiQA2018 and SCIDOCS, even the best method keeps only about three quarters of nDCG@10 at $k=64$, and about 90\% on ArguAna. On all three STS datasets, every method keeps at least 94\% of Spearman $\rho$ at $k=64$.
 
-\paragraph{Analysis of ArguAna Compression}
-\begin{itemize}
-\item Broad Subspace ($k=512$): Prefix slicing retains 99.96\% of native nDCG@10 on dedicated models; PCA retains 99.56\%; SpecTemp retains 99.45\%. Standard whitening drops to 90.68\% retention (-9.32\% loss) due to noise tail amplification.
-\item Compact Subspace ($k=64$): PCA retains 91.69\% nDCG@10 on dedicated models, while SpecTemp retains 89.33\%, whitening retains 87.69\%, and prefix slicing drops to 85.92\%. PCA outperforms prefix slicing by +5.77 percentage points, demonstrating that spectral rotation concentrates argumentative variance more effectively than fixed coordinate slicing.
-\item Base Causal Models: Whitening at $k=512$ achieves 129.12\% retention on nDCG and 132.97\% on recall, overcoming initial representation collapse.
-\end{itemize}
+\paragraph{Whitening is costly at large $k$ and recovers at small $k$.}
+For dedicated encoders at $k=512$, whitening is the weakest method on every dataset except STS22.v2 Spearman $\rho$, while prefix slicing, PCA, and SpecTemp stay close to the native score. The gap closes as $k$ shrinks. At $k=64$, whitening is level with PCA on FiQA2018 and SCIDOCS and ahead of PCA on STS22.v2 and STSBenchmark.
 
+\paragraph{Prefix slicing holds up on similarity but not on retrieval.}
+Prefix slicing keeps nearly all of the dedicated score at $k=512$ on every dataset. At $k=64$ it is the weakest method apart from random truncation on all three IR datasets, while on STS it still keeps at least 96\% of Spearman $\rho$. On retrieval, EmbeddingGemma's prefix loses much more than Qwen3-Embedding's at $k=64$ on every dataset.
 
-\subsection{FiQA2018 Retrieval Compression}
-Table~\ref{tab:fiqa_compression_ndcg}, Table~\ref{tab:fiqa_compression_mrr}, and Table~\ref{tab:fiqa_compression_recall} report compression performance on FiQA2018.
+\paragraph{PCA and SpecTemp trade places at small $k$.}
+For dedicated encoders, PCA and SpecTemp both track the native score closely at $k=512$, and on SCIDOCS both slightly exceed it for EmbeddingGemma. At $k=64$, PCA keeps more on ArguAna, while SpecTemp keeps more on FiQA2018 and SCIDOCS.
 
-\input{sections/approach_2/tables/compression/fiqa_compression_ndcg.tex}
-\input{sections/approach_2/tables/compression/fiqa_compression_mrr.tex}
-\input{sections/approach_2/tables/compression/fiqa_compression_recall.tex}
+\paragraph{Random truncation is weak on retrieval but not on similarity.}
+For dedicated encoders, random coordinate subsets keep the least nDCG@10 of all methods at $k=64$ on every IR dataset. On STS they keep at least 95\% of Spearman $\rho$, and on STS22.v2 they keep more than any other method.
 
-\paragraph{Analysis of FiQA2018 Compression}
-\begin{itemize}
-\item Broad Subspace ($k=512$): SpecTemp retains 99.82\% of native nDCG@10 and 99.75\% of native MRR@10 on dedicated models. Whitening suffers steep degradation (86.92\% nDCG retention and 89.76\% MRR retention). SpecTemp sets $\gamma \approx 0.05$, successfully matching PCA without noise inflation.
-\item Compact Subspace ($k=64$): SpecTemp establishes the top retention on dedicated models (75.73\% nDCG@10 and 77.50\% MRR@10), outperforming native Matryoshka prefix slicing (70.17\% nDCG and 73.19\% MRR) by over 5 percentage points.
-\item Base Model Inversion: On base models, whitening at $k=512$ elevates nDCG@10 to 174.02\% and Recall@100 to 183.68\% of native performance, proving that post-hoc variance equalization eliminates financial vocabulary noise.
-\end{itemize}
+\paragraph{The ranking of methods flips for base models.}
+For base models, whitening at $k=512$ scores above the native nDCG@10 or Spearman $\rho$ for every model and pooling mode on every dataset, and above SpecTemp in every case. On retrieval this advantage shrinks with $k$, and the base average falls to or below the native score by $k=64$. On STS, the base average for whitening stays above the native Spearman $\rho$ down to $k=64$. Very large retention values occur where the native score is close to zero: Qwen3.5-0.8B-Base with last-token pooling has a native FiQA2018 nDCG@10 of 0.0026, so whitening's 0.0060 at $k=512$ appears as 233\% retention.
 
-
-\subsection{SCIDOCS Retrieval Compression}
-Table~\ref{tab:scidocs_compression_ndcg}, Table~\ref{tab:scidocs_compression_mrr}, and Table~\ref{tab:scidocs_compression_recall} report compression performance on SCIDOCS.
-
-\input{sections/approach_2/tables/compression/scidocs_compression_ndcg.tex}
-\input{sections/approach_2/tables/compression/scidocs_compression_mrr.tex}
-\input{sections/approach_2/tables/compression/scidocs_compression_recall.tex}
-
-\paragraph{Analysis of SCIDOCS Compression}
-\begin{itemize}
-\item Noise-Filtering Inversion ($k=512$): On dedicated models, both SpecTemp (100.71\% nDCG, 100.49\% MRR, 101.85\% Recall) and PCA (100.18\% nDCG, 101.57\% Recall) exceed full-rank uncompressed representations, confirming that the trailing dimensions encode citation noise.
-\item Extreme Compression Advantage ($k=64$): SpecTemp preserves 74.55\% nDCG@10 and 76.18\% MRR@10 on dedicated models, outperforming prefix slicing (62.64\% nDCG and 67.54\% MRR) by +11.91 and +8.64 percentage points. On Recall@100, PCA and SpecTemp outperform prefix slicing by over +18 percentage points (88.57\% and 87.67\% vs 69.56\%).
-\item Base Model Coverage: Whitening at $k=512$ achieves 214.50\% recall retention on base models, more than doubling candidate capture.
-\end{itemize}
-
-
-\subsection{SICK-R Similarity Compression}
-Table~\ref{tab:sickr_compression_spearman} and Table~\ref{tab:sickr_compression_pearson} report compression performance on SICK-R.
-
-\input{sections/approach_2/tables/compression/sickr_compression_spearman.tex}
-\input{sections/approach_2/tables/compression/sickr_compression_pearson.tex}
-
-\paragraph{Analysis of SICK-R Compression}
-\begin{itemize}
-\item High Retention Across Ladder: On short sentences, all spectral methods retain over 96.5\% of native correlation down to $k=64$. SpecTemp achieves the highest retention at $k=64$ (98.66\% Spearman and 98.77\% Pearson).
-\item Whitening Noise at $k=512$: Standard whitening drops to 86.90\% Spearman retention and 81.84\% Pearson retention on dedicated models, while SpecTemp maintains 99.66\% and 100.11\%.
-\item Base Model Recovery: Base causal models gain from spectral compression, reaching 119.59\% Spearman retention under whitening and 108.26\% under SpecTemp at $k=512$.
-\end{itemize}
-
-
-\subsection{STS22.v2 Similarity Compression}
-Table~\ref{tab:sts22_compression_spearman} and Table~\ref{tab:sts22_compression_pearson} report compression performance on STS22.v2.
-
-\input{sections/approach_2/tables/compression/sts22_compression_spearman.tex}
-\input{sections/approach_2/tables/compression/sts22_compression_pearson.tex}
-
-\paragraph{Analysis of STS22.v2 Compression}
-\begin{itemize}
-\item Long-Document Whitening Collapse: On ~2,048 token contexts, whitening on dedicated models collapses to 52.07\% Pearson retention at $k=512$. SpecTemp sets $\gamma = 0.00$, tracking PCA perfectly (99.56\% retention). Truncating low-variance noise dimensions at $k=64$ allows whitening to recover to 94.89\% retention.
-\item Base Model Recovery: Whitening achieves 155.09\% Spearman retention at $k=512$ and 128.74\% at $k=64$ on base models, while SpecTemp preserves 116.14\% at $k=64$, significantly outperforming unweighted PCA (83.69\%).
-\end{itemize}
-
-
-\subsection{STSBenchmark Similarity Compression}
-Table~\ref{tab:stsb_compression_spearman} and Table~\ref{tab:stsb_compression_pearson} report compression performance on STSBenchmark.
-
-\input{sections/approach_2/tables/compression/stsb_compression_spearman.tex}
-\input{sections/approach_2/tables/compression/stsb_compression_pearson.tex}
-
-\paragraph{Analysis of STSBenchmark Compression}
-\begin{itemize}
-\item Noise-Filtering at $k=512$: SpecTemp retains 100.50\% of native Spearman rho and 100.77\% of native Pearson r on dedicated models, improving upon uncompressed embeddings.
-\item Mitigating PCA Skewness at $k=64$: At $k=64$, unweighted PCA drops to 90.41\% Pearson retention on dedicated models due to spectral skewness, while SpecTemp (95.57\%) and whitening (96.62\%) maintain superior retention.
-\item Base Model Recovery: Whitening nearly doubles base model Pearson correlation at $k=512$ (196.51\% retention) and retains 175.70\% at $k=64$, lifting base representations above 60 Pearson r.
-\end{itemize}
+\paragraph{STS22.v2 behaves differently at $k=512$.}
+On STS22.v2 at $k=512$, whitening keeps on average only about half of the dedicated Pearson $r$, while its Spearman $\rho$ stays near the native score. At $k=256$ and $k=128$, the dedicated average for whitening is at or above the native Pearson $r$. Also at $k=512$, SpecTemp gives exactly the same scores as PCA for every model, which matches the zero tempering exponent reported for EmbeddingGemma (Table~\ref{tab:spectemp_dynamics}).

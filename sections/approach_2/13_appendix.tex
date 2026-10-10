@@ -1,0 +1,72 @@
+\section{Approach 2: Detailed Result Tables}
+\label{app:app2}
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+
+This appendix collects the result tables for Sections~\ref{sec:retrieval_results} to~\ref{sec:theoretical_analysis}, in the order those sections cite them: full-dimension retrieval (Tables~\ref{tab:arguana_ndcg} to~\ref{tab:scidocs_recall}), full-dimension similarity (Tables~\ref{tab:sickr_spearman} to~\ref{tab:stsb_pearson}), compression (Tables~\ref{tab:arguana_compression_ndcg} to~\ref{tab:stsb_compression_pearson}), geometry (Tables~\ref{tab:arguana_geometry} to~\ref{tab:stsb_geometry_comp}), pooling ablation (Tables~\ref{tab:pooling_penalty_ir} and~\ref{tab:pooling_penalty_sts}), and derived analyses (Tables~\ref{tab:gap_closure_ir} to~\ref{tab:tri_paradigm_benchmark}).
+
+% Full-dimension retrieval (Section 7)
+\input{sections/approach_2/tables/retrieval/arguana_ndcg.tex}
+\input{sections/approach_2/tables/retrieval/arguana_mrr.tex}
+\input{sections/approach_2/tables/retrieval/arguana_recall.tex}
+\input{sections/approach_2/tables/retrieval/fiqa_ndcg.tex}
+\input{sections/approach_2/tables/retrieval/fiqa_mrr.tex}
+\input{sections/approach_2/tables/retrieval/fiqa_recall.tex}
+\input{sections/approach_2/tables/retrieval/scidocs_ndcg.tex}
+\input{sections/approach_2/tables/retrieval/scidocs_mrr.tex}
+\input{sections/approach_2/tables/retrieval/scidocs_recall.tex}
+
+% Full-dimension similarity (Section 8)
+\input{sections/approach_2/tables/similarity/sickr_spearman.tex}
+\input{sections/approach_2/tables/similarity/sickr_pearson.tex}
+\input{sections/approach_2/tables/similarity/sts22_spearman.tex}
+\input{sections/approach_2/tables/similarity/sts22_pearson.tex}
+\input{sections/approach_2/tables/similarity/stsb_spearman.tex}
+\input{sections/approach_2/tables/similarity/stsb_pearson.tex}
+
+% Flush pending floats so the float queue never exceeds its limit
+\clearpage
+
+% Compression (Section 9)
+\input{sections/approach_2/tables/compression/arguana_compression_ndcg.tex}
+\input{sections/approach_2/tables/compression/arguana_compression_mrr.tex}
+\input{sections/approach_2/tables/compression/arguana_compression_recall.tex}
+\input{sections/approach_2/tables/compression/fiqa_compression_ndcg.tex}
+\input{sections/approach_2/tables/compression/fiqa_compression_mrr.tex}
+\input{sections/approach_2/tables/compression/fiqa_compression_recall.tex}
+\input{sections/approach_2/tables/compression/scidocs_compression_ndcg.tex}
+\input{sections/approach_2/tables/compression/scidocs_compression_mrr.tex}
+\input{sections/approach_2/tables/compression/scidocs_compression_recall.tex}
+\input{sections/approach_2/tables/compression/sickr_compression_spearman.tex}
+\input{sections/approach_2/tables/compression/sickr_compression_pearson.tex}
+\input{sections/approach_2/tables/compression/sts22_compression_spearman.tex}
+\input{sections/approach_2/tables/compression/sts22_compression_pearson.tex}
+\input{sections/approach_2/tables/compression/stsb_compression_spearman.tex}
+\input{sections/approach_2/tables/compression/stsb_compression_pearson.tex}
+
+\clearpage
+
+% Geometry (Section 10) and pooling ablation (Section 11)
+\input{sections/approach_2/tables/geometry/arguana_geometry.tex}
+\input{sections/approach_2/tables/geometry/fiqa_geometry.tex}
+\input{sections/approach_2/tables/geometry/scidocs_geometry.tex}
+\input{sections/approach_2/tables/geometry/sickr_geometry.tex}
+\input{sections/approach_2/tables/geometry/sts22_geometry.tex}
+\input{sections/approach_2/tables/geometry/stsb_geometry.tex}
+\input{sections/approach_2/tables/ablation/pooling_penalty_ir.tex}
+\input{sections/approach_2/tables/ablation/pooling_penalty_sts.tex}
+
+\clearpage
+
+% Derived analyses (Section 12)
+\input{sections/approach_2/tables/analysis/gap_closure_ir.tex}
+\input{sections/approach_2/tables/analysis/gap_closure_sts.tex}
+\input{sections/approach_2/tables/analysis/spectemp_dynamics.tex}
+\input{sections/approach_2/tables/analysis/geometry_task_correlation.tex}
+\input{sections/approach_2/tables/analysis/r2_vs_r1_head_to_head.tex}
+\input{sections/approach_2/tables/analysis/abtt_monotonicity.tex}
+\input{sections/approach_2/tables/analysis/compression_divergence.tex}
+\input{sections/approach_2/tables/analysis/negative_controls_validation.tex}
+\input{sections/approach_2/tables/analysis/context_length_impact.tex}
+\input{sections/approach_2/tables/analysis/spectemp_vs_mrl.tex}
+\input{sections/approach_2/tables/analysis/tri_paradigm_benchmark.tex}

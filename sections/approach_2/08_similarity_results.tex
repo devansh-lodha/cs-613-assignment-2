@@ -7,46 +7,22 @@ S_1' = \frac{(S_1 - \mu)W}{\|(S_1 - \mu)W\|_2}, \quad S_2' = \frac{(S_2 - \mu)W}
 \end{equation}
 Row-wise cosine similarity $\text{sim}_i = (S_{1, i}')^\top S_{2, i}'$ is evaluated against human ratings using Spearman rank correlation ($\rho \times 100$) and Pearson linear correlation ($r \times 100$).
 
-\subsection{SICK-R Relatedness and Entailment}
-SICK-R contains 9,927 sentence pairs averaging 9.6 words per sentence. Table~\ref{tab:sickr_spearman} and Table~\ref{tab:sickr_pearson} present Spearman rank correlation and Pearson linear correlation.
+Tables~\ref{tab:sickr_spearman} to~\ref{tab:stsb_pearson} in Appendix~\ref{app:app2} report both correlations for every model and method on SICK-R, STS22.v2, and STSBenchmark (Section~\ref{sec:datasets}).
 
-\input{sections/approach_2/tables/similarity/sickr_spearman.tex}
-\input{sections/approach_2/tables/similarity/sickr_pearson.tex}
+\paragraph{The base-to-dedicated gap depends on the dataset.}
+On the short-sentence datasets STSBenchmark and SICK-R, raw mean-pooled base models trail the dedicated encoders by more than 30 Spearman points. On the long-text STS22.v2 the gap is under 10 points.
 
-\paragraph{Analysis of SICK-R Results}
-\begin{itemize}
-\item Short-Context Pooling Parity: Because SICK-R sentences are ultra-short (~12 tokens), base models under last token pooling achieve baseline performance on par with or slightly exceeding mean pooling (Spearman rho of 49.55 vs 47.44; Pearson r of 49.03 vs 51.53). In short contexts, causal attention states have not yet drifted away from sentence semantics.
-\item Post-Processing Gains on Base Models: Soft-ZCA lifts base mean pooling Spearman rho from 47.44 to 59.95 (+12.51 points, closing 37.7\% of the initial gap). Principal component deflation delivers strong linear correlation recoveries: ABTT-1 achieves 63.75 Pearson r (+12.22 points) and ABTT-2 achieves 63.62 (+12.09 points).
-\item Dedicated Model Response: Dedicated models achieve 80.67 Spearman rho and 85.17 Pearson r at baseline. Coordinate standardization and R2 deflation slightly improve linear correlation (reaching 85.27 and 85.25 Pearson r). In contrast, Soft-ZCA causes a noticeable decline on dedicated models (dropping to 71.02 Spearman rho and 70.67 Pearson r), because full variance equalization amplifies low-variance tail noise that interferes with subtle entailment distinctions.
-\item Negative Controls: Random direction deflation (\texttt{rand}) yields 80.67 for dedicated and 47.43 for base mean pooling, matching baseline exactly. Unrenormalized centering (\texttt{mc}) drops dedicated Spearman rho to 76.36 (-4.31 points).
-\end{itemize}
+\paragraph{Soft-ZCA gives base models the best rank correlation.}
+Soft-ZCA gives the highest Spearman $\rho$ for every base model and pooling mode on all three datasets. Its gain on mean pooling is largest on STSBenchmark and smallest on STS22.v2, where the initial gap was smallest. Pearson $r$ does not always agree. On SICK-R, ABTT gives higher Pearson $r$ than Soft-ZCA for every base model and pooling mode. On STS22.v2 with last-token pooling, Soft-ZCA roughly doubles Spearman $\rho$ but leaves the average Pearson $r$ almost unchanged, while ABTT-3 raises both.
 
+\paragraph{Soft-ZCA hurts dedicated encoders, most on SICK-R.}
+Soft-ZCA lowers both dedicated encoders on SICK-R and STSBenchmark on both metrics, by about 9 to 16 points on SICK-R and 3 to 5 points on STSBenchmark. On STS22.v2 its effect on Spearman $\rho$ is small and model-dependent (EmbeddingGemma rises, Qwen3-Embedding falls), but Pearson $r$ falls for both. The other full-dimension transforms change dedicated Spearman $\rho$ by at most about 2.5 points, in both directions, and a few give small gains, such as R2 on STSBenchmark for both encoders.
 
-\subsection{STS22.v2 Long-Form Cross-Domain Similarity}
-STS22.v2 evaluates 197 sentence pairs across extended multi-paragraph texts averaging 461.1 words (up to 4,412 words). Table~\ref{tab:sts22_spearman} and Table~\ref{tab:sts22_pearson} present Spearman rank correlation and Pearson linear correlation.
+\paragraph{The ABTT pattern differs by dataset.}
+For base models, removing more principal components keeps helping on STSBenchmark, where every base model and pooling mode improves with each added component. On SICK-R, nearly all of the gain comes from removing the first component. On STS22.v2, ABTT leaves the mean-pooled average below the raw baseline but raises last-token scores sharply.
 
-\input{sections/approach_2/tables/similarity/sts22_spearman.tex}
-\input{sections/approach_2/tables/similarity/sts22_pearson.tex}
+\paragraph{Renormalization matters, and the random control changes nothing.}
+Without the final L2 normalization (\texttt{mc}), every model scores lower than with it (R1) on every STS dataset, by up to about 17 Spearman points. Deflating a random direction (\texttt{rand}) changes no correlation of any model by more than 0.05 points.
 
-\paragraph{Analysis of STS22.v2 Results}
-\begin{itemize}
-\item Catastrophic Causal Pooling Collapse: Over extended context windows (~2,048 tokens), last token pooling suffers an extreme collapse, scoring only 14.17 Spearman rho and 13.23 Pearson r on base models, compared to 59.49 and 49.20 for sequence mean pooling. The final token state specializes in local next-token predicting distributions rather than document-level semantics.
-\item Gap Closure on Base Mean Pooling: Soft-ZCA raises base mean pooling from 59.49 to 63.87 Spearman rho (+4.38 points) and from 49.20 to 65.39 Pearson r (+16.19 points), closing 51.0\% of the initial gap to dedicated models (68.07).
-\item Recovery on Last Token Representations: Soft-ZCA doubles last token rank correlation from 14.17 to 28.69 (+14.52 points), while ABTT-3 reaches 24.26 (+10.09 points). However, because mean pooling also improves, an architectural deficit of over 35 points remains.
-\item Dedicated Model Stability: Dedicated models exhibit high resilience to Soft-ZCA on long documents (67.83 Spearman rho vs 68.07 baseline), while ABTT-3 slightly improves Pearson r (69.42 vs 68.71 baseline).
-\end{itemize}
-
-
-\subsection{STSBenchmark Canonical Synthesis}
-STSBenchmark contains 1,379 sentence pairs across news, forums, and image captions averaging 9.8 words. Table~\ref{tab:stsb_spearman} and Table~\ref{tab:stsb_pearson} present Spearman rank correlation and Pearson linear correlation.
-
-\input{sections/approach_2/tables/similarity/stsb_spearman.tex}
-\input{sections/approach_2/tables/similarity/stsb_pearson.tex}
-
-\paragraph{Analysis of STSBenchmark Results}
-\begin{itemize}
-\item Baseline Representation Deficit: Raw base causal models capture less than half the rank correlation of dedicated models (39.67 vs 84.72 Spearman rho; 38.92 vs 84.36 Pearson r), trailing by 45.05 points.
-\item Soft-ZCA Recovery: Soft-ZCA provides an exceptional recovery, lifting base mean pooling from 39.67 to 60.54 (+20.87 points, closing 46.3\% of the initial gap) and base last token pooling from 38.70 to 63.05 (+24.35 points). On last token representations, Soft-ZCA raises Pearson r from 26.83 to 62.26 (+35.43 points, +132.1\% relative increase).
-\item Monotonic Progression of ABTT Deflation: Successive component deflation produces a strict monotonic improvement ladder across base models: baseline (39.67) $\to$ ABTT-1 (47.03) $\to$ ABTT-2 (51.27) $\to$ ABTT-3 (52.50), confirming that leading principal axes encode non-semantic frequency noise.
-\item Peak Dedicated Performance: Dedicated models achieve their highest benchmark scores under R2 mean-subspace deflation (85.10 Spearman rho, +0.38 points over baseline) and coordinate standardization (85.00), demonstrating that minor mean offset and rogue coordinate variance persist even after contrastive fine-tuning.
-\end{itemize}
+\paragraph{Last-token pooling fails only on long texts.}
+On SICK-R and STSBenchmark, raw last-token pooling stays within about 5 Spearman points of mean pooling, but on STS22.v2 it falls far below it for both base models. Section~\ref{sec:ablation_results} examines this in detail.
