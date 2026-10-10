@@ -15,20 +15,18 @@ We evaluate four open-weight models in two tiers, dedicated contrastive encoders
 \begin{table*}[t]
 \centering
 \small
-\caption{Evaluated models. Base models are evaluated under both mean pooling and final non-padding token pooling.}
+\caption{Evaluated models: EmbeddingGemma \citep{vera-etal-2025-embeddinggemma}, Qwen3-Embedding \citep{zhang-etal-2025-qwen3embedding}, Gemma-3 \citep{gemmateam-2025-gemma3}, and Qwen3.5 \citep{qwenteam-2026-qwen35}. Context is the maximum input length in tokens.}
 \label{tab:model_architectures}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{1.7cm}cccc >{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}p{2.6cm}}
+\begin{tabular}{llccccl}
 \toprule
-\textbf{Model} & \textbf{Tier} & \textbf{Params} & \textbf{Native $d$} & \textbf{Context} & \textbf{MRL} & \textbf{Pooling} & \textbf{Training Objective} & \textbf{Prompts and Output} \\
+\textbf{Model} & \textbf{Tier} & \textbf{Params} & \textbf{$d$} & \textbf{Context} & \textbf{MRL} & \textbf{Pooling} \\
 \midrule
-\texttt{google/\allowbreak embeddinggemma-300m} \citep{vera-etal-2025-embeddinggemma} & Dedicated contrastive & 308M & 768 & 2,048 & Yes & Mean & Contrastive InfoNCE & Asymmetric instruction prompts; unit-normalized \\
-\texttt{Qwen/\allowbreak Qwen3-Embedding-0.6B} \citep{zhang-etal-2025-qwen3embedding} & Dedicated contrastive & 600M & 1,024 & 32,768 & Yes & Final non-padding token & Contrastive InfoNCE & Asymmetric instruction prompts; unit-normalized \\
-\texttt{google/\allowbreak gemma-3-1b-pt} \citep{gemmateam-2025-gemma3} & Base causal LM & 1.0B & 1,152 & 32,768 & No & Mean and final token & Next-token cross-entropy, tied embeddings & No prompts; no sentence-level ranking loss \\
-\texttt{Qwen/\allowbreak Qwen3.5-0.8B-Base} \citep{qwenteam-2026-qwen35} & Base causal LM & 0.8B & 1,024 & 262,144 & No & Mean and final token & Next-token cross-entropy, tied embeddings & No prompts; no sentence-level ranking loss \\
+\texttt{google/embeddinggemma-300m} & Dedicated & 308M & 768 & 2,048 & Yes & Mean \\
+\texttt{Qwen/Qwen3-Embedding-0.6B} & Dedicated & 600M & 1,024 & 32,768 & Yes & Last token \\
+\texttt{google/gemma-3-1b-pt} & Base LM & 1.0B & 1,152 & 32,768 & No & Mean, last token \\
+\texttt{Qwen/Qwen3.5-0.8B-Base} & Base LM & 0.8B & 1,024 & 262,144 & No & Mean, last token \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}
 \end{table*}
 
 \paragraph{Availability of Baseline Implementations}

@@ -7,25 +7,22 @@ Evaluations are conducted on six standardized English benchmarks from MTEB v2 \c
 \begin{table*}[t]
 \centering
 \small
-\caption{Evaluated MTEB v2 benchmarks. For retrieval benchmarks, text lengths refer to corpus documents. Similarity labels range from unrelated (lowest) to semantically equivalent (highest). STS22.v2 texts have a median length of 340.0 words.}
+\caption{Evaluated MTEB v2 benchmarks: three retrieval tasks (top) and three similarity tasks (bottom). For retrieval, lengths refer to corpus documents.}
 \label{tab:dataset_statistics}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{l >{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}p{1.4cm} cc >{\raggedright\arraybackslash}p{1.6cm} cc ccc c c}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llccccc}
 \toprule
-& & & & & & & & \multicolumn{3}{c}{\textbf{Text Words}} & & \\
-\cmidrule(lr){9-11}
-\textbf{Benchmark} & \textbf{Domain} & \textbf{Protocol} & \textbf{Docs} & \textbf{Queries / Pairs} & \textbf{Qrels / Score Range} & \textbf{Rel./Query} & \textbf{Query Words} & \textbf{Min} & \textbf{Mean} & \textbf{Max} & \textbf{Mean Tokens} & \textbf{Label Mean (SD)} \\
+\textbf{Benchmark} & \textbf{Domain} & \textbf{Docs} & \textbf{Queries / Pairs} & \textbf{Qrels / Range} & \textbf{Mean Words} & \textbf{Mean Tokens} \\
 \midrule
-FiQA2018 & Financial opinion QA & Asymmetric search & 57,638 & 648 & 1,706 pairs & 2.63 & 10.9 & 0 & 132.9 & 2,973 & 174 & -- \\
-ArguAna & Counter-argument retrieval (multi-sentence arguments) & Asymmetric search & 8,674 & 1,406 & 1,406 pairs (1-to-1) & 1 & 193.6 & 1 & 167.2 & 1,058 & 212 & -- \\
-SCIDOCS & Scientific citation search (title queries) & Asymmetric search & 25,657 & 1,000 & 29,928 pairs & 29.93 & -- & 2 & 176.7 & 3,653 & 226 & -- \\
+FiQA2018 & Financial QA & 57,638 & 648 & 1,706 & 132.9 & 174 \\
+ArguAna & Counter-arguments & 8,674 & 1,406 & 1,406 & 167.2 & 212 \\
+SCIDOCS & Scientific citations & 25,657 & 1,000 & 29,928 & 176.7 & 226 \\
 \midrule
-STSBenchmark & News, image captions, web forums & Symmetric matching & -- & 1,379 & $[0.00, 5.00]$ & -- & -- & 2 & 9.8 & 30 & 12 & 2.61 (1.52) \\
-SICK-R & Entailment, contradiction, relatedness & Symmetric matching & -- & 9,927 & $[1.00, 5.00]$ & -- & -- & 3 & 9.6 & 32 & 10 & 3.53 (1.02) \\
-STS22.v2 & Long-form cross-domain narrative & Symmetric matching & -- & 197 & $[1.00, 4.00]$ & -- & -- & 13 & 461.1 & 4,412 & 638 & -- \\
+STSBenchmark & News, captions, forums & -- & 1,379 & $[0, 5]$ & 9.8 & 12 \\
+SICK-R & Entailment, relatedness & -- & 9,927 & $[1, 5]$ & 9.6 & 10 \\
+STS22.v2 & Long-form narrative & -- & 197 & $[1, 4]$ & 461.1 & 638 \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}
 \end{table*}
 
 \paragraph{Sample Bias Mitigation and Experimental Controls}
