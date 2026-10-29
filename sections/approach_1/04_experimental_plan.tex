@@ -3,7 +3,7 @@
 
 \paragraph{Experimental Setting and Robustness}
 The study is inference-only. No model is trained or fine-tuned, so the geometry we measure is that of the released weights. Each model is loaded in float32, and all 1{,}024 sentences of each language are run with right padding. Hidden embeddings from each layer are stored, and, for models with a final RMSNorm, the last layer both before and after that norm are stored. The pipeline computes three views per layer: $N = 16{,}000$ sampled tokens, one mean-pooled vector per sentence, and one last-token vector per sentence. This report presents the token view. 
-Several measures keep results robust under limited compute. The same $N$ and seed are used for every language and model. Token positions are drawn before inference, so the full token matrix is never stored. The value of seed, must be varied adn results must be reported across d
+Several measures keep results robust under limited compute. The same $N$ and seed are used for every language and model. Token positions are drawn before inference, so the full token matrix is never stored. The value of seed, must be varied adn results must be reported across different seed values.
 
 \paragraph{Models and Parameters}
 We use four models: two embedding models and two generative models, one of each from the Gemma and Qwen families (Table~\ref{tab:app1_models}). The approaches differ in training objective and attention. The embedding models are trained contrastively for sentence similarity, whereas the generative models are trained only for next-token prediction. EmbeddingGemma uses bidirectional attention and mean pooling \citep{vera-etal-2025-embeddinggemma}. Qwen3-Embedding is a causal model with last-token pooling \citep{zhang-etal-2025-qwen3embedding}. Gemma-3-1B-PT uses causal attention with five sliding-window layers per global layer \citep{gemmateam-2025-gemma3}. Qwen3.5-0.8B-Base is a hybrid model in which three Gated DeltaNet linear-attention layers alternate with one full-attention layer \citep{qwenteam-2026-qwen35}. We analyse its text backbone and discard the vision encoder. Parameter counts come from the released safetensors files.
@@ -22,7 +22,9 @@ Gemma-3-1B-PT & 1000M & 26 & 1152 \\
 Qwen3.5-0.8B-Base & 752M & 24 & 1024 \\
 \bottomrule
 \end{tabular}
-\caption{Models used: embedding models (top) and generative models (bottom). Params counts the transformer backbone with tied embeddings. EmbeddingGemma has 308M with its dense projection head, and Qwen3.5 has 873M with its vision encoder and multi-token prediction head. $L$ is the number of layers and $d$ the hidden size.}
+\caption{Embedding models (top) and generative models (bottom).
+Params denotes backbone parameters; $L$ and $d$ denote transformer
+layers and hidden size, respectively.}
 \label{tab:app1_models}
 \end{table}
 
@@ -33,31 +35,49 @@ Qwen3.5-0.8B-Base & 752M & 24 & 1024 \\
 \label{fig:app1_depth}
 \end{figure*}
 
-\paragraph{Hyperparameters and Ablation Study}
-No parameters are learned, so there is no grid search. The analysis settings are fixed to keep runs comparable. $N = 16{,}000$ is below the token count of every language for every tokenizer, so no language is skipped. ID uses $k = 20$ neighbours, the \texttt{scikit-dimension} default used by \citet{rudman-etal-2022-isoscore}. Average cosine uses $10^6$ random pairs. The seed is 0. Our ablation varies the representation instead: the last layer before and after the final norm (Table~\ref{tab:app1_ablation}). The norm raises IsoScore and lowers MEV in every model, lowers average cosine sharply in EmbeddingGemma and Gemma-3-1B-PT, and leaves ID almost unchanged. It therefore changes the conclusions about isotropy, but not the intrinsic dimension.
+% \paragraph{Hyperparameters and Ablation Study}
+% No parameters are learned, so there is no grid search. The analysis settings are fixed to keep runs comparable. $N = 16{,}000$ is below the token count of every language for every tokenizer, so no language is skipped. ID uses $k = 20$ neighbours, the \texttt{scikit-dimension} default used by \citet{rudman-etal-2022-isoscore}. Average cosine uses $10^6$ random pairs. The seed is 0. Our ablation varies the representation instead: the last layer before and after the final norm (Table~\ref{tab:app1_ablation}). The norm raises IsoScore and lowers MEV in every model, lowers average cosine sharply in EmbeddingGemma and Gemma-3-1B-PT, and leaves ID almost unchanged. It therefore changes the conclusions about isotropy, but not the intrinsic dimension.
 
-\begin{table}[t]
-\centering
-\footnotesize
-\setlength{\tabcolsep}{2.6pt}
-\begin{tabular}{lrrrrrrrr}
-\toprule
- & \multicolumn{2}{c}{IsoScore} & \multicolumn{2}{c}{Avg. cos} & \multicolumn{2}{c}{MEV} & \multicolumn{2}{c}{ID} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
-Model & pre & post & pre & post & pre & post & pre & post \\
-\midrule
-EmbGemma & .001 & .228 & .969 & .140 & .871 & .049 & 15.1 & 14.9 \\
-Qwen3-Emb & .016 & .114 & .254 & .197 & .225 & .080 & 10.3 & 10.0 \\
-Gemma3 & .008 & .013 & .916 & .773 & .340 & .243 & 6.8 & 7.0 \\
-Qwen3.5 & .019 & .038 & .549 & .550 & .204 & .152 & 6.5 & 6.4 \\
-\bottomrule
-\end{tabular}
-\caption{Ablation over the final norm: token view of the last layer before (pre) and after (post) the final RMSNorm, averaged over 23 languages.}
-\label{tab:app1_ablation}
-\end{table}
+% \begin{table}[t]
+% \centering
+% \footnotesize
+% \setlength{\tabcolsep}{2.6pt}
+% \begin{tabular}{lrrrrrrrr}
+% \toprule
+%  & \multicolumn{2}{c}{IsoScore} & \multicolumn{2}{c}{Avg. cos} & \multicolumn{2}{c}{MEV} & \multicolumn{2}{c}{ID} \\
+% \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+% Model & pre & post & pre & post & pre & post & pre & post \\
+% \midrule
+% EmbGemma & .001 & .228 & .969 & .140 & .871 & .049 & 15.1 & 14.9 \\
+% Qwen3-Emb & .016 & .114 & .254 & .197 & .225 & .080 & 10.3 & 10.0 \\
+% Gemma3 & .008 & .013 & .916 & .773 & .340 & .243 & 6.8 & 7.0 \\
+% Qwen3.5 & .019 & .038 & .549 & .550 & .204 & .152 & 6.5 & 6.4 \\
+% \bottomrule
+% \end{tabular}
+% \caption{Ablation over the final norm: token view of the last layer before (pre) and after (post) the final RMSNorm, averaged over 23 languages.}
+% \label{tab:app1_ablation}
+% \end{table}
 
 \paragraph{Evaluation Metrics}
-IsoScore is the primary metric because it is the only one among those used here that measures how evenly variance is spread over all dimensions and is invariant to rotation and scale \citep{rudman-etal-2022-isoscore}. Average random cosine and MEV are kept for comparability with \citet{ethayarajh-2019-contextual}. However, MEV on raw vectors is dominated by a few tokens with very large norms. ID separates ``variance on few directions'' from ``points on a low-dimensional manifold''. Beyond these metrics, we added two diagnostics. First, we report the last layer before and after the final norm. Second, a norm breakdown splits RMSNorm into the per-token division and the learned per-dimension gain $\gamma$, applies each part alone, identifies the massive dimensions, and reports MEV on unit-length vectors, which counts every token equally.
+% IsoScore is the primary metric because it is the only one among those used here that measures how evenly variance is spread over all dimensions and is invariant to rotation and scale \citep{rudman-etal-2022-isoscore}. Average random cosine and MEV are kept for comparability with \citet{ethayarajh-2019-contextual}. However, MEV on raw vectors is dominated by a few tokens with very large norms. ID separates ``variance on few directions'' from ``points on a low-dimensional manifold''. Beyond these metrics, we added two diagnostics. First, we report the last layer before and after the final norm. Second, a norm breakdown splits RMSNorm into the per-token division and the learned per-dimension gain $\gamma$, applies each part alone, identifies the massive dimensions, and reports MEV on unit-length vectors, which counts every token equally.
+
+
+\paragraph{IsoScore}
+We use this metric because it follows the mathematical definition of isotropy and provides a reliable measure of how evenly transformer representations utilize the available embedding space.
+
+\paragraph{Average Random Cosine Similarity}
+We include this metric to maintain comparability with existing NLP literature and track the average angular spread of multilingual representations across transformer layers.
+
+\paragraph{Intrinsic Dimensionality (ID) Score}
+We use this metric to detect whether transformer layers compress token representations into low-dimensional spaces, capturing geometric structure that angular and variance-based metrics may miss.
+
+\paragraph{Maximum Explainable Variance (MEV)}
+We use this metric to identify whether a single dominant principal component captures a disproportionate amount of variance, indicating severe anisotropy.
+
+\paragraph{Excluded Metrics}
+We exclude the Variance Explained (VarEx) ratio, which measures the proportion of total variance captured by the top k principal components. This metric is problematic because relying on an arbitrary, a priori choice for
+k severely complicates reliable layer-to-layer comparisons.
+
 
 % \paragraph{System Effort and Viva Demonstration}
 % One model on 23 languages takes a single GPU run. The 1B-parameter model in float32 needs about 4\,GB for weights. Each model produces about 130\,MB of results. For the viva, we will run the command above for EmbeddingGemma-300M on Hindi and English, show the progress log, and open the per-layer \texttt{metrics.csv}, the metric-versus-depth plot, and the 3-D PCA scatter of every layer. We will then rerun the command to show that finished languages are skipped. Finally, we will run the norm-breakdown script to show the massive dimension and its removal by $\gamma$, and regenerate Figures~\ref{fig:app1_depth} and~\ref{fig:app1_groups} from the saved results.

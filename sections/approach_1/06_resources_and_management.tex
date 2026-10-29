@@ -5,7 +5,7 @@
 We started from the isotropy literature \citep{ethayarajh-2019-contextual,rudman-etal-2022-isoscore}, which studies English text with older encoders. Two gaps followed: no study covers the scripts and tokenization levels of Indian languages, and no study compares a contrastive embedding model with a generative model of the same family. Early runs showed a sharp change in every metric at the final norm, so we added the pre/post-norm split and the norm breakdown to the method.
 
 \subsection{Computational Environment}
-Table~\ref{tab:app1_compute_resources} lists the resources used. The study needs one GPU at a time. Several models can run in parallel on separate GPUs with \texttt{--device}.We discovered the hard way that these resources(including kaggle GPUs) weren't sufficient especially for Gujarati and Malyalam(high token fertility).
+Table~\ref{tab:app1_compute_resources} lists the resources used. 
 
 \begin{table}[t]
 \centering
@@ -26,6 +26,3 @@ Software Stack & Python; PyTorch, Transformers.  \\
 \label{tab:app1_compute_resources}
 \end{table}
 
-\subsection{Task Distribution and Workflow}
-% TODO: fill in who did what for Approach 1.
-[Detail the breakdown of responsibilities and workflow distribution among the team members assigned to Approach 1.]

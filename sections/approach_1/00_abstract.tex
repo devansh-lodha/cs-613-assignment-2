@@ -1,3 +1,20 @@
 \begin{abstract}
-We measure how uniformly small language models use their representation space when reading 22 scheduled Indian languages and English. For every layer we compute IsoScore, average random cosine similarity, maximum explainable variance, and intrinsic dimension on 16{,}000 sampled tokens per language of the n-way parallel IN22-Gen benchmark. We compare two contrastively trained embedding models (EmbeddingGemma-300M, Qwen3-Embedding-0.6B) with two generative models (Gemma-3-1B-PT, Qwen3.5-0.8B-Base). The last layer before the final RMSNorm is close to rank one in EmbeddingGemma and highly clustered in Gemma-3-1B-PT because of massive activation dimensions; the norm removes most of this, so isotropy must be reported before and after it. After the norm, the embedding models are more isotropic than the generative models (token IsoScore 0.23 and 0.11 against 0.04 and 0.01), and this order holds for 19 of the 23 languages. Languages fall into four groups with similar layer-wise behaviour: English, 18 Indic languages, Bodo with Kashmiri, and Manipuri (Meitei script) with Santali (Ol Chiki script). The last group is the least isotropic in three of the four models.
+How does representation geometry vary across languages, model types,
+and transformer depth? We study layer-wise anisotropy in two embedding
+and two generative models from the Gemma and Qwen families across
+all 22 scheduled Indian languages and English. Using the aligned
+IN22-Gen dataset, we sample 16,000 non-special tokens per language
+and model from 1,024 sentences and evaluate IsoScore, average cosine
+similarity, maximum explainable variance, and intrinsic dimensionality
+at every layer. We separately examine representations before and after
+the final root-mean-square normalization (RMSNorm). This distinction
+substantially changes the observed geometry: in EmbeddingGemma,
+final normalization raises mean token IsoScore from 0.001 to 0.228
+and reduces average cosine similarity from 0.969 to 0.140. After final normalization, the two embedding
+models have higher mean IsoScore than the generative models. English has the highest
+group-average IsoScore in all four models, while Manipuri and Santali
+form the least isotropic group in three. These findings show that
+multilingual representation geometry depends on both language
+and the extraction point within a model, making explicit treatment of
+final normalization essential for interpreting isotropy comparisons.
 \end{abstract}
